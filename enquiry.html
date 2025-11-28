@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>استعلام رقم القيد</title>
+  <link rel="stylesheet" href="id.css" />
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <div class="card">
+
+      <!-- شعار الجامعة -->
+      <div class="logo-box">
+        <img src="aiu-logo.png" alt="شعار الجامعة">
+      </div>
+
+      <h2>📘 استعلام المواد</h2>
+      <p class="subtitle">أدخل رقم القيد لمعرفة المواد المسجلة لهذا الفصل</p>
+
+      <input id="sid" type="number" placeholder="أدخل رقم القيد">
+
+      <button onclick="lookup()">استعلام</button>
+
+      <p id="error" class="error"></p>
+
+      <div id="result" class="result"></div>
+    </div>
+  </div>
+
+<script>
+  async function lookup() {
+    let id = document.getElementById("sid").value;
+    let error = document.getElementById("error");
+    let box = document.getElementById("result");
+
+    error.textContent = "";
+    box.innerHTML = "";
+
+    if (id.trim() === "") {
+      error.textContent = "الرجاء إدخال رقم القيد";
+      return;
+    }
+
+    let api = "https://script.google.com/macros/s/AKfycbwhonFbZB8edfHKfVIvxELQSXT4EfM1790E2hzfv3XveHxms4qCCjcrRBpzd4_RdRKM5w/exec";
+    let url = api + "?action=getStudent&id=" + id;
+
+    let res = await fetch(url);
+    let data = await res.json();
+
+    if (data.error === "STUDENT_NOT_FOUND") {
+      error.textContent = "رقم القيد غير موجود. راجع مكتب الدراسة.";
+      return;
+    }
+
+    // عرض البيانات
+    let html = `
+      <h3>👨‍🎓 اسم الطالب: ${data.full_name}</h3>
+      <p>🏛️ الكلية: ${data.college}</p>
+      <p>📚 التخصص: ${data.department}</p>
+      <h4>المواد المسجلة:</h4>
+    `;
+
+    data.courses.forEach(c => {
+      html += `
+        <div class="course">
+          <span class="code">${c.code}</span>
+          <span class="name">${c.name}</span>
+        </div>`;
+    });
+
+    box.innerHTML = html;
+  }
+</script>
+
+</body>
+</html>

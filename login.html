@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>دخول الموظفين - جامعة السلام الدولية</title>
+
+    <!-- عشان يشتغل التصميم كويس في الموبايل -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ملف التنسيقات الرئيسي -->
+    <link rel="stylesheet" href="long.css">
+</head>
+<body>
+
+<div class="hero">
+    <!-- طبقة التغميق المتحركة -->
+    <div class="hero-overlay"></div>
+
+    <!-- أشكال ديكورية متحركة في الخلفية -->
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+
+    <!-- الهيدر: الشعار واسم الجامعة -->
+    <header class="hero-header">
+        <div class="hero-uni">
+            <!-- 🔵 صورة شعار الجامعة (aiu-logo.png) -->
+            <img src="aiu-logo.png" alt="شعار جامعة السلام الدولية" class="hero-logo">
+            <div class="hero-uni-text">
+                <div class="uni-name">جامعة السلام الدولية</div>
+                <div class="uni-sub">منظومة شؤون الطلبة والامتحانات</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="hero-main">
+
+        <!-- نص تعريفي بسيط (يسار في الشاشات الكبيرة، فوق في الموبايل) -->
+        <section class="hero-intro">
+            <h1>لوحة دخول الموظفين</h1>
+            <p>
+                الرجاء استخدام حسابك الرسمي للدخول إلى نظام
+                <strong>التسجيل، الجداول، والنتائج</strong>.
+            </p>
+            <ul>
+                <li>صلاحيات حسب نوع المستخدم</li>
+                <li>تسجيل ومراجعة بيانات الطلبة</li>
+                <li>إدارة المواد والفصول الدراسية</li>
+            </ul>
+        </section>
+
+        <!-- كرت تسجيل الدخول الفخم -->
+        <section class="login-card">
+            <h2>دخول الموظفين</h2>
+
+            <label class="field-label" for="user">اسم المستخدم</label>
+            <div class="field-wrapper">
+                <input type="text" id="user" placeholder="أدخل اسم المستخدم">
+            </div>
+
+            <label class="field-label" for="pass">كلمة المرور</label>
+            <div class="field-wrapper">
+                <input type="password" id="pass" placeholder="أدخل كلمة المرور">
+            </div>
+
+            <button class="login-btn" onclick="doLogin()">
+                دخول إلى النظام
+            </button>
+
+            <div id="msg" class="msg"></div>
+
+            <div class="login-footer-note">
+                هذا النظام مخصص للموظفين المخولين فقط.
+            </div>
+        </section>
+
+    </main>
+
+    <!-- فوتر بسيط -->
+    <footer class="hero-footer">
+        <span>© جامعة السلام الدولية</span>
+        <span class="dot"></span>
+        <span>وحدة نظم المعلومات</span>
+         <span class="dot"></span>
+        <span>م.أيوب الحوات</span>
+    </footer>
+
+</div>
+
+<script>
+    // 🔴 نفس رابط الـ API المستخدم في صفحة الاستعلام
+    const API_URL = "https://script.google.com/macros/s/AKfycbxX-5-aWuFmnwesgTpco13qabgXlgM4yE5KABoTWd8ytWTOTcDCNc32KFVovmnSltdMSQ/exec";
+
+    async function doLogin() {
+        const u = document.getElementById('user').value.trim();
+        const p = document.getElementById('pass').value.trim();
+        const msg = document.getElementById('msg');
+
+        // نرجع الرسالة للوضع الافتراضي كل مرة
+        msg.textContent = "";
+        msg.classList.remove("msg-ok", "msg-error");
+
+        if (!u || !p) {
+            msg.textContent = "الرجاء إدخال اسم المستخدم وكلمة المرور";
+            msg.classList.add("msg-error");
+            return;
+        }
+
+        const url = `${API_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`;
+
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+
+            console.log(data); // للمراجعة في الكونسول
+
+            if (data.status === "OK") {
+                localStorage.setItem("aiu_user", data.username || u);
+                localStorage.setItem("aiu_role", data.role || "");
+
+                msg.textContent = "تم تسجيل الدخول بنجاح، جاري التحويل...";
+                msg.classList.add("msg-ok");
+
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 800);
+            } else {
+                msg.textContent = "بيانات الدخول غير صحيحة";
+                msg.classList.add("msg-error");
+            }
+        } catch (err) {
+            console.error(err);
+            msg.textContent = "خطأ في الاتصال، تأكد من الإنترنت أو رابط الـ API";
+            msg.classList.add("msg-error");
+        }
+    }
+</script>
+
+</body>
+</html>

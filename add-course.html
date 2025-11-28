@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إضافة مادة - جامعة السلام الدولية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- خط كايرو -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #004b8f;
+      --primary-soft: #e0f2ff;
+      --primary-dark: #01233f;
+      --gold: #F4B547;
+      --bg: #f3f4f6;
+      --muted: #6b7280;
+      --border: #d4d4d8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+  margin: 0;
+  font-family: "Cairo", sans-serif;
+  background: #e6e9c6;   /* ← الخلفية الهادية الجديدة */
+  color: #0f172a;
+  direction: rtl;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 10px;
+}
+
+
+    /* الغلاف العام */
+    .shell {
+      width: 100%;
+      max-width: 920px;
+      background: #ffffff;
+      border-radius: 22px;
+      box-shadow: 0 20px 60px rgba(15,23,42,0.18);
+      border: 1px solid rgba(148,163,184,0.35);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      position: relative;
+    }
+
+    /* شريط علوي */
+    .top-bar {
+      grid-column: 1 / -1;
+      padding: 10px 20px 6px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, #004b8f, #0073c9);
+      color: #f9fafb;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    .top-text h1 {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .top-text p {
+      margin: 0;
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+
+    .chip {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.16);
+      border: 1px solid rgba(248, 250, 252, 0.4);
+    }
+
+    /* يمين: الفورم */
+    .form-pane {
+      padding: 16px 18px 18px;
+      border-left: 1px solid #edf2ff;
+      position: relative;
+    }
+
+    .form-title {
+      margin: 4px 0 6px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-title span.icon {
+      font-size: 1.4rem;
+    }
+
+    .subtitle {
+      margin: 0 0 12px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 0.9rem;
+      transition: 0.25s;
+      font-family: "Cairo", sans-serif;
+    }
+
+    input::placeholder {
+      color: #9ca3af;
+    }
+
+    input:focus {
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 1px rgba(14,165,233,0.5);
+      outline: none;
+    }
+
+    .actions {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 9px 22px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #F4B547, #d98a1b);
+      color: #0f172a;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 800;
+      transition: 0.25s;
+      box-shadow: 0 12px 26px rgba(217,138,27,0.65);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button span.btn-icon {
+      font-size: 1.1rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(217,138,27,0.95);
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .msg {
+      margin-top: 8px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .debug-label {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    #raw {
+      margin-top: 6px;
+      background: #020617;
+      color: #22c55e;
+      padding: 6px 8px;
+      font-size: 11px;
+      max-height: 110px;
+      overflow: auto;
+      border-radius: 8px;
+      direction: ltr;
+      text-align: left;
+    }
+
+    /* يسار: لوحة معلومات */
+    .info-pane {
+      padding: 16px 18px 18px;
+      background: linear-gradient(135deg, #e0f2ff, #fdfcfb);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(148,163,184,0.45);
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .badge::before {
+      content: "●";
+      font-size: 0.6rem;
+      color: #22c55e;
+    }
+
+    .info-title {
+      margin: 0 0 6px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .info-text {
+      margin: 0 0 10px;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .bullet-list {
+      margin: 4px 0 10px;
+      padding: 0;
+      list-style: none;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .bullet-list li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #0ea5e9;
+    }
+
+    .mini-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 10px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .pill {
+      font-size: 0.72rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(148,163,184,0.4);
+      color: #1f2937;
+    }
+
+    /* أشكال خلفية */
+    .blob-soft {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(56,189,248,0.45), transparent);
+      top: -40px;
+      left: -40px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .blob-soft-2 {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(244,181,71,0.45), transparent);
+      bottom: -50px;
+      right: -20px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    @keyframes floatIcon {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-4px); }
+    }
+
+    /* 📱 استجابة للهاتف (S23 Ultra وأصغر) */
+    @media (max-width: 800px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+      .form-pane {
+        border-left: none;
+        border-top: 1px solid #edf2ff;
+      }
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding: 14px 8px;
+      }
+
+      .shell {
+        border-radius: 18px;
+      }
+
+      .top-bar {
+        padding: 10px 12px 6px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .form-pane {
+        padding: 14px 12px 14px;
+      }
+
+      .info-pane {
+        padding: 14px 12px 12px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="shell">
+  <!-- شريط علوي -->
+  <div class="top-bar">
+    <div class="top-left">
+      <div class="logo-circle">📘</div>
+      <div class="top-text">
+        <h1>لوحة المواد الدراسية</h1>
+        <p>إضافة واعتماد مقررات الخطة الأكاديمية.</p>
+      </div>
+    </div>
+    <div class="chip">جامعة السلام الدولية</div>
+  </div>
+
+  <!-- يمين: الفورم -->
+  <div class="form-pane">
+    <h2 class="form-title">
+      <span class="icon">➕</span>
+      <span>إضافة مادة جديدة</span>
+    </h2>
+    <p class="subtitle">قم بإدخال رمز المادة واسمها بشكل صحيح ليتم استخدامها في تسجيل مواد الطلاب والتقارير.</p>
+
+    <div class="row">
+      <div class="field">
+        <label for="code">رمز المادة</label>
+        <input type="text" id="code" placeholder="مثال: IT101">
+      </div>
+      <div class="field">
+        <label for="name">اسم المادة</label>
+        <input type="text" id="name" placeholder="مثال: أساسيات تقنية المعلومات">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button onclick="saveCourse()">
+        <span class="btn-icon">💾</span>
+        <span>حفظ المادة</span>
+      </button>
+      <span class="hint">يفضّل اعتماد نمط ثابت لرموز المواد (مثل IT101، PHAR201).</span>
+    </div>
+
+    <p id="msg" class="msg"></p>
+
+    <!-- <div class="debug-label">🔍 رد الـ API (للاختبار فقط):</div> -->
+    <pre id="raw"></pre>
+  </div>
+
+  <!-- يسار: معلومات توضيحية -->
+  <div class="info-pane">
+    <div class="blob-soft"></div>
+    <div class="blob-soft-2"></div>
+
+    <div class="badge">بوابة التسجيل الأكاديمي</div>
+    <h3 class="info-title">ما فائدة صفحة إضافة مادة؟</h3>
+    <p class="info-text">
+      من خلال هذه الصفحة يتم تعريف المقررات الأساسية في النظام، بحيث
+      تُستخدم لاحقاً في:
+    </p>
+
+    <ul class="bullet-list">
+      <li><span class="dot"></span>تسجيل مواد الطلاب لكل فصل دراسي.</li>
+      <li><span class="dot"></span>استخراج تقارير المواد وعدد المسجلين.</li>
+      <li><span class="dot"></span>توحيد أسماء ورموز المقررات في جميع الكليات.</li>
+    </ul>
+
+    <div class="mini-label">أمثلة على رموز المواد:</div>
+    <div class="pill-row">
+      <div class="pill">PHAR101 - مدخل إلى الصيدلة</div>
+      <div class="pill">NURS205 - أساسيات التمريض</div>
+      <div class="pill">IT120 - مهارات الحاسوب</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ⭐ نفس رابط الـ API اللي خدم معاك في استعلام الطالب
+  const API_URL = "https://script.google.com/macros/s/AKfycbwhonFbZB8edfHKfVIvxELQSXT4EfM1790E2hzfv3XveHxms4qCCjcrRBpzd4_RdRKM5w/exec";
+
+  async function saveCourse() {
+    const code = document.getElementById('code').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const msg  = document.getElementById('msg');
+    const raw  = document.getElementById('raw');
+
+    msg.textContent = "";
+    msg.style.color = "red";
+    raw.textContent = "";
+
+    if (!code || !name) {
+      msg.textContent = "⚠ رمز المادة واسم المادة مطلوبان";
+      return;
+    }
+
+    const url = `${API_URL}?action=addCourse&code=${encodeURIComponent(code)}&name=${encodeURIComponent(name)}`;
+
+    try {
+      const res  = await fetch(url);
+      const text = await res.text();   // ناخذ الرد كنص
+      raw.textContent = text;          // نعرضه كما هو للعين
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
+        return;
+      }
+
+      // نعالج الحالات المختلفة حسب الرد:
+      if (data.status === "OK") {
+        msg.style.color = "green";
+        msg.textContent = "✔ تم حفظ المادة بنجاح";
+        document.getElementById('code').value = "";
+        document.getElementById('name').value = "";
+      }
+      else if (data.status === "EXISTS") {
+        msg.textContent = "⚠ رمز المادة مسجّل مسبقًا، جرّب رمز آخر.";
+      }
+      else if (data.status === "MISSING_FIELDS") {
+        msg.textContent = "⚠ بيانات ناقصة، تأكد من رمز واسم المادة.";
+      }
+      else if (data.error === "UNKNOWN_ACTION") {
+        msg.textContent = "السيرفر لا يتعرف على action=addCourse (مشكلة في رابط الـ API أو في doGet).";
+      }
+      else {
+        msg.textContent = "لم يتم الحفظ، تحقق من البيانات أو الكود. (راجع الرد في الصندوق الأسود)";
+      }
+    } catch (e) {
+      console.error(e);
+      msg.textContent = "❌ خطأ في الاتصال برابط الـ API";
+    }
+  }
+</script>
+
+</body>
+</html>

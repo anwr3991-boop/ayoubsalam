@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل مواد للطلاب - جامعة السلام الدولية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #004b8f;
+      --primary-dark: #01233f;
+      --accent: #0ea5e9;
+      --gold: #F4B547;
+      --bg: #f3f4f6;
+      --muted: #6b7280;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: #f2f6ff;
+      color: #0f172a;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 10px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 920px;
+      background: #ffffff;
+      border-radius: 22px;
+      box-shadow: 0 20px 60px rgba(15,23,42,0.18);
+      border: 1px solid rgba(148,163,184,0.35);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+    }
+
+    .top-bar {
+      grid-column: 1 / -1;
+      padding: 10px 18px 8px;
+      background: linear-gradient(135deg, #004b8f, #0ea5e9);
+      color: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    .top-text h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .top-text p {
+      margin: 0;
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+
+    .chip {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.16);
+      border: 1px solid rgba(248, 250, 252, 0.4);
+    }
+
+    .form-pane {
+      padding: 16px 18px 18px;
+      border-left: 1px solid #e5e7eb;
+    }
+
+    .form-title {
+      margin: 4px 0 6px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-title span.icon {
+      font-size: 1.4rem;
+    }
+
+    .subtitle {
+      margin: 0 0 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 0.9rem;
+      transition: 0.25s;
+      font-family: "Cairo", sans-serif;
+    }
+
+    input::placeholder {
+      color: #9ca3af;
+    }
+
+    input:focus {
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 1px rgba(14,165,233,0.5);
+      outline: none;
+    }
+
+    .actions {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 9px 22px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #f9fafb;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 800;
+      transition: 0.25s;
+      box-shadow: 0 10px 26px rgba(22,163,74,0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button span.btn-icon {
+      font-size: 1.1rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(22,163,74,1);
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .msg {
+      margin-top: 8px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .debug-label {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    #raw {
+      margin-top: 6px;
+      background: #020617;
+      color: #22c55e;
+      padding: 6px 8px;
+      font-size: 11px;
+      max-height: 100px;
+      overflow: auto;
+      border-radius: 8px;
+      direction: ltr;
+      text-align: left;
+    }
+
+    /* info pane */
+    .info-pane {
+      padding: 16px 18px 18px;
+      background: linear-gradient(135deg, #e0f2ff, #fefce8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(148,163,184,0.45);
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .badge::before {
+      content: "●";
+      font-size: 0.6rem;
+      color: #22c55e;
+    }
+
+    .info-title {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .info-text {
+      margin: 0 0 10px;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .bullet-list {
+      margin: 4px 0 10px;
+      padding: 0;
+      list-style: none;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .bullet-list li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #0ea5e9;
+    }
+
+    .mini-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 5px;
+    }
+
+    .pill {
+      font-size: 0.72rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(148,163,184,0.4);
+      color: #1f2937;
+    }
+
+    .blob-soft {
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(56,189,248,0.45), transparent);
+      top: -40px;
+      left: -40px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .blob-soft-2 {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(250,204,21,0.4), transparent);
+      bottom: -40px;
+      right: -20px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    @keyframes floatIcon {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-4px); }
+    }
+
+    @media (max-width: 800px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+      .form-pane {
+        border-left: none;
+        border-top: 1px solid #e5e7eb;
+      }
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding: 14px 8px;
+      }
+
+      .shell {
+        border-radius: 18px;
+      }
+
+      .top-bar {
+        padding: 8px 12px 6px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .form-pane,
+      .info-pane {
+        padding: 14px 12px 14px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="shell">
+  <div class="top-bar">
+    <div class="top-left">
+      <div class="logo-circle">📝</div>
+      <div class="top-text">
+        <h1>تسجيل مواد للطلاب</h1>
+        <p>ربط الطالب بالمقررات الدراسية للفصل الحالي.</p>
+      </div>
+    </div>
+    <div class="chip">نظام إدارة الجامعة</div>
+  </div>
+
+  <!-- فورم التسجيل -->
+  <div class="form-pane">
+    <h2 class="form-title">
+      <span class="icon">➕</span>
+      <span>إضافة تسجيل جديد</span>
+    </h2>
+    <p class="subtitle">أدخل رقم القيد، رمز المادة، والفصل الدراسي، ثم اضغط تسجيل.</p>
+
+    <div class="row">
+      <div class="field">
+        <label for="sid">رقم القيد</label>
+        <input type="number" id="sid" placeholder="مثال: 20251234">
+      </div>
+      <div class="field">
+        <label for="code">رمز المادة</label>
+        <input type="text" id="code" placeholder="مثال: IT101">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="semester">الفصل الدراسي</label>
+      <input type="text" id="semester" placeholder="مثال: خريف 2025/2026">
+    </div>
+
+    <div class="actions">
+      <button onclick="registerCourse()">
+        <span class="btn-icon">✅</span>
+        <span>تسجيل المادة للطالب</span>
+      </button>
+      <span class="hint">تأكد من أن الطالب والمادة موجودان مسبقًا في النظام.</span>
+    </div>
+
+    <p id="msg" class="msg"></p>
+
+    <div class="debug-label">🔍 رد الـ API (للاختبار فقط):</div>
+    <pre id="raw"></pre>
+  </div>
+
+  <!-- لوحة معلومات -->
+  <div class="info-pane">
+    <div class="blob-soft"></div>
+    <div class="blob-soft-2"></div>
+
+    <div class="badge">بوابة التسجيل الأكاديمي</div>
+    <h3 class="info-title">دور صفحة تسجيل المواد</h3>
+    <p class="info-text">
+      من خلال هذه الصفحة يتم ربط كل طالب بالمقررات التي يدرسها في فصل معين،
+      وهو ما يسمح لاحقاً بـ:
+    </p>
+
+    <ul class="bullet-list">
+      <li><span class="dot"></span>عرض مواد الطالب في صفحة الاستعلام.</li>
+      <li><span class="dot"></span>حساب عدد المسجلين في كل مادة في التقارير.</li>
+      <li><span class="dot"></span>تتبع العبء الدراسي لكل طالب.</li>
+    </ul>
+
+    <div class="mini-label">أمثلة لاستخدام الفصل الدراسي:</div>
+    <div class="pill-row">
+      <div class="pill">خريف 2025/2026</div>
+      <div class="pill">ربيع 2025/2026</div>
+      <div class="pill">صيفي 2025</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbwhonFbZB8edfHKfVIvxELQSXT4EfM1790E2hzfv3XveHxms4qCCjcrRBpzd4_RdRKM5w/exec";
+
+  async function registerCourse() {
+    const sid = document.getElementById('sid').value.trim();
+    const code = document.getElementById('code').value.trim();
+    const sem  = document.getElementById('semester').value.trim();
+    const msg  = document.getElementById('msg');
+    const raw  = document.getElementById('raw');
+
+    msg.textContent = "";
+    msg.style.color = "red";
+    raw.textContent = "";
+
+    if (!sid || !code) {
+      msg.textContent = "⚠ رقم القيد ورمز المادة مطلوبان";
+      return;
+    }
+
+    const url = `${API_URL}?action=registerCourse&sid=${encodeURIComponent(sid)}&code=${encodeURIComponent(code)}&semester=${encodeURIComponent(sem)}`;
+
+    try {
+      const res  = await fetch(url);
+      const text = await res.text();
+      raw.textContent = text;
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
+        return;
+      }
+
+      if (data.status === "OK") {
+        msg.style.color = "green";
+        msg.textContent = "✔ تم تسجيل المادة للطالب بنجاح";
+        document.getElementById('sid').value = "";
+        document.getElementById('code').value = "";
+        document.getElementById('semester').value = "";
+      } else if (data.status === "MISSING_FIELDS") {
+        msg.textContent = "⚠ بيانات ناقصة، تأكد من رقم القيد ورمز المادة.";
+      } else {
+        msg.textContent = "لم يتم التسجيل، تحقق من البيانات أو الكود. (راجع الرد في الصندوق الأسود)";
+      }
+    } catch (e) {
+      console.error(e);
+      msg.textContent = "❌ خطأ في الاتصال برابط الـ API";
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+body {
+  font-family: "Cairo", sans-serif;
+  background: linear-gradient(135deg, #012E57, #003F7C);
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+}
+
+.form-card {
+  max-width: 550px;
+  margin: 80px auto;
+  background: rgba(255,255,255,0.96);
+  padding: 20px 25px;
+  border-radius: 14px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.35);
+  animation: fadeIn 0.9s ease;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.6rem;
+  color: #012E57;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+h2::before {
+  content: "📚";
+  font-size: 1.4rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #003F7C;
+  box-shadow: 0 0 8px rgba(0,63,124,0.4);
+  outline: none;
+}
+
+button {
+  width: 160px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #D4A446;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #b7872f;
+  transform: scale(1.03);
+}
+
+.msg {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* أنيميشن بسيط */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
