@@ -463,7 +463,7 @@
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbwhonFbZB8edfHKfVIvxELQSXT4EfM1790E2hzfv3XveHxms4qCCjcrRBpzd4_RdRKM5w/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycby-dAbWFwHdIZcdrNul_wMCQqaiK4iTH0bKBBdAKYNRCErBQyDQEiWrP_3wBXqzwQN3dA/exec";
 
   async function registerCourse() {
     const sid = document.getElementById('sid').value.trim();
@@ -504,6 +504,12 @@
         document.getElementById('semester').value = "";
       } else if (data.status === "MISSING_FIELDS") {
         msg.textContent = "⚠ بيانات ناقصة، تأكد من رقم القيد ورمز المادة.";
+      } else if (data.status === "STUDENT_NOT_FOUND") {
+        msg.textContent = "❌ رقم القيد غير موجود في جدول الطلاب (Students).";
+      } else if (data.status === "COURSE_NOT_FOUND") {
+        msg.textContent = "❌ رمز المادة غير موجود في جدول المواد (Courses).";
+      } else if (data.status === "ALREADY_REGISTERED") {
+        msg.textContent = "⚠ هذا الطالب مسجل بالفعل في هذه المادة.";
       } else {
         msg.textContent = "لم يتم التسجيل، تحقق من البيانات أو الكود. (راجع الرد في الصندوق الأسود)";
       }
@@ -513,6 +519,7 @@
     }
   }
 </script>
+
 
 </body>
 </html>

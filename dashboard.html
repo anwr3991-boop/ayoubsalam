@@ -79,6 +79,10 @@
             text-decoration: none;
             transition: 0.2s;
             color: #E5F0FF;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            position: relative; /* مهم للعلامة فوق */
         }
 
         .dash-item:hover {
@@ -86,30 +90,118 @@
             border-color: #38bdf8;
         }
 
-        /* أيقونة */
         .dash-item .icon {
             font-size: 1.55rem;
-            margin-bottom: 6px;
-        }
-
-        /* عنوان */
-        .dash-item .title {
-            font-size: 1rem;
-            font-weight: 700;
             margin-bottom: 4px;
         }
 
-        /* وصف */
+        .dash-item .title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
         .dash-item .desc {
             font-size: 0.78rem;
             color: #9CA3AF;
         }
 
-        /* زر خروج */
+        /* ===== كرت المالية (مميز) ===== */
+        .dash-item.finance {
+            background: radial-gradient(circle at top left, rgba(250,204,21,0.18), rgba(15,23,42,0.95));
+            border: 1px solid rgba(244,181,71,0.7);
+            overflow: hidden;
+            grid-column: span 2;
+        }
+
+        .dash-item.finance::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 0 0, rgba(244,181,71,0.18), transparent 55%);
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .dash-item.finance .icon {
+            color: #F4B547;
+        }
+
+        .dash-item.finance .title {
+            color: #FDE68A;
+        }
+
+        .dash-item.finance .desc {
+            color: #E5E7EB;
+        }
+
+        .badge-soon {
+            align-self: flex-start;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: rgba(15,23,42,0.9);
+            border: 1px solid rgba(244,181,71,0.9);
+            color: #F4B547;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dash-item.finance > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== زر مقفول (لا يملك صلاحية) ===== */
+        .dash-item.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            border-style: dashed;
+            box-shadow: none;
+        }
+
+        .dash-item.disabled:hover {
+            transform: none;
+            border-color: rgba(148,163,184,0.7);
+        }
+
+        .dash-item.disabled .desc {
+            color: #6b7280;
+        }
+
+        .dash-item.disabled::after {
+            content: "🔒 لا تملك صلاحية لهذا القسم";
+            position: absolute;
+            bottom: 6px;
+            inset-inline-start: 10px;
+            inset-inline-end: 10px;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #fecaca;
+            background: rgba(15,23,42,0.9);
+            border-radius: 999px;
+            border: 1px solid rgba(248,113,113,0.8);
+            padding: 2px 8px;
+        }
+
+        /* فوتر: نوع الحساب + خروج */
         .dash-footer {
             margin-top: 20px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .role-pill {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,0.6);
+            color: #E5F0FF;
+            background: rgba(15,23,42,0.9);
         }
 
         .logout-btn {
@@ -130,7 +222,7 @@
             transform: translateY(-2px);
         }
 
-        /* ===== نسخة الهاتف (S23 Ultra) ===== */
+        /* نسخة الهاتف */
         @media (max-width: 500px) {
             .dash-header h1 { font-size: 1.55rem; }
             .dash-card { padding: 18px 14px 24px; }
@@ -138,6 +230,18 @@
             .dash-item { padding: 14px 12px; }
             .dash-item .icon { font-size: 1.45rem; }
             .dash-item .title { font-size: 0.95rem; }
+            .dash-item.finance { grid-column: auto; }
+            .dash-footer {
+                flex-direction: column-reverse;
+                align-items: stretch;
+            }
+            .role-pill {
+                text-align: center;
+                width: 100%;
+            }
+            .logout-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -157,32 +261,45 @@
         <div class="dash-card">
 
             <div class="dash-grid">
-                <a href="add-student.html" class="dash-item">
+                <!-- نستخدم data-key لكل صلاحية -->
+
+                <a href="add-student.html" class="dash-item" data-key="add-student">
                     <span class="icon">👨‍🎓</span>
                     <span class="title">إضافة طالب</span>
                     <span class="desc">تسجيل طالب جديد وربطه بالكلية.</span>
                 </a>
 
-                <a href="add-course.html" class="dash-item">
+                <a href="add-course.html" class="dash-item" data-key="add-course">
                     <span class="icon">📚</span>
                     <span class="title">إضافة مادة</span>
                     <span class="desc">إضافة مقررات واعتمادها.</span>
                 </a>
 
-                <a href="registercourse.html" class="dash-item">
+                <a href="registercourse.html" class="dash-item" data-key="registercourse">
                     <span class="icon">📝</span>
                     <span class="title">تسجيل مواد</span>
                     <span class="desc">تسجيل مواد الطلاب للفصل.</span>
                 </a>
 
-                <a href="reports.html" class="dash-item">
+                <a href="reports.html" class="dash-item" data-key="reports">
                     <span class="icon">📊</span>
                     <span class="title">التقارير</span>
                     <span class="desc">تقارير الطلاب والمواد.</span>
                 </a>
+
+                <!-- زر المالية (قريباً) -->
+               <a href="finance.html" class="dash-item finance" data-key="finance">
+    <span class="badge-soon">قريباً</span>
+    <span class="icon">💰</span>
+    <span class="title">المالية</span>
+    <span class="desc">إدارة الرسوم، الإيصالات، والذمم المالية للطلاب.</span>
+</a>
+
+
             </div>
 
             <div class="dash-footer">
+                <span id="rolePill" class="role-pill"></span>
                 <button class="logout-btn" onclick="logout()">⏻ تسجيل الخروج</button>
             </div>
 
@@ -191,17 +308,70 @@
 </div>
 
 <script>
+    // قراءة المستخدم والدور من localStorage
     const user = localStorage.getItem("aiu_user");
+    const role = localStorage.getItem("aiu_role") || "user1";
+
     if (!user) {
         window.location.href = "login.html";
     } else {
         document.getElementById("welcome").textContent = "مرحباً، " + user;
     }
 
+    // جدول الصلاحيات
+    const permissions = {
+       admin: ["add-student", "add-course", "registercourse", "reports", "finance"],
+        user1: ["registercourse", "reports","add-course", "finance"], // موظف تسجيل
+        user2: ["reports", "finance"]                    // موظف تقارير
+    };
+
+    const roleNames = {
+        admin: "مدير النظام",
+        user1: "منسق كلية",
+        user2: "موظف تقارير"
+    };
+
+    const pill = document.getElementById("rolePill");
+    if (pill) {
+        pill.textContent = "نوع الحساب: " + (roleNames[role] || role);
+    }
+
+    // تطبيق الصلاحيات: لا نخفي الأزرار، بس نقفلها
+    function applyPermissions() {
+        const allowed = permissions[role] || [];
+
+        document.querySelectorAll(".dash-item").forEach(item => {
+            const key = item.getAttribute("data-key");
+            if (!key) return;
+
+            // نزيل حالة القفل افتراضياً
+            item.classList.remove("disabled");
+
+            // لو ماعندهش صلاحية لهذا الزر
+            if (!allowed.includes(key)) {
+                item.classList.add("disabled");
+
+                // منع الضغط + رسالة
+                item.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    alert("لا تملك صلاحية الدخول إلى هذا القسم راجع مدير النظام م.أيوب الحوات.");
+                });
+            }
+        });
+    }
+
+    applyPermissions();
+
     function logout() {
         localStorage.removeItem("aiu_user");
         localStorage.removeItem("aiu_role");
         window.location.href = "login.html";
+    }
+
+    // المالية (للآن مجرد رسالة قريباً، لكن لو الصلاحية مقفولة بيطلع له رسالة الصلاحيات بدلها)
+    function financeSoon(e) {
+        e.preventDefault();
+        alert("قسم المالية سيتم تفعيله في التحديث القادم للنظام.");
     }
 </script>
 

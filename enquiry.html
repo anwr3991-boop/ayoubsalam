@@ -3,27 +3,405 @@
 <head>
   <meta charset="UTF-8" />
   <title>استعلام رقم القيد</title>
-  <link rel="stylesheet" href="id.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- خط جميل -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-soft: #6366f1;
+      --accent: #22c55e;
+      --danger: #ef4444;
+      --text: #0f172a;
+      --muted: #9ca3af;
+      --card-bg: rgba(15, 23, 42, 0.72);
+      --glass-border: rgba(148, 163, 184, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      direction: rtl;
+      color: #f9fafb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #0f172a, #1d4ed8, #0f766e);
+      background-size: 300% 300%;
+      animation: bgMove 12s ease-in-out infinite;
+    }
+
+    @keyframes bgMove {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 480px;
+      padding: 18px 12px;
+      position: relative;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.4;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .orb.orb-1 {
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle at center, #22d3ee, transparent);
+      top: -40px;
+      left: -40px;
+      animation: floatOrb1 10s ease-in-out infinite;
+    }
+
+    .orb.orb-2 {
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle at center, #f97316, transparent);
+      bottom: -60px;
+      right: -40px;
+      animation: floatOrb2 14s ease-in-out infinite;
+    }
+
+    @keyframes floatOrb1 {
+      0%,100% { transform: translate(0,0); }
+      50%     { transform: translate(10px, 20px); }
+    }
+
+    @keyframes floatOrb2 {
+      0%,100% { transform: translate(0,0); }
+      50%     { transform: translate(-15px, -10px); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.90), rgba(15, 23, 42, 0.78));
+      border-radius: 22px;
+      padding: 18px 16px 20px;
+      box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.7),
+        0 0 0 1px rgba(148,163,184,0.35);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+      animation: cardIn 0.7s ease-out;
+    }
+
+    @keyframes cardIn {
+      0% {
+        opacity: 0;
+        transform: translateY(18px) scale(.98);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(96,165,250,0.4), transparent, rgba(52,211,153,0.35));
+      opacity: 0;
+      transition: 0.4s;
+      z-index: -1;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .logo-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #eef2ff, #1d4ed8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      overflow: hidden;
+      border: 2px solid rgba(191, 219, 254, 0.8);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.7);
+      animation: floatLogo 4s ease-in-out infinite;
+    }
+
+    .logo-box img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+    }
+
+    @keyframes floatLogo {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-4px); }
+    }
+
+    h2 {
+      margin: 4px 0 4px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #e5e7eb;
+      text-align: center;     /* ⬅⬅ تم التوسيط */
+    }
+
+    .subtitle {
+      margin: 0 0 14px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;     /* ⬅⬅ تم التوسيط */
+    }
+
+    #sid {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.85);
+      color: #e5e7eb;
+      font-family: inherit;
+      font-size: 0.95rem;
+      text-align: center;
+      outline: none;
+      transition: 0.25s;
+      margin-bottom: 10px;
+    }
+
+    #sid::placeholder {
+      color: #6b7280;
+    }
+
+    #sid:focus {
+      border-color: var(--primary-soft);
+      box-shadow: 0 0 0 1px rgba(129,140,248,0.7);
+    }
+
+    button {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: none;
+      background: radial-gradient(circle at 20% 0, #a7f3d0, #22c55e);
+      color: #022c22;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow:
+        0 12px 28px rgba(34, 197, 94, 0.7),
+        0 0 0 1px rgba(16, 185, 129, 0.7);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+      margin-bottom: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 10% 0, rgba(255,255,255,0.35), transparent);
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    button:active {
+      transform: translateY(1.5px) scale(0.99);
+      box-shadow:
+        0 6px 18px rgba(34, 197, 94, 0.65),
+        0 0 0 1px rgba(16, 185, 129, 0.7);
+      filter: brightness(0.98);
+    }
+
+    button:hover::after {
+      opacity: 1;
+    }
+
+    button span.icon {
+      font-size: 1.1rem;
+    }
+
+    .error {
+      min-height: 18px;
+      margin: 2px 0 4px;
+      font-size: 0.8rem;
+      color: var(--danger);
+      text-align: center;
+    }
+
+    .status {
+      min-height: 18px;
+      margin: 0 0 4px;
+      font-size: 0.75rem;
+      color: #a5b4fc;
+      text-align: center;
+    }
+
+    .result {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(148, 163, 184, 0.5);
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      animation: resultIn 0.4s ease-out;
+    }
+
+    @keyframes resultIn {
+      0%   { opacity: 0; transform: translateY(6px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .result h3 {
+      margin: 4px 0 2px;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .result p {
+      margin: 2px 0;
+      font-size: 0.82rem;
+      color: #d1d5db;
+    }
+
+    .label {
+      color: #9ca3af;
+      font-size: 0.8rem;
+    }
+
+    .money {
+      margin-top: 6px;
+      padding: 7px 8px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 0 0, rgba(34,197,94,0.18), rgba(15,23,42,0.95));
+      border: 1px solid rgba(34,197,94,0.4);
+    }
+
+    .money p {
+      margin: 2px 0;
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .money strong {
+      font-weight: 800;
+      color: #bbf7d0;
+    }
+
+    .course {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(244, 181, 71, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeUp 0.35s ease-out;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    }
+
+    .course:hover {
+      transform: translateY(-3px);
+      transition: 0.25s;
+      box-shadow: 0 10px 20px rgba(244, 181, 71, 0.45);
+      border-color: #F4B547;
+    }
+
+    .course-icon {
+      font-size: 1.3rem;
+      color: #F4B547;
+    }
+
+    .course .code {
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(244, 181, 71, 0.15);
+      border: 1px solid rgba(244, 181, 71, 0.5);
+      color: #F4B547;
+    }
+
+    .course .name {
+      font-size: 0.9rem;
+      color: #f9fafb;
+      font-weight: 600;
+    }
+
+    @keyframes fadeUp {
+      0%   { opacity: 0; transform: translateY(6px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .empty-msg {
+      font-size: 0.82rem;
+      color: #cbd5f5;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 16px 14px 18px;
+        border-radius: 20px;
+      }
+      h2 {
+        font-size: 1.15rem;
+      }
+      .subtitle {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
   <div class="wrapper">
-    <div class="card">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-      <!-- شعار الجامعة -->
+    <div class="card">
       <div class="logo-box">
         <img src="aiu-logo.png" alt="شعار الجامعة">
       </div>
 
       <h2>📘 استعلام المواد</h2>
-      <p class="subtitle">أدخل رقم القيد لمعرفة المواد المسجلة لهذا الفصل</p>
+      <p class="subtitle">أدخل رقم القيد لمعرفة بياناتك والمواد المسجلة لهذا الفصل</p>
 
       <input id="sid" type="number" placeholder="أدخل رقم القيد">
 
-      <button onclick="lookup()">استعلام</button>
+      <button onclick="lookup()">
+        <span class="icon">🔍</span>
+        <span>استعلام</span>
+      </button>
 
       <p id="error" class="error"></p>
+      <p id="status" class="status"></p>
 
       <div id="result" class="result"></div>
     </div>
@@ -31,46 +409,95 @@
 
 <script>
   async function lookup() {
-    let id = document.getElementById("sid").value;
-    let error = document.getElementById("error");
-    let box = document.getElementById("result");
+    let id     = document.getElementById("sid").value;
+    let error  = document.getElementById("error");
+    let status = document.getElementById("status");
+    let box    = document.getElementById("result");
 
     error.textContent = "";
+    status.textContent = "";
     box.innerHTML = "";
 
-    if (id.trim() === "") {
+    if (!id || id.trim() === "") {
       error.textContent = "الرجاء إدخال رقم القيد";
       return;
     }
 
-    let api = "https://script.google.com/macros/s/AKfycbwhonFbZB8edfHKfVIvxELQSXT4EfM1790E2hzfv3XveHxms4qCCjcrRBpzd4_RdRKM5w/exec";
-    let url = api + "?action=getStudent&id=" + id;
+    status.textContent = "⏳ جاري جلب البيانات...";
 
-    let res = await fetch(url);
-    let data = await res.json();
+    let api = "https://script.google.com/macros/s/AKfycby-dAbWFwHdIZcdrNul_wMCQqaiK4iTH0bKBBdAKYNRCErBQyDQEiWrP_3wBXqzwQN3dA/exec";
+    let url = api + "?action=getStudent&id=" + encodeURIComponent(id);
 
-    if (data.error === "STUDENT_NOT_FOUND") {
-      error.textContent = "رقم القيد غير موجود. راجع مكتب الدراسة.";
-      return;
+    try {
+      let res  = await fetch(url);
+      let data = await res.json();
+      status.textContent = "";
+
+      if (data.error === "STUDENT_NOT_FOUND") {
+        error.textContent = "رقم القيد غير موجود. يرجى مراجعة مكتب الدراسة والامتحانات.";
+        return;
+      }
+
+      let paid       = (data.paid !== undefined && data.paid !== "") ? data.paid : 0;
+      let remaining  = (data.remaining !== undefined && data.remaining !== "") ? data.remaining : 0;
+      let receipt    = data.receipt || "-";
+      let studStatus = data.stud_status || "-";
+
+      let html = `
+        <div style="text-align:center; margin-bottom:10px;">
+          <h3 style="font-size:1.15rem; margin:6px 0;">👨‍🎓 ${data.full_name}</h3>
+
+          <div style="margin:4px 0; font-size:0.9rem;">
+            <span style="color:#F4B547; font-weight:700;">🏛️ الكلية:</span>
+            <span style="font-weight:600; margin-right:6px;">${data.college || "-"}</span>
+          </div>
+
+          <div style="margin:4px 0; font-size:0.9rem;">
+            <span style="color:#F4B547; font-weight:700;">📚 التخصص:</span>
+            <span style="font-weight:600; margin-right:6px;">${data.department || "-"}</span>
+          </div>
+
+          <div style="margin:4px 0; font-size:0.9rem;">
+            <span style="color:#F4B547; font-weight:700;">🧾 رقم الإيصال:</span>
+            <span style="font-weight:600; margin-right:6px;">${receipt}</span>
+          </div>
+
+          <div style="margin:4px 0; font-size:0.9rem;">
+            <span style="color:#F4B547; font-weight:700;">🎓 حالة الطالب:</span>
+            <span style="font-weight:600; margin-right:6px;">${studStatus}</span>
+          </div>
+        </div>
+
+        <div class="money">
+          <p><span>✅ المبلغ المدفوع:</span> <strong>${paid}</strong> د.ل</p>
+          <p><span>⚠ المبلغ المتبقي:</span> <strong>${remaining}</strong> د.ل</p>
+        </div>
+
+        <div class="courses-title" style="text-align:center; margin-top:12px;">
+          📖 المواد المسجلة:
+        </div>
+      `;
+
+      if (data.courses && data.courses.length > 0) {
+        data.courses.forEach(c => {
+          html += `
+            <div class="course">
+              <span class="course-icon">📘</span>
+              <span class="code">${c.code}</span>
+              <span class="name">${c.name}</span>
+            </div>
+          `;
+        });
+      } else {
+        html += `<div class="empty-msg">لا توجد مواد مسجلة لهذا الطالب في هذا الفصل.</div>`;
+      }
+
+      box.innerHTML = html;
+    } catch (e) {
+      console.error(e);
+      status.textContent = "";
+      error.textContent = "حدث خطأ أثناء الاتصال بالخادم، حاول مرة أخرى.";
     }
-
-    // عرض البيانات
-    let html = `
-      <h3>👨‍🎓 اسم الطالب: ${data.full_name}</h3>
-      <p>🏛️ الكلية: ${data.college}</p>
-      <p>📚 التخصص: ${data.department}</p>
-      <h4>المواد المسجلة:</h4>
-    `;
-
-    data.courses.forEach(c => {
-      html += `
-        <div class="course">
-          <span class="code">${c.code}</span>
-          <span class="name">${c.name}</span>
-        </div>`;
-    });
-
-    box.innerHTML = html;
   }
 </script>
 
