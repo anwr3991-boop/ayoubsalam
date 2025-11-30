@@ -219,17 +219,19 @@
     }
 
     #raw {
-      margin-top: 6px;
-      background: #020617;
-      color: #22c55e;
-      padding: 6px 8px;
-      font-size: 11px;
-      max-height: 110px;
-      overflow: auto;
-      border-radius: 8px;
-      direction: ltr;
-      text-align: left;
-    }
+  display: none !important;
+  margin-top: 6px;
+  background: #020617;
+  color: #22c55e;
+  padding: 6px 8px;
+  font-size: 11px;
+  max-height: 110px;
+  overflow: auto;
+  border-radius: 8px;
+  direction: ltr;
+  text-align: left;
+}
+
 
     /* يسار: لوحة معلومات */
     .info-pane {
@@ -474,7 +476,7 @@
 
 <script>
   // ⭐ نفس رابط الـ API اللي خدم معاك في استعلام الطالب
-  const API_URL = "https://script.google.com/macros/s/AKfycby-dAbWFwHdIZcdrNul_wMCQqaiK4iTH0bKBBdAKYNRCErBQyDQEiWrP_3wBXqzwQN3dA/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbwCZQAihGkwmKalNLn3kZP2mffKKiB70wTDU7ZuCf2Kb0RmCLeEX7l8-Jycg7OsPcM9Hw/exec";
 
   async function saveCourse() {
     const code = document.getElementById('code').value.trim();

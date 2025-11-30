@@ -112,6 +112,7 @@
       justify-content: space-between;
       gap: 8px;
       margin-bottom: 4px;
+      flex-wrap: wrap;
     }
 
     .card-title {
@@ -132,6 +133,13 @@
       margin: 0;
     }
 
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
     .btn {
       padding: 7px 14px;
       border-radius: 999px;
@@ -145,6 +153,7 @@
       align-items: center;
       gap: 4px;
       box-shadow: 0 8px 18px rgba(22,163,74,0.6);
+      white-space: nowrap;
     }
 
     .btn:hover {
@@ -154,6 +163,38 @@
     .btn.secondary {
       background: linear-gradient(135deg, #0ea5e9, #0369a1);
       box-shadow: 0 8px 18px rgba(14,165,233,0.6);
+    }
+
+    /* 🔹 شريط الفلترة بالكليات */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 4px 0 8px;
+    }
+
+    .filter-chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #374151;
+    }
+
+    .filter-chip span.icon {
+      font-size: 1rem;
+    }
+
+    .filter-chip.active {
+      background: #0ea5e9;
+      color: #f9fafb;
+      border-color: #0284c7;
+      box-shadow: 0 0 0 1px rgba(14,165,233,0.4);
     }
 
     .field-row {
@@ -192,23 +233,33 @@
       max-height: 260px;
     }
 
+    /* 🔹 تنسيق جدول الملخص */
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.8rem;
+      table-layout: fixed;
     }
 
     th, td {
       padding: 6px 8px;
       border-bottom: 1px solid #e5e7eb;
-      text-align: right;
-      white-space: nowrap;
+      text-align: center;
+      white-space: normal;
+      color: #111827;
+      font-weight: 600;
     }
+
+    /* 4 أعمدة: رمز – اسم – كلية – عدد */
+    th:nth-child(1), td:nth-child(1) { width: 15%; }
+    th:nth-child(2), td:nth-child(2) { width: 40%; }
+    th:nth-child(3), td:nth-child(3) { width: 25%; }
+    th:nth-child(4), td:nth-child(4) { width: 20%; }
 
     th {
       background: #eff6ff;
       font-weight: 700;
-      color: #1f2937;
+      color: #111827;
       position: sticky;
       top: 0;
       z-index: 1;
@@ -225,6 +276,13 @@
       background: #e0f2fe;
       color: #0369a1;
       font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* 🔴 مواد أقل من 3 طلاب */
+    .low-enroll td {
+      background: #fef2f2 !important;
+      color: #991b1b !important;
     }
 
     .debug-label {
@@ -244,9 +302,10 @@
       border-radius: 8px;
       direction: ltr;
       text-align: left;
+      display: none;
     }
 
-    /* ✅ وضع الطباعة: كشف بسيط بدون صور */
+    /* طباعة */
     @media print {
       body {
         background: #ffffff;
@@ -265,7 +324,6 @@
         gap: 8px;
       }
 
-      /* نخلي التوب بار أبيض ونص أسود عادي */
       .top-bar {
         background: #ffffff !important;
         color: #000000 !important;
@@ -277,24 +335,22 @@
       }
 
       .top-text p {
-        display: none; /* نخفي السطر الصغير */
+        display: none;
       }
 
-      /* نخفي كل الصور/الإيموجيات */
       .logo-circle,
       .card-title .icon {
         display: none !important;
       }
 
-      /* نخفي الأزرار، الشيب، التشخيص */
       .btn,
       .chip,
+      .filter-bar,
       .debug-label,
       #raw {
         display: none !important;
       }
 
-      /* نخلي الكروت بدون خلفيات ملونة، زي “ورقة كشف” */
       .card {
         background: #ffffff !important;
         border-radius: 0;
@@ -324,7 +380,6 @@
         padding: 0;
       }
 
-      /* 🔹 طباعة ملخص المواد فقط */
       body.print-summary .card-summary {
         display: block !important;
       }
@@ -332,7 +387,6 @@
         display: none !important;
       }
 
-      /* 🔹 طباعة تقرير المادة فقط */
       body.print-details .card-summary {
         display: none !important;
       }
@@ -375,7 +429,47 @@
         width: 100%;
         justify-content: center;
       }
+
+      .card-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
+    
+    /* لودر (رملة) صغير */
+   .loader {
+   display: inline-block;
+   width: 18px;
+   height: 18px;
+   border: 3px solid #0ea5e9;
+   border-top-color: transparent;
+   border-radius: 50%;
+   animation: spin 0.7s linear infinite;
+   margin-left: 6px;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #0ea5e9;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
   </style>
 </head>
 
@@ -394,7 +488,7 @@
   </div>
 
   <div class="content">
-    <!-- الكرت الأيمن: ملخص المواد -->
+    <!-- 🔵 الكرت الأيمن: ملخص المواد -->
     <div class="card card-summary">
       <div class="card-header">
         <div>
@@ -402,18 +496,68 @@
             <span class="icon">📚</span>
             <span>تقرير عام لكل مادة</span>
           </div>
-          <p class="card-sub">عرض جميع المواد مع عدد الطلاب المسجَّلين في كل مادة.</p>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-end;">
-          <button class="btn" onclick="loadSummary()">
-            🔄 تحديث الملخص
-          </button>
-          <!-- زر طباعة ملخص PDF -->
-          <button class="btn secondary" onclick="printSummary()">
-            🖨️ طباعة ملخص PDF
-          </button>
+          <p class="card-sub">عرض جميع المواد مع الكلية وعدد الطلاب المسجَّلين في كل مادة.</p>
         </div>
       </div>
+
+      <div class="btn-row">
+        <button class="btn" onclick="loadSummary()">🔄 تحديث الملخص</button>
+        <button class="btn secondary" onclick="printSummary()">🖨️ طباعة ملخص PDF</button>
+      </div>
+
+            <!-- 🔹 شريط الفلترة بالكليات -->
+      <div class="filter-bar" id="filterBar">
+        <!-- الكل -->
+        <button class="filter-chip active" data-college="ALL"
+                onclick="filterByCollege('ALL', this)">
+          <span class="icon">🌐</span><span>كل الكليات</span>
+        </button>
+
+        <!-- اقتصاد -->
+        <button class="filter-chip" data-college="إقتصاد"
+                onclick="filterByCollege('إقتصاد', this)">
+          <span class="icon">💼</span><span>الاقتصاد</span>
+        </button>
+
+        <!-- قانون -->
+        <button class="filter-chip" data-college="قانون"
+                onclick="filterByCollege('قانون', this)">
+          <span class="icon">⚖️</span><span>القانون</span>
+        </button>
+
+        <!-- صيدلة (تجمع صيدلة جديدة + صيدلة قديمة) -->
+        <button class="filter-chip" data-college="صيدلة قديمة"
+                onclick="filterByCollege('صيدلة قديمة', this)">
+          <span class="icon">💊</span><span>الصيدلة</span>
+        </button>
+        <!-- صيدلة (تجمع صيدلة جديدة + صيدلة قديمة) -->
+        <button class="filter-chip" data-college="صيدلة جديدة"
+                onclick="filterByCollege('صيدلة جديدة', this)">
+          <span class="icon">💊</span><span>صيدلة جديدة</span>
+        </button>
+
+       <!-- الحاسوب -->
+        <button class="filter-chip" data-college="الحاسوب"
+                onclick="filterByCollege('الحاسوب', this)">
+          <span class="icon">💻</span><span>كلية الحاسوب</span>
+        </button>
+
+
+        <!-- تقنية طبية -->
+        <button class="filter-chip" data-college="تقنية طبية"
+                onclick="filterByCollege('تقنية طبية', this)">
+          <span class="icon">🧪</span><span>كلية التقنية الطبية</span>
+        </button>
+
+        <!-- الهندسة -->
+        <button class="filter-chip" data-college="الهندسة"
+                onclick="filterByCollege('الهندسة', this)">
+          <span class="icon">🏗️</span><span>كلية الهندسة</span>
+        </button>
+
+        
+      </div>
+
 
       <div class="table-wrapper" id="summaryTableWrap">
         <table id="summaryTable">
@@ -421,19 +565,18 @@
             <tr>
               <th>رمز المادة</th>
               <th>اسم المادة</th>
+              <th>الكلية</th>
               <th>عدد المسجلين</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- يتم تعبئته بالجافاسكربت -->
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
 
       <div id="summaryMsg" class="msg"></div>
     </div>
 
-    <!-- الكرت الأيسر: تفاصيل مادة معينة -->
+    <!-- 🟣 الكرت الأيسر: تفاصيل مادة -->
     <div class="card card-details">
       <div class="card-header">
         <div>
@@ -443,11 +586,10 @@
           </div>
           <p class="card-sub">أدخل رمز المادة لعرض قائمة الطلاب المسجَّلين.</p>
         </div>
+      </div>
 
-        <!-- زر طباعة PDF لتقرير المادة -->
-        <button class="btn secondary" onclick="printDetails()">
-          🖨️ طباعة تقرير المادة PDF
-        </button>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="printDetails()">🖨️ طباعة تقرير المادة PDF</button>
       </div>
 
       <div class="field-row">
@@ -465,33 +607,56 @@
               <th>اسم الطالب</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- يتم تعبئته بالجافاسكربت -->
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
 
       <div id="detailsMsg" class="msg"></div>
-      <!-- <div class="debug-label">🔍 رد الـ API (للاختبار فقط):</div> -->
-<pre id="raw" style="display: none;"></pre>
+      <pre id="raw"></pre>
     </div>
   </div>
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycby-dAbWFwHdIZcdrNul_wMCQqaiK4iTH0bKBBdAKYNRCErBQyDQEiWrP_3wBXqzwQN3dA/exec";
+  const API_URL =
+    "https://script.google.com/macros/s/AKfycbwCZQAihGkwmKalNLn3kZP2mffKKiB70wTDU7ZuCf2Kb0RmCLeEX7l8-Jycg7OsPcM9Hw/exec";
 
+  // نخزن كل الملخص هنا بعد أول تحميل
+  let allSummaryData = [];
+
+  // دالة ترسم جدول الملخص من أي ليست نبعثهالها
+  function renderSummaryTable(list) {
+    const tbody = document.querySelector("#summaryTable tbody");
+    tbody.innerHTML = "";
+
+    list.forEach((item) => {
+      const tr = document.createElement("tr");
+      const total = parseInt(item.total, 10) || 0;
+
+      if (total < 3) {
+        tr.classList.add("low-enroll");
+      }
+
+      tr.innerHTML = `
+        <td>${item.code || ""}</td>
+        <td>${item.name || ""}</td>
+        <td>${item.college || ""}</td>
+        <td><span class="badge-small">${total}</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // 🔵 ملخص المواد
   async function loadSummary() {
-    const msg = document.getElementById('summaryMsg');
-    const tbody = document.querySelector('#summaryTable tbody');
+    const msg = document.getElementById("summaryMsg");
     msg.textContent = "جاري تحميل الملخص...";
     msg.style.color = "#6b7280";
-    tbody.innerHTML = "";
 
     const url = `${API_URL}?action=courseSummary`;
 
     try {
-      const res  = await fetch(url);
+      const res = await fetch(url);
       const text = await res.text();
       let data;
       try {
@@ -508,19 +673,11 @@
         return;
       }
 
-      data.summary.forEach(item => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${item.code || ""}</td>
-          <td>${item.name || ""}</td>
-          <td><span class="badge-small">${item.total || 0}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      allSummaryData = data.summary;   // نخزنها للاستعمال في الفلترة
+      renderSummaryTable(allSummaryData);
 
       msg.style.color = "green";
       msg.textContent = "✔ تم تحميل الملخص بنجاح";
-
     } catch (e) {
       console.error(e);
       msg.style.color = "red";
@@ -528,94 +685,120 @@
     }
   }
 
-  async function loadDetails() {
-    const code = document.getElementById('detailCode').value.trim();
-    const header = document.getElementById('detailsHeader');
-    const msg    = document.getElementById('detailsMsg');
-    const tbody  = document.querySelector('#detailsTable tbody');
-    const raw    = document.getElementById('raw');
+  // فلترة حسب الكلية
+  function filterByCollege(collegeName, btnElement) {
+    // نحدّث الأزرار (نشيل active ونحطه للزر الحالي)
+    const chips = document.querySelectorAll(".filter-chip");
+    chips.forEach(ch => ch.classList.remove("active"));
+    if (btnElement) {
+      btnElement.classList.add("active");
+    }
 
-    header.textContent = "";
-    msg.textContent = "";
-    raw.textContent = "";
-    tbody.innerHTML = "";
+    if (collegeName === "ALL") {
+      renderSummaryTable(allSummaryData);
+    } else {
+      const filtered = allSummaryData.filter(item =>
+        (item.college || "").trim() === collegeName
+      );
+      renderSummaryTable(filtered);
+    }
+  }
 
-    if (!code) {
+// 🟣 تفاصيل مادة + رسالة جاري جلب البيانات + لودر
+async function loadDetails() {
+  const code = document.getElementById("detailCode").value.trim();
+  const header = document.getElementById("detailsHeader");
+  const msg = document.getElementById("detailsMsg");
+  const tbody = document.querySelector("#detailsTable tbody");
+  const raw = document.getElementById("raw");
+
+  header.textContent = "";
+  msg.textContent = "";
+  raw.textContent = "";
+  tbody.innerHTML = "";
+
+  if (!code) {
+    msg.style.color = "red";
+    msg.textContent = "⚠ الرجاء إدخال رمز المادة أولاً";
+    return;
+  }
+
+  // ⏳ رسالة جاري جلب البيانات + اللودر
+  msg.style.color = "#0ea5e9";
+  msg.innerHTML = `<span class="spinner"></span> جاري جلب البيانات...`;
+
+  const url = `${API_URL}?action=courseDetails&code=${encodeURIComponent(code)}`;
+
+  try {
+    const res = await fetch(url);
+    const text = await res.text();
+    raw.textContent = text;
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
       msg.style.color = "red";
-      msg.textContent = "⚠ الرجاء إدخال رمز المادة أولاً";
+      msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
       return;
     }
 
-    const url = `${API_URL}?action=courseDetails&code=${encodeURIComponent(code)}`;
-
-    try {
-      const res  = await fetch(url);
-      const text = await res.text();
-      raw.textContent = text;
-
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        msg.style.color = "red";
-        msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
-        return;
-      }
-
-      if (data.error === "COURSE_NOT_FOUND") {
-        msg.style.color = "red";
-        msg.textContent = "المادة غير موجودة، تأكد من رمز المادة.";
-        return;
-      }
-
-      header.innerHTML = `
-        <span>مادة: <strong>${data.course_name || ""}</strong></span>
-        &nbsp; | &nbsp;
-        <span class="badge-small">${data.code || code}</span>
-      `;
-
-      if (!data.students || data.students.length === 0) {
-        msg.style.color = "#6b7280";
-        msg.textContent = "لا يوجد طلاب مسجَّلين في هذه المادة حالياً.";
-        return;
-      }
-
-      data.students.forEach(st => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${st.student_id || ""}</td>
-          <td>${st.full_name || ""}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      msg.style.color = "green";
-      msg.textContent = "✔ تم جلب تفاصيل المادة";
-
-    } catch (e) {
-      console.error(e);
+    if (data.error === "COURSE_NOT_FOUND") {
       msg.style.color = "red";
-      msg.textContent = "❌ خطأ في الاتصال برابط الـ API";
+      msg.textContent = "المادة غير موجودة، تأكد من رمز المادة.";
+      return;
     }
-  }
 
-  // 🖨️ طباعة ملخص المواد فقط (كشف عام)
+    header.innerHTML = `
+      <span>مادة: <strong>${data.course_name || ""}</strong></span>
+      &nbsp; | &nbsp;
+      <span class="badge-small">${data.code || code}</span>
+    `;
+
+    if (!data.students || data.students.length === 0) {
+      msg.style.color = "#6b7280";
+      msg.textContent = "لا يوجد طلاب مسجَّلين في هذه المادة حالياً.";
+      return;
+    }
+
+    data.students.forEach((st) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${st.student_id || ""}</td>
+        <td>${st.full_name || ""}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // ✔ نجاح
+    msg.style.color = "green";
+    msg.textContent = "✔ تم جلب تفاصيل المادة";
+
+  } catch (e) {
+    console.error(e);
+    msg.style.color = "red";
+    msg.textContent = "❌ خطأ في الاتصال برابط الـ API";
+  }
+}
+
+
+  // طباعة ملخص
   function printSummary() {
-    document.body.classList.add('print-summary');
-    document.body.classList.remove('print-details');
+    document.body.classList.add("print-summary");
+    document.body.classList.remove("print-details");
     window.print();
     setTimeout(() => {
-      document.body.classList.remove('print-summary');
+      document.body.classList.remove("print-summary");
     }, 500);
   }
 
-  // 🖨️ طباعة تقرير المادة فقط (كشف مادة)
+  // طباعة تقرير مادة
   function printDetails() {
-    document.body.classList.add('print-details');
-    document.body.classList.remove('print-summary');
+    document.body.classList.add("print-details");
+    document.body.classList.remove("print-summary");
     window.print();
     setTimeout(() => {
-      document.body.classList.remove('print-details');
+      document.body.classList.remove("print-details");
     }, 500);
   }
 </script>
