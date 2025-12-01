@@ -23,11 +23,15 @@
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       font-family: "Cairo", sans-serif;
-      color: #e5e7eb;
       direction: rtl;
+    }
+
+    body {
+      color: #e5e7eb;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -35,7 +39,8 @@
       justify-content: flex-start;
       padding: 14px 10px 18px;
       position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto; /* يسمح بالسكرول على الشاشات الكبيرة */
       background: radial-gradient(circle at top left, #0f172a 0, #020617 40%, #000 100%);
     }
 
@@ -199,7 +204,7 @@
 
     .top-bar {
       grid-column: 1 / -1;
-      padding: 10px 18px 8px;
+      padding: 10px 18px 10px;
       background: linear-gradient(135deg, #0f172a, #020617);
       border-bottom: 1px solid rgba(148,163,184,0.55);
       color: #e5e7eb;
@@ -209,6 +214,7 @@
       gap: 8px;
       position: relative;
       overflow: hidden;
+      margin-bottom: 6px;
     }
 
     .top-bar::after {
@@ -285,6 +291,12 @@
       box-shadow: 0 0 0 6px rgba(34,197,94,0.18);
     }
 
+    /* فاصل بسيط تحت شريط "تسجيل مواد للطلاب" */
+    .section-gap {
+      grid-column: 1 / -1;
+      height: 8px;
+    }
+
     .form-pane {
       position: relative;
       padding: 18px 20px 20px;
@@ -307,7 +319,7 @@
     }
 
     .form-title {
-      margin: 4px 0 6px;
+      margin: 6px 0 8px;
       font-size: 1.22rem;
       font-weight: 800;
       display: flex;
@@ -666,28 +678,37 @@
       }
     }
 
+    /* موبايل – بدون سكرول للصفحة، السكرول جوّة الكرت فقط */
     @media (max-width: 600px) {
+      body {
+        height: 100vh;
+        padding: 8px 6px 10px;
+        justify-content: flex-start;
+        overflow: hidden;
+      }
+
+      body::before,
+      body::after {
+        display: none !important;
+      }
+
       .header-bar {
         border-radius: 16px;
         padding: 7px 10px;
+        margin-bottom: 6px;
       }
 
-      .header-text-main .uni-name {
-        font-size: 0.88rem;
-      }
-
-      .header-left {
-        gap: 8px;
-      }
-
-      .header-tag {
-        display: none; /* نخفّي الوسم في الشاشات الصغيرة لو تحب */
+      .shell {
+        border-radius: 18px;
+        max-width: 100%;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
       }
     }
 
     @media (max-width: 550px) {
       body {
-        padding: 10px 8px 14px;
+        padding: 8px 6px 8px;
       }
 
       .shell {
@@ -724,15 +745,25 @@
       .hint {
         max-width: 100%;
       }
+
+      .header-text-main .uni-name {
+        font-size: 0.88rem;
+      }
+
+      .header-left {
+        gap: 8px;
+      }
+
+      .header-tag {
+        display: none;
+      }
     }
 
     .debug-label,
-#raw,
-.debug-bar {
-  display: none !important;
-}
-
-
+    #raw,
+    .debug-bar {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -742,7 +773,6 @@
 <div class="header-bar">
   <div class="header-left">
     <div class="header-logo">
-      <!-- حط ملف الشعار في نفس المجلد باسم aiu-logo.png -->
       <img src="aiu-logo.png" alt="شعار جامعة السلام الدولية">
     </div>
     <div class="header-text-main">
@@ -764,6 +794,9 @@
     </div>
     <div class="chip">نظام إدارة الجامعة</div>
   </div>
+
+  <!-- 🔹 فاصل بين شريط العنوان و فقرة "إضافة تسجيل جديد" -->
+  <div class="section-gap"></div>
 
   <!-- فورم التسجيل -->
   <div class="form-pane">
@@ -806,7 +839,7 @@
     <!-- الفصل الدراسي -->
     <div class="field">
       <label for="semester">الفصل الدراسي</label>
-<input type="text" id="semester" value="خريف 2025/2026" readonly>
+      <input type="text" id="semester" value="خريف 2025/2026" readonly>
     </div>
 
     <div class="actions">
@@ -1010,10 +1043,9 @@
     raw.textContent = "";
 
     if (!sid || !cleanCode || !sem) {
-  msg.textContent = "⚠ رقم القيد، رمز المادة، والفصل الدراسي مطلوبة";
-  return;
-}
-
+      msg.textContent = "⚠ رقم القيد، رمز المادة، والفصل الدراسي مطلوبة";
+      return;
+    }
 
     // تأكد أن الطالب من القائمة
     if (!allStudents || allStudents.length === 0) {
