@@ -1044,19 +1044,23 @@
     }
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
+   window.addEventListener("DOMContentLoaded", () => {
     loadCoursesList();
     loadStudentsList();
 
     const sidInput  = document.getElementById("sid");
     const codeInput = document.getElementById("code");
 
+    // رقم القيد
     sidInput.addEventListener("change", validateStudentFromInput);
-    sidInput.addEventListener("blur", validateStudentFromInput);
+    sidInput.addEventListener("blur",   validateStudentFromInput);
 
+    // رمز المادة – يشتغل فوراً في الموبايل عند اختيار الكود من القائمة
+    codeInput.addEventListener("input",  updateCourseNameFromInput); // ✅ سطر جديد مهم
     codeInput.addEventListener("change", updateCourseNameFromInput);
-    codeInput.addEventListener("blur", updateCourseNameFromInput);
+    codeInput.addEventListener("blur",   updateCourseNameFromInput);
   });
+
 </script>
 
 </body>
