@@ -24,23 +24,25 @@
     }
 
     html, body {
-      margin: 0;
-      padding: 0;
-      font-family: "Cairo", sans-serif;
-      direction: rtl;
-    }
+  margin: 0;
+  padding: 0;
+  font-family: "Cairo", sans-serif;
+  direction: rtl;
+  overflow-x: hidden;   /* ⬅ يمنع الحركة يمين/يسار نهائيًا */
+}
+
 
     body {
       color: #e5e7eb;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: center;        /* ⬅ توسيط أفقي */
       justify-content: flex-start;
       padding: 14px 10px 18px;
       position: relative;
       overflow-x: hidden;
-      overflow-y: auto; /* يسمح بالسكرول على الشاشات الكبيرة */
+      overflow-y: auto;          /* ⬅ سكرول عادي لو المحتوى طويل */
       background: radial-gradient(circle at top left, #0f172a 0, #020617 40%, #000 100%);
     }
 
@@ -89,8 +91,8 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 960px;
-      margin-bottom: 10px;
+      max-width: 960px;          /* ⬅ نفس عرض الكرت */
+      margin: 0 auto 10px;       /* ⬅ في النص */
       padding: 6px 14px;
       border-radius: 999px;
       background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
@@ -176,7 +178,8 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 960px;
+      max-width: 960px;          /* ⬅ نفس الهيدر */
+      margin: 0 auto;            /* ⬅ توسيط */
       background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.88));
       border-radius: 26px;
       box-shadow:
@@ -214,7 +217,7 @@
       gap: 8px;
       position: relative;
       overflow: hidden;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
 
     .top-bar::after {
@@ -291,15 +294,9 @@
       box-shadow: 0 0 0 6px rgba(34,197,94,0.18);
     }
 
-    /* فاصل بسيط تحت شريط "تسجيل مواد للطلاب" */
-    .section-gap {
-      grid-column: 1 / -1;
-      height: 8px;
-    }
-
     .form-pane {
       position: relative;
-      padding: 18px 20px 20px;
+      padding: 22px 20px 20px;
       border-left: 1px solid rgba(31,41,55,0.85);
       background: linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
       z-index: 1;
@@ -319,7 +316,7 @@
     }
 
     .form-title {
-      margin: 6px 0 8px;
+      margin: 10px 0 8px;
       font-size: 1.22rem;
       font-weight: 800;
       display: flex;
@@ -651,18 +648,8 @@
       50%     { transform: translateY(-3px); }
     }
 
-    @media (max-width: 900px) {
-      .shell,
-      .header-bar {
-        max-width: 100%;
-      }
-    }
-
+    /* موبايل */
     @media (max-width: 800px) {
-      body {
-        padding: 10px 10px 16px;
-      }
-
       .shell {
         grid-template-columns: 1fr;
         border-radius: 22px;
@@ -678,40 +665,19 @@
       }
     }
 
-    /* موبايل – بدون سكرول للصفحة، السكرول جوّة الكرت فقط */
-    @media (max-width: 600px) {
+    @media (max-width: 550px) {
       body {
-        height: 100vh;
         padding: 8px 6px 10px;
-        justify-content: flex-start;
-        overflow: hidden;
-      }
-
-      body::before,
-      body::after {
-        display: none !important;
       }
 
       .header-bar {
+        max-width: 100%;
         border-radius: 16px;
         padding: 7px 10px;
-        margin-bottom: 6px;
       }
 
       .shell {
-        border-radius: 18px;
         max-width: 100%;
-        max-height: calc(100vh - 70px);
-        overflow-y: auto;
-      }
-    }
-
-    @media (max-width: 550px) {
-      body {
-        padding: 8px 6px 8px;
-      }
-
-      .shell {
         border-radius: 18px;
       }
 
@@ -795,9 +761,6 @@
     <div class="chip">نظام إدارة الجامعة</div>
   </div>
 
-  <!-- 🔹 فاصل بين شريط العنوان و فقرة "إضافة تسجيل جديد" -->
-  <div class="section-gap"></div>
-
   <!-- فورم التسجيل -->
   <div class="form-pane">
     <h2 class="form-title">
@@ -811,9 +774,7 @@
       <div class="field">
         <label for="sid">رقم القيد</label>
         <input list="studentsList" type="text" id="sid" placeholder="مثال: 20251234 أو اختر من القائمة">
-        <datalist id="studentsList">
-          <!-- يتم تعبئته من الـ API -->
-        </datalist>
+        <datalist id="studentsList"></datalist>
       </div>
       <div class="field">
         <label for="studentName">اسم الطالب</label>
@@ -826,9 +787,7 @@
       <div class="field">
         <label for="code">رمز المادة (اختر أو اكتب من القائمة)</label>
         <input list="courseList" type="text" id="code" placeholder="مثال: IT101 أو اختر من القائمة">
-        <datalist id="courseList">
-          <!-- يتم تعبئته من الـ API -->
-        </datalist>
+        <datalist id="courseList"></datalist>
       </div>
       <div class="field">
         <label for="courseName">اسم المادة</label>
@@ -883,12 +842,9 @@
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbwCZQAihGkwmKalNLn3kZP2mffKKiB70wTDU7ZuCf2Kb0RmCLeEX7l8-Jycg7OsPcM9Hw/exec";
 
-  // نخزن كل المواد هنا بعد التحميل
   let allCourses = [];
-  // نخزن كل الطلبة هنا بعد التحميل
   let allStudents = [];
 
-  // دالة مساعدة: تنظف الكود وتخليه UpperCase وتقصي اللي بعد -
   function normalizeCode(raw) {
     if (!raw) return "";
     let val = String(raw).trim();
@@ -899,23 +855,16 @@
     return val.toUpperCase();
   }
 
-  // تحميل قائمة المواد من الـ API (courseSummary)
   async function loadCoursesList() {
     try {
       const res  = await fetch(`${API_URL}?action=courseSummary`);
       const text = await res.text();
       let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.log("Course list not JSON:", text);
-        return;
-      }
+      try { data = JSON.parse(text); } catch(e){ console.log("Course list not JSON:", text); return;}
 
       if (!data.summary || !Array.isArray(data.summary)) return;
 
-      allCourses = data.summary; // فيها: code, name, college, total...
-
+      allCourses = data.summary;
       const dl = document.getElementById("courseList");
       dl.innerHTML = "";
 
@@ -930,23 +879,16 @@
     }
   }
 
-  // تحميل قائمة الطلبة من الـ API (studentsSummary)
   async function loadStudentsList() {
     try {
       const res  = await fetch(`${API_URL}?action=studentsSummary`);
       const text = await res.text();
       let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.log("Students list not JSON:", text);
-        return;
-      }
+      try { data = JSON.parse(text); } catch(e){ console.log("Students list not JSON:", text); return;}
 
       if (!data.students || !Array.isArray(data.students)) return;
 
-      allStudents = data.students; // كل عنصر فيه: id, full_name
-
+      allStudents = data.students;
       const dl = document.getElementById("studentsList");
       dl.innerHTML = "";
 
@@ -962,7 +904,6 @@
     }
   }
 
-  // التحقق من أن رقم القيد موجود في قائمة الطلبة + تعبئة الاسم تلقائياً
   function validateStudentFromInput() {
     const sidInput    = document.getElementById("sid");
     const studentName = document.getElementById("studentName");
@@ -999,7 +940,6 @@
     }
   }
 
-  // تحديث اسم المادة حسب الكود المدخل / المختار
   function updateCourseNameFromInput() {
     const codeInput   = document.getElementById("code");
     const courseName  = document.getElementById("courseName");
@@ -1016,7 +956,6 @@
     }
   }
 
-  // تسجيل المادة للطالب
   async function registerCourse() {
     const sidInput    = document.getElementById('sid');
     const codeInput   = document.getElementById('code');
@@ -1047,7 +986,6 @@
       return;
     }
 
-    // تأكد أن الطالب من القائمة
     if (!allStudents || allStudents.length === 0) {
       msg.textContent = "⚠ لم يتم تحميل قائمة الطلبة، حدّث الصفحة.";
       return;
@@ -1061,7 +999,6 @@
       studentName.value = stu.full_name || "";
     }
 
-    // تأكد أن المادة من القائمة
     if (!allCourses || allCourses.length === 0) {
       msg.textContent = "⚠ لم يتم تحميل قائمة المواد، حدّث الصفحة.";
       return;
@@ -1083,12 +1020,7 @@
       raw.textContent = text;
 
       let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
-        return;
-      }
+      try { data = JSON.parse(text); } catch(e){ msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر."; return;}
 
       if (data.status === "OK") {
         msg.style.color = "green";
@@ -1112,7 +1044,6 @@
     }
   }
 
-  // أحداث تلقائية
   window.addEventListener("DOMContentLoaded", () => {
     loadCoursesList();
     loadStudentsList();
