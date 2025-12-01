@@ -846,14 +846,19 @@
   let allStudents = [];
 
   function normalizeCode(raw) {
-    if (!raw) return "";
-    let val = String(raw).trim();
-    const dashIndex = val.indexOf("-");
-    if (dashIndex !== -1) {
-      val = val.slice(0, dashIndex).trim();
-    }
-    return val.toUpperCase();
+  if (!raw) return "";
+  let val = String(raw).trim();
+
+  // نفصل الكود عن اسم المادة فقط لو كان فيها " - "
+  const sep = " - ";
+  const idx = val.indexOf(sep);
+  if (idx !== -1) {
+    val = val.slice(0, idx).trim(); // ياخذ PG-ST106 فقط
   }
+
+  return val.toUpperCase();
+}
+
 
   async function loadCoursesList() {
     try {
