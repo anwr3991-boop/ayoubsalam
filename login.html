@@ -78,8 +78,8 @@
 </div>
 
 <script>
-    // 🔗 رابط الويب آب الأخير
-    const API_URL = "https://script.google.com/macros/s/AKfycbwCZQAihGkwmKalNLn3kZP2mffKKiB70wTDU7ZuCf2Kb0RmCLeEX7l8-Jycg7OsPcM9Hw/exec";
+    // 🔗 رابط الويب آب الأخير (نفس اللي في باقي الصفحات)
+    const API_URL = "https://script.google.com/macros/s/AKfycby82BG686GVU7lXSpDhiE6uWng7sUDYPCMap1ZrrO8O7EbXcu-0I8FAb6Odk5F44rb8KA/exec";
 
     async function doLogin() {
         const u   = document.getElementById('user').value.trim();
@@ -88,7 +88,7 @@
 
         // تصفير الرسالة كل مرة
         msg.textContent = "";
-        msg.classList.remove("msg-ok", "msg-error");
+        msg.classList.remove("msg-ok", "msg-error", "msg-info");
 
         if (!u || !p) {
             msg.textContent = "الرجاء إدخال اسم المستخدم وكلمة المرور";
@@ -122,9 +122,17 @@
             msg.classList.remove("msg-info");
 
             if (data.status === "OK") {
-                // ✔ حفظ المستخدم والدور
-                localStorage.setItem("aiu_user", data.username || u);
-                localStorage.setItem("aiu_role", data.role || "");
+                // ✔ حفظ المستخدم والدور في localStorage بمفاتيح موحدة للنظام
+                const username = data.username || u;
+                const role     = data.role || "";
+
+                // مفاتيح عامة تستخدمها باقي الصفحات
+                localStorage.setItem("USERNAME", username);
+                localStorage.setItem("ROLE", role);
+
+                // نخلي مفاتيحك القديمة شغالة لو تبي تستخدمها مستقبلاً
+                localStorage.setItem("aiu_user", username);
+                localStorage.setItem("aiu_role", role);
 
                 msg.textContent = "✔ تم تسجيل الدخول بنجاح، جاري التحويل...";
                 msg.classList.add("msg-ok");
@@ -147,3 +155,5 @@
         }
     }
 </script>
+</body>
+</html>

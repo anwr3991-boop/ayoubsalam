@@ -598,6 +598,82 @@
       font-weight: 600;
     }
 
+/* 🔻 تنسيق فلتر الفصول (شكل أوضح وأكبر) */
+.semester-filter {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  position: relative;
+  flex-wrap: wrap; /* لو الشاشة ضيقة ينزل السطر للسطـر اللي بعده */
+}
+
+.semester-label {
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+/* الحبة اللي فيها اسم الفصل */
+.semester-pill-btn {
+  padding: 7px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.85);
+  background: radial-gradient(circle at top, rgba(15,23,42,1), rgba(15,23,42,0.96));
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow:
+    0 8px 20px rgba(15,23,42,0.9),
+    0 0 0 1px rgba(15,23,42,1);
+  min-width: 170px;          /* يخليها أعرض عشان اسم الفصل يبان كامل */
+  justify-content: space-between;
+}
+
+/* نص اسم الفصل نفسه */
+.semester-pill-btn .semester-current {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* سهم صغير */
+.semester-pill-btn .semester-icon {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+
+    .semester-dropdown {
+      position: absolute;
+      top: 120%;
+      min-width: 160px;
+      background: rgba(15,23,42,0.98);
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.8);
+      box-shadow: 0 16px 32px rgba(15,23,42,0.95);
+      padding: 4px;
+      display: none;
+      z-index: 20;
+    }
+
+    .semester-dropdown.open {
+      display: block;
+    }
+
+    .semester-option {
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      color: #e5e7eb;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .semester-option:hover {
+      background: rgba(55,65,81,0.85);
+    }
+
     /* استجابة للجوال */
     @media (max-width: 600px) {
       body {
@@ -687,7 +763,10 @@
       .logo-box,
       .note,
       #sid,
-      .actions-row {
+      .actions-row,
+      .semester-filter,
+      .status,
+      .error {
         display: none !important;
       }
       .money,
@@ -760,6 +839,7 @@
         </div>
       </div>
       <div class="page-pill">استعلام رقم القيد</div>
+      <div class="page-pill">م.أيوب الحوات</div>
     </div>
 
     <div class="orb orb-1"></div>
@@ -804,6 +884,11 @@
   </div>
 
 <script>
+  // 🔹 متغيرات عامة لتخزين كل المواد والفصول
+  let ALL_COURSES = [];
+  let ALL_SEMESTERS = [];
+  let SELECTED_SEMESTER = null;
+
   async function lookup() {
     let id     = document.getElementById("sid").value;
     let error  = document.getElementById("error");
@@ -813,6 +898,9 @@
     error.textContent = "";
     status.textContent = "";
     box.innerHTML = "";
+    ALL_COURSES = [];
+    ALL_SEMESTERS = [];
+    SELECTED_SEMESTER = null;
 
     if (!id || id.trim() === "") {
       error.textContent = "الرجاء إدخال رقم القيد";
@@ -821,7 +909,7 @@
 
     status.textContent = "⏳ جاري جلب البيانات...";
 
-    let api = "https://script.google.com/macros/s/AKfycbwCZQAihGkwmKalNLn3kZP2mffKKiB70wTDU7ZuCf2Kb0RmCLeEX7l8-Jycg7OsPcM9Hw/exec";
+    let api = "https://script.google.com/macros/s/AKfycby82BG686GVU7lXSpDhiE6uWng7sUDYPCMap1ZrrO8O7EbXcu-0I8FAb6Odk5F44rb8KA/exec";
     let url = api + "?action=getStudent&id=" + encodeURIComponent(id);
 
     try {
@@ -838,6 +926,23 @@
       let remaining  = (data.remaining !== undefined && data.remaining !== "") ? data.remaining : 0;
       let receipt    = data.receipt || "-";
       let studStatus = data.stud_status || "-";
+
+      // تخزين كل المواد كما رجعت من الـ API
+      ALL_COURSES = Array.isArray(data.courses) ? data.courses : [];
+
+      // استخراج الفصول من عمود السمستر (مثلاً c.semester أو c.sem أو c.semester_name)
+      ALL_SEMESTERS = [...new Set(
+        ALL_COURSES
+          .map(c => (c.semester || c.sem || c.semester_name || "").trim())
+          .filter(s => s !== "")
+      )];
+
+      // آخر فصل (افتراضياً آخر عنصر في المصفوفة)
+      if (ALL_SEMESTERS.length > 0) {
+        SELECTED_SEMESTER = ALL_SEMESTERS[ALL_SEMESTERS.length - 1];
+      } else {
+        SELECTED_SEMESTER = null; // يعني كل المواد
+      }
 
       let html = `
         <div style="text-align:center; margin-bottom:10px;">
@@ -872,31 +977,114 @@
         <div class="courses-title" style="text-align:center; margin-top:12px;">
           📖 المواد المسجلة:
         </div>
-      `;
 
-      if (data.courses && data.courses.length > 0) {
-        data.courses.forEach(c => {
-          html += `
-            <div class="course">
-              <span class="course-icon">📘</span>
-              <span class="code">${c.code}</span>
-              <span class="name">${c.name}</span>
-            </div>
-          `;
-        });
-      } else {
-        html += `<div class="empty-msg">لا توجد مواد مسجلة لهذا الطالب في هذا الفصل.</div>`;
-      }
+        <!-- 🔻 شريط فلترة الفصول -->
+        <div class="semester-filter" ${ALL_SEMESTERS.length === 0 ? 'style="display:none;"' : ""}>
+          <span class="semester-label">الفصل الدراسي:</span>
+          <button type="button" class="semester-pill-btn" onclick="toggleSemesterList()">
+            <span class="semester-current">${SELECTED_SEMESTER || "كل الفصول"}</span>
+            <span class="semester-icon">▾</span>
+          </button>
+          <div class="semester-dropdown" id="semesterDropdown"></div>
+        </div>
+
+        <!-- هنا تطلع المواد حسب الفصل المختار -->
+        <div id="coursesContainer"></div>
+      `;
 
       document.querySelector('.student-id-print').textContent = "رقم القيد: " + id;
       document.querySelector('.student-id-print').style.display = "block";
 
       box.innerHTML = html;
+
+      // تجهيز عناصر القائمة المنسدلة للفصول
+      setupSemesterDropdown();
+
+      // عرض المواد لأول مرة على حسب آخر فصل
+      renderCourses();
     } catch (e) {
       console.error(e);
       status.textContent = "";
       error.textContent = "حدث خطأ أثناء الاتصال بالخادم، حاول مرة أخرى.";
     }
+  }
+
+  // تجهيز قائمة الفصول داخل الدروب داون
+  function setupSemesterDropdown() {
+    const dropdown = document.getElementById("semesterDropdown");
+    if (!dropdown) return;
+
+    dropdown.innerHTML = "";
+
+    ALL_SEMESTERS.forEach(sem => {
+      const item = document.createElement("div");
+      item.className = "semester-option";
+      item.textContent = sem;
+      item.dataset.semester = sem;
+      item.onclick = () => {
+        SELECTED_SEMESTER = sem;
+        const label = document.querySelector(".semester-current");
+        if (label) label.textContent = sem;
+        dropdown.classList.remove("open");
+        renderCourses();
+      };
+      dropdown.appendChild(item);
+    });
+
+    // خيار "كل الفصول" (اختياري)
+    if (ALL_SEMESTERS.length > 1) {
+      const allItem = document.createElement("div");
+      allItem.className = "semester-option";
+      allItem.textContent = "كل الفصول";
+      allItem.onclick = () => {
+        SELECTED_SEMESTER = null;
+        const label = document.querySelector(".semester-current");
+        if (label) label.textContent = "كل الفصول";
+        dropdown.classList.remove("open");
+        renderCourses();
+      };
+      dropdown.appendChild(allItem);
+    }
+  }
+
+  // فتح / إغلاق قائمة الفصول
+  function toggleSemesterList() {
+    const dropdown = document.getElementById("semesterDropdown");
+    if (!dropdown) return;
+    dropdown.classList.toggle("open");
+  }
+
+  // اظهار المواد حسب الفصل المختار
+  function renderCourses() {
+    const container = document.getElementById("coursesContainer");
+    if (!container) return;
+
+    let list = ALL_COURSES;
+
+    if (SELECTED_SEMESTER) {
+      list = ALL_COURSES.filter(c => {
+        const sem = (c.semester || c.sem || c.semester_name || "").trim();
+        return sem === SELECTED_SEMESTER;
+      });
+    }
+
+    if (!list || list.length === 0) {
+      container.innerHTML = `<div class="empty-msg">لا توجد مواد مسجلة لهذا الطالب في هذا الفصل.</div>`;
+      return;
+    }
+
+    let html = "";
+    list.forEach(c => {
+      html += `
+        <div class="course">
+          <span class="course-icon">📘</span>
+          <span class="code">${c.code}</span>
+          <span class="name">${c.name}</span>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
   }
 
   // دالة بسيطة لطباعة PDF

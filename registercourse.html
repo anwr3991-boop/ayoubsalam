@@ -24,25 +24,38 @@
     }
 
     html, body {
-  margin: 0;
-  padding: 0;
-  font-family: "Cairo", sans-serif;
-  direction: rtl;
-  overflow-x: hidden;   /* ⬅ يمنع الحركة يمين/يسار نهائيًا */
-}
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", sans-serif;
+      direction: rtl;
+      overflow-x: hidden;      /* يمنع سكرول يمين/يسار */
+      touch-action: pan-y;     /* يمنع سحب أفقي مزعج على الموبايل */
+      scroll-behavior: smooth; /* سكرول أنعم في الانتقالات */
 
+      /* ⭐ إخفاء السكروول شكلاً فقط (يبقى شغال) */
+      scrollbar-width: none;          /* فايرفوكس */
+      -ms-overflow-style: none;       /* IE/Edge قديم */
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
 
     body {
       color: #e5e7eb;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;        /* ⬅ توسيط أفقي */
+      align-items: center;
       justify-content: flex-start;
       padding: 14px 10px 18px;
       position: relative;
       overflow-x: hidden;
-      overflow-y: auto;          /* ⬅ سكرول عادي لو المحتوى طويل */
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch; /* سكرول سلس على iOS */
+      overscroll-behavior-x: contain;
       background: radial-gradient(circle at top left, #0f172a 0, #020617 40%, #000 100%);
     }
 
@@ -91,8 +104,8 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 960px;          /* ⬅ نفس عرض الكرت */
-      margin: 0 auto 10px;       /* ⬅ في النص */
+      max-width: 960px;
+      margin: 0 auto 10px;
       padding: 6px 14px;
       border-radius: 999px;
       background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
@@ -105,6 +118,7 @@
         0 0 0 1px rgba(15,23,42,1),
         0 18px 38px rgba(15,23,42,0.9);
       backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .header-left {
@@ -178,8 +192,8 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 960px;          /* ⬅ نفس الهيدر */
-      margin: 0 auto;            /* ⬅ توسيط */
+      max-width: 960px;
+      margin: 0 auto;
       background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.88));
       border-radius: 26px;
       box-shadow:
@@ -189,6 +203,7 @@
       display: grid;
       grid-template-columns: minmax(0,1.35fr) minmax(0,1fr);
       backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
       border: 1px solid rgba(148,163,184,0.35);
     }
 
@@ -399,7 +414,7 @@
       border-color: rgba(56,189,248,0.9);
       box-shadow:
         0 0 0 1px rgba(56,189,248,0.9),
-        0 0 0 6px rgba(56,189,248,0.25);
+        0 0 0 6px rgba(56,189,248,0.1);
       outline: none;
       background: radial-gradient(circle at top, rgba(15,23,42,1), rgba(15,23,42,0.94));
     }
@@ -668,6 +683,39 @@
     @media (max-width: 550px) {
       body {
         padding: 8px 6px 10px;
+        background: #020617;
+      }
+
+      /* ⭐ إلغاء الخلفيات المتحركة نهائياً في الموبايل لتخفيف الثقل */
+      body::before,
+      body::after {
+        display: none !important;
+      }
+
+      /* ⭐ إلغاء البلور الثقيل في الموبايل */
+      .header-bar,
+      .shell,
+      .form-pane,
+      .info-pane,
+      .top-bar {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      /* ⭐ تخفيف كل الشادو في الموبايل (يساعد على سكرول سلس) */
+      * {
+        box-shadow: none !important;
+      }
+
+      /* زر التسجيل: نخفف الترانسفورم والأنيميشن عشان ما يعكش حوله */
+      button {
+        transform: none !important;
+        transition: none !important;
+      }
+
+      button:hover,
+      button:active {
+        transform: none !important;
       }
 
       .header-bar {
@@ -798,7 +846,7 @@
     <!-- الفصل الدراسي -->
     <div class="field">
       <label for="semester">الفصل الدراسي</label>
-      <input type="text" id="semester" value="خريف 2025/2026" readonly>
+      <input type="text" id="semester" value="خريف 2026/2025" readonly>
     </div>
 
     <div class="actions">
@@ -815,7 +863,7 @@
     <pre id="raw"></pre>
   </div>
 
-  <!-- لوحة معلومات -->
+  <!-- لوحة معلومات + قائمة مواد الطالب -->
   <div class="info-pane">
     <div class="badge">بوابة التسجيل الأكاديمي</div>
     <h3 class="info-title">دور صفحة تسجيل المواد</h3>
@@ -836,29 +884,38 @@
       <div class="pill">ربيع 2025/2026</div>
       <div class="pill">صيفي 2025</div>
     </div>
+
+    <!-- ✅ هنا قائمة مواد الطالب في الفصل الحالي -->
+    <div class="mini-label" style="margin-top: 12px;">المواد المسجَّلة لهذا الطالب في هذا الفصل:</div>
+    <ul class="bullet-list" id="studentCourses">
+      <li><span class="dot"></span>أدخل رقم القيد لعرض المواد المسجّلة.</li>
+    </ul>
   </div>
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbwCZQAihGkwmKalNLn3kZP2mffKKiB70wTDU7ZuCf2Kb0RmCLeEX7l8-Jycg7OsPcM9Hw/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycby82BG686GVU7lXSpDhiE6uWng7sUDYPCMap1ZrrO8O7EbXcu-0I8FAb6Odk5F44rb8KA/exec";
 
   let allCourses = [];
   let allStudents = [];
 
-  function normalizeCode(raw) {
-  if (!raw) return "";
-  let val = String(raw).trim();
-
-  // نفصل الكود عن اسم المادة فقط لو كان فيها " - "
-  const sep = " - ";
-  const idx = val.indexOf(sep);
-  if (idx !== -1) {
-    val = val.slice(0, idx).trim(); // ياخذ PG-ST106 فقط
+  // ✅ اسم المستخدم الحالي (مخزَّن من صفحة الدخول)
+  function getCurrentUser() {
+    return localStorage.getItem("USERNAME") || "";
   }
 
-  return val.toUpperCase();
-}
+  function normalizeCode(raw) {
+    if (!raw) return "";
+    let val = String(raw).trim();
 
+    const sep = " - ";
+    const idx = val.indexOf(sep);
+    if (idx !== -1) {
+      val = val.slice(0, idx).trim();
+    }
+
+    return val.toUpperCase();
+  }
 
   async function loadCoursesList() {
     try {
@@ -918,7 +975,13 @@
     studentName.value = "";
     msg.textContent = "";
 
-    if (!rawValue) return;
+    if (!rawValue) {
+      const listEl = document.getElementById("studentCourses");
+      if (listEl) {
+        listEl.innerHTML = `<li><span class="dot"></span>أدخل رقم القيد لعرض المواد المسجّلة.</li>`;
+      }
+      return;
+    }
 
     const dashIndex = rawValue.indexOf("-");
     if (dashIndex !== -1) {
@@ -938,10 +1001,16 @@
       studentName.value = found.full_name || "";
       msg.style.color = "#16a34a";
       msg.textContent = "✔ الطالب موجود ضمن قائمة الطلبة";
+      loadStudentCourses();
     } else {
       msg.style.color = "red";
       msg.textContent = "❌ رقم القيد غير موجود ضمن الطلبة المسجلين";
       sidInput.value = "";
+
+      const listEl = document.getElementById("studentCourses");
+      if (listEl) {
+        listEl.innerHTML = `<li><span class="dot"></span>رقم القيد غير موجود في قاعدة البيانات.</li>`;
+      }
     }
   }
 
@@ -958,6 +1027,70 @@
     const found = allCourses.find(c => String(c.code).trim().toUpperCase() === cleanCode);
     if (found) {
       courseName.value = found.name || "";
+    }
+  }
+
+  async function loadStudentCourses() {
+    const sidInput = document.getElementById("sid");
+    const semInput = document.getElementById("semester");
+    const listEl   = document.getElementById("studentCourses");
+
+    if (!listEl) return;
+
+    let sidRaw = sidInput.value.trim();
+    if (!sidRaw) {
+      listEl.innerHTML = `<li><span class="dot"></span>أدخل رقم القيد لعرض المواد المسجّلة.</li>`;
+      return;
+    }
+
+    const dashIndex = sidRaw.indexOf("-");
+    if (dashIndex !== -1) {
+      sidRaw = sidRaw.slice(0, dashIndex).trim();
+    }
+    const sid = sidRaw;
+    const sem = semInput.value.trim();
+
+    listEl.innerHTML = `<li><span class="dot"></span>⏳ جاري تحميل مواد الطالب لهذا الفصل...</li>`;
+
+    try {
+      const url  = `${API_URL}?action=getStudent&id=${encodeURIComponent(sid)}`;
+      const res  = await fetch(url);
+      const text = await res.text();
+
+      let data;
+      try { data = JSON.parse(text); } catch (e) {
+        console.error("Student data not JSON:", text);
+        listEl.innerHTML = `<li><span class="dot"></span>⚠ خطأ في قراءة بيانات الطالب.</li>`;
+        return;
+      }
+
+      if (data.error === "STUDENT_NOT_FOUND") {
+        listEl.innerHTML = `<li><span class="dot"></span>رقم القيد غير موجود في قاعدة البيانات.</li>`;
+        return;
+      }
+
+      const all = Array.isArray(data.courses) ? data.courses : [];
+      let filtered = all;
+
+      if (sem) {
+        filtered = all.filter(c => String(c.semester || "").trim() === sem);
+      }
+
+      if (!filtered.length) {
+        listEl.innerHTML = `<li><span class="dot"></span>لا توجد مواد مسجّلة لهذا الطالب في هذا الفصل.</li>`;
+        return;
+      }
+
+      listEl.innerHTML = "";
+      filtered.forEach(c => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="dot"></span><span>${c.code || ""} - <strong>${c.name || ""}</strong></span>`;
+        listEl.appendChild(li);
+      });
+
+    } catch (err) {
+      console.error(err);
+      listEl.innerHTML = `<li><span class="dot"></span>❌ خطأ في الاتصال برابط الـ API أثناء تحميل المواد.</li>`;
     }
   }
 
@@ -981,6 +1114,7 @@
     }
 
     const sid = sidRaw;
+    const currentUser = getCurrentUser(); // ✅ المستخدم الحالي
 
     msg.textContent = "";
     msg.style.color = "red";
@@ -1017,7 +1151,11 @@
       courseName.value = course.name || "";
     }
 
-    const url = `${API_URL}?action=registerCourse&sid=${encodeURIComponent(sid)}&code=${encodeURIComponent(cleanCode)}&semester=${encodeURIComponent(sem)}`;
+    const url = `${API_URL}?action=registerCourse`
+      + `&sid=${encodeURIComponent(sid)}`
+      + `&code=${encodeURIComponent(cleanCode)}`
+      + `&semester=${encodeURIComponent(sem)}`
+      + `&user=${encodeURIComponent(currentUser)}`;
 
     try {
       const res  = await fetch(url);
@@ -1025,13 +1163,17 @@
       raw.textContent = text;
 
       let data;
-      try { data = JSON.parse(text); } catch(e){ msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر."; return;}
+      try { data = JSON.parse(text); } catch(e){
+        msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
+        return;
+      }
 
       if (data.status === "OK") {
         msg.style.color = "green";
         msg.textContent = "✔ تم تسجيل المادة للطالب بنجاح";
         codeInput.value   = "";
         courseName.value  = "";
+        loadStudentCourses();
       } else if (data.status === "MISSING_FIELDS") {
         msg.textContent = "⚠ بيانات ناقصة، تأكد من رقم القيد ورمز المادة.";
       } else if (data.status === "STUDENT_NOT_FOUND") {
@@ -1049,23 +1191,20 @@
     }
   }
 
-   window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", () => {
     loadCoursesList();
     loadStudentsList();
 
     const sidInput  = document.getElementById("sid");
     const codeInput = document.getElementById("code");
 
-    // رقم القيد
     sidInput.addEventListener("change", validateStudentFromInput);
     sidInput.addEventListener("blur",   validateStudentFromInput);
 
-    // رمز المادة – يشتغل فوراً في الموبايل عند اختيار الكود من القائمة
-    codeInput.addEventListener("input",  updateCourseNameFromInput); // ✅ سطر جديد مهم
+    codeInput.addEventListener("input",  updateCourseNameFromInput);
     codeInput.addEventListener("change", updateCourseNameFromInput);
     codeInput.addEventListener("blur",   updateCourseNameFromInput);
   });
-
 </script>
 
 </body>

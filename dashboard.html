@@ -9,16 +9,30 @@
 
     <style>
         /* خلفية hero */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            padding: 28px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at top, #0b1120 0%, #020617 55%, #000 100%);
-            overflow: hidden;
-        }
+       .hero {
+    position: relative;
+    min-height: 100vh;
+    padding: 28px 14px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: radial-gradient(circle at top, #0b1120 0%, #020617 55%, #000 100%);
+    
+    overflow-x: hidden; 
+    overflow-y: auto;  
+}
+
+/* إخفاء شكل السكرول في كل المتصفحات */
+.hero::-webkit-scrollbar {
+    display: none; /* Chrome - Edge - Safari */
+}
+
+.hero {
+    -ms-overflow-style: none;  /* Internet Explorer */
+    scrollbar-width: none;     /* Firefox */
+}
+
+
 
         .dash-shell {
             position: relative;
@@ -287,14 +301,13 @@
                     <span class="desc">تقارير الطلاب والمواد.</span>
                 </a>
 
-                <!-- زر المالية (قريباً) -->
-               <a href="finance.html" class="dash-item finance" data-key="finance">
-    <span class="badge-soon">قريباً</span>
-    <span class="icon">💰</span>
-    <span class="title">المالية</span>
-    <span class="desc">إدارة الرسوم، الإيصالات، والذمم المالية للطلاب.</span>
-</a>
-
+                <!-- زر المالية -->
+                <a href="finance.html" class="dash-item finance" data-key="finance">
+                    <span class="badge-soon">قريباً</span>
+                    <span class="icon">💰</span>
+                    <span class="title">المالية</span>
+                    <span class="desc">إدارة الرسوم، الإيصالات، والذمم المالية للطلاب.</span>
+                </a>
 
             </div>
 
@@ -310,7 +323,7 @@
 <script>
     // قراءة المستخدم والدور من localStorage
     const user = localStorage.getItem("aiu_user");
-    const role = localStorage.getItem("aiu_role") || "user1";
+    const role = (localStorage.getItem("aiu_role") || "user1").toLowerCase();
 
     if (!user) {
         window.location.href = "login.html";
@@ -320,15 +333,17 @@
 
     // جدول الصلاحيات
     const permissions = {
-       admin: ["add-student", "add-course", "registercourse", "reports", "finance"],
-        user1: ["registercourse", "reports","add-course", "finance"], // موظف تسجيل
-        user2: ["reports", "finance"]                    // موظف تقارير
+        admin: ["add-student", "add-course", "registercourse", "reports", "finance"],
+        user1: ["add-course", "registercourse", "reports", "finance"], // منسق كلية
+        user2: ["add-student", "finance"],                       // موظف تسجيل
+        user3: ["reports", "finance"]                            // موظف تقارير 
     };
 
     const roleNames = {
         admin: "مدير النظام",
         user1: "منسق كلية",
-        user2: "موظف تقارير"
+        user2: "موظف تسجيل",
+        user3: "موظف تقارير"
     };
 
     const pill = document.getElementById("rolePill");
@@ -336,7 +351,7 @@
         pill.textContent = "نوع الحساب: " + (roleNames[role] || role);
     }
 
-    // تطبيق الصلاحيات: لا نخفي الأزرار، بس نقفلها
+    // تطبيق الصلاحيات: لا نخفي الأزرار، بس نقفلها لو ماعندهش صلاحية
     function applyPermissions() {
         const allowed = permissions[role] || [];
 
@@ -344,18 +359,20 @@
             const key = item.getAttribute("data-key");
             if (!key) return;
 
-            // نزيل حالة القفل افتراضياً
+            // نرجع الكرت للوضع الافتراضي قبل ما نقرر
             item.classList.remove("disabled");
 
-            // لو ماعندهش صلاحية لهذا الزر
+            // نمسح أي onClick قديم خاص بالقفل
+            item.onclick = null;
+
             if (!allowed.includes(key)) {
                 item.classList.add("disabled");
 
                 // منع الضغط + رسالة
-                item.addEventListener("click", function (e) {
+                item.onclick = function (e) {
                     e.preventDefault();
-                    alert("لا تملك صلاحية الدخول إلى هذا القسم راجع مدير النظام م.أيوب الحوات.");
-                });
+                    alert("لا تملك صلاحية الدخول إلى هذا القسم، الرجاء مراجعة مدير النظام م.أيوب الحوات.");
+                };
             }
         });
     }
@@ -368,7 +385,7 @@
         window.location.href = "login.html";
     }
 
-    // المالية (للآن مجرد رسالة قريباً، لكن لو الصلاحية مقفولة بيطلع له رسالة الصلاحيات بدلها)
+    // لو حاب تخلي زر المالية دايمًا "قريبًا" حتى لو عنده صلاحية:
     function financeSoon(e) {
         e.preventDefault();
         alert("قسم المالية سيتم تفعيله في التحديث القادم للنظام.");
