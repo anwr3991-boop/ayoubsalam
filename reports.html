@@ -609,7 +609,7 @@
 
 <script>
   const API_URL =
-    "https://script.google.com/macros/s/AKfycbzX5Mxcco-l30KPzB1-oLNiBFPBgKoU3GUMgVnePM9jJGbYssfl_a54fId64JSyimOD-w/exec";
+    "https://script.google.com/macros/s/AKfycbxSXzoccORX5DP_MwJXg13WPHDBV5vuuh3v0pX8Lch0xYX4tLrF8JjlVpdGpeQLt_7RKA/exec";
 
   let allSummaryData = [];
   let SELECTED_SEMESTER = "";
@@ -842,15 +842,16 @@
         return;
       }
 
-      data.students.forEach((st, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${st.student_id || ""}</td>
-          <td>${st.full_name || ""}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+      data.students.forEach((s, i) => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${i + 1}</td>
+    <td>${s.student_id}</td>
+    <td>${s.full_name || s.name || ""}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
 
       msg.style.color = "green";
       msg.textContent = "✔ تم جلب تفاصيل المادة";

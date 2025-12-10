@@ -784,6 +784,7 @@
       <div class="uni-sub">نظام إدارة وتسجيل المقررات الدراسية</div>
     </div>
   </div>
+    <div class="header-tag">م.أيوب الحوات</div>
   <div class="header-tag">بوابة الموظفين الأكاديمية</div>
 </div>
 
@@ -793,9 +794,10 @@
       <div class="logo-circle">📝</div>
       <div class="top-text">
         <h1>تسجيل مواد للطلاب</h1>
-        <p>ربط الطالب بالمقررات الدراسية للفصل الحالي.</p>
+        <p>    تنزيل المواد الدراسية للطالب في الفصل الحالي.</p>
       </div>
     </div>
+    <div class="chip">وحدة المنظومة الإلكترونية</div>
     <div class="chip">نظام إدارة الجامعة</div>
   </div>
 
@@ -804,7 +806,9 @@
       <span class="icon">➕</span>
       <span>إضافة تسجيل جديد</span>
     </h2>
-    <p class="subtitle">أدخل رقم القيد، اختر المادة، ثم اضغط تسجيل.</p>
+<p class="subtitle" style="color:#F4C46A;">
+  أدخل رقم القيد ثم اختر المادة، ثم اضغط تسجيل.
+</p>
 
     <div class="row">
       <div class="field">
@@ -877,8 +881,8 @@
   </div>
 </div>
 
-<script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbzX5Mxcco-l30KPzB1-oLNiBFPBgKoU3GUMgVnePM9jJGbYssfl_a54fId64JSyimOD-w/exec";
+<script>           
+  const API_URL = "https://script.google.com/macros/s/AKfycbxSXzoccORX5DP_MwJXg13WPHDBV5vuuh3v0pX8Lch0xYX4tLrF8JjlVpdGpeQLt_7RKA/exec";
 
   let allCourses = [];
   let allStudents = [];
@@ -1171,11 +1175,17 @@
         msg.textContent = "⚠ هذه المادة مسجلة لهذا الطالب من قبل (راه الطالب منزلها).";
 
       // ⭐ أسبقية المادة
-      } else if (data.status === "PREREQ_MISSING") {
-        const pc = data.prereq_code || "";
-        const pn = data.prereq_name || "";
-        msg.textContent = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مادة الأسبقية: ${pc} - ${pn}`;
+} else if (
+  data.status === "PREREQ_REQUIRED" ||   // اللي يرجعه Code.gs
+  data.status === "PREREQ_MISSING"       // نخليها احتياط لو تغيرت مستقبلاً
+) {
+  const pc = data.prereq_code || "";
+  const pn = data.prereq_name || "";
+  msg.textContent = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مادة الأسبقية: ${pc} - ${pn}`;
 
+      // ⭐ النظام مقفول
+      } else if (data.status === "SYSTEM_CLOSED") {
+        msg.textContent = "⛔ النظام مغلق حالياً، لا يمكن تسجيل مواد.";
       } else {
         msg.textContent = "لم يتم التسجيل، تحقق من البيانات أو الكود. (راجع الرد في الصندوق الأسود)";
       }

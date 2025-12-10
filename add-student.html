@@ -34,7 +34,6 @@
       overflow-x: hidden;
     }
 
-    /* منطقة الخلفية العامة */
     .hero {
       position: relative;
       min-height: 100vh;
@@ -46,7 +45,6 @@
       overflow: hidden;
     }
 
-    /* Blobs متحركة */
     .blob {
       position: absolute;
       width: 420px;
@@ -68,7 +66,6 @@
       100% { transform: translate(-30px, 40px) scale(0.95); }
     }
 
-    /* طبقة تغطية خفيفة */
     .overlay {
       position: absolute;
       inset: 0;
@@ -76,7 +73,6 @@
       z-index: 1;
     }
 
-    /* الحاوية الرئيسية (فورم + معلومات) */
     .shell {
       position: relative;
       z-index: 2;
@@ -87,7 +83,6 @@
       gap: 22px;
     }
 
-    /* كرت الفورم */
     .form-card {
       background: rgba(255,255,255,0.96);
       padding: 22px 24px 20px;
@@ -143,7 +138,8 @@
       color: #0f172a;
     }
 
-    input {
+    input,
+    select {
       width: 100%;
       padding: 9px 10px;
       border-radius: 8px;
@@ -153,10 +149,15 @@
       font-family: "Cairo", sans-serif;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       border-color: #003F7C;
       box-shadow: 0 0 7px rgba(0,63,124,0.4);
       outline: none;
+    }
+
+    select:invalid {
+      color: #9ca3af;
     }
 
     .actions {
@@ -190,20 +191,25 @@
       margin-top: 10px;
       font-weight: bold;
       font-size: 0.9rem;
+      min-height: 1.2rem;
     }
 
-    /* صندوق الرد الخام */
+    /* مؤثر "جاري حفظ بيانات الطالب..." */
+    .loading {
+      display: none;
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #0ea5e9;
+      font-weight: 600;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    /* إخفاء صندوق الرد الخام حتى ما يطلع الشريط الأسود */
     #raw {
-      margin-top: 10px;
-      background: #0b1120;
-      color: #0ef;
-      padding: 6px 8px;
-      font-size: 11px;
-      max-height: 110px;
-      overflow: auto;
-      border-radius: 6px;
-      direction: ltr;
-      text-align: left;
+      display: none;
     }
 
     .debug-label {
@@ -212,7 +218,6 @@
       color: #64748b;
     }
 
-    /* الكرت الجانبي (شعار + معلومات) */
     .side-card {
       background: var(--glass);
       border-radius: 20px;
@@ -291,7 +296,6 @@
       50%     { opacity: 0.3; }
     }
 
-    /* 📱 استجابة الشاشات المتوسطة (تابلت وموبايل أفقي) */
     @media (max-width: 880px) {
       .hero {
         padding: 24px 14px;
@@ -304,14 +308,12 @@
         margin: 0 auto;
       }
 
-      /* نخلي شعار الجامعة فوق والفورم تحته في الهاتف */
       .side-card {
         order: -1;
         margin-bottom: 10px;
       }
     }
 
-    /* 📱 استجابة الشاشات الصغيرة جداً (S23 Ultra وأصغر) */
     @media (max-width: 520px) {
       .hero {
         padding: 20px 10px;
@@ -321,7 +323,6 @@
         padding: 18px 14px 18px;
       }
 
-      /* نخلي كل حقل في سطر واحد */
       .row {
         grid-template-columns: 1fr;
       }
@@ -338,7 +339,6 @@
 <body>
 
 <div class="hero">
-  <!-- خلفية متحركة -->
   <div class="blob blob1"></div>
   <div class="blob blob2"></div>
   <div class="blob blob3"></div>
@@ -346,10 +346,9 @@
 
   <div class="shell">
 
-    <!-- الكرت الجانبي: شعار الجامعة والمعلومات -->
+    <!-- الكرت الجانبي -->
     <div class="side-card">
       <div class="logo-wrap">
-        <!-- حط صورة الجامعة في نفس المجلد باسم aiu-logo.png -->
         <img src="aiu-logo.png" alt="شعار جامعة السلام الدولية">
       </div>
       <div class="side-title">نظام إدارة الجامعة - بوابة التسجيل</div>
@@ -384,7 +383,10 @@
       <div class="row">
         <div>
           <label for="college">الكلية</label>
-          <input type="text" id="college" placeholder="مثال: كلية الصيدلة">
+          <!-- تتعبّى من جدول Courses عبر getColleges -->
+          <select id="college" required>
+            <option value="" disabled selected hidden>اختر الكلية</option>
+          </select>
         </div>
         <div>
           <label for="dep">التخصص</label>
@@ -396,8 +398,10 @@
         <button onclick="saveStudent()">حفظ الطالب</button>
       </div>
 
+      <!-- حالة الانتظار -->
+      <div id="loading" class="loading">⏳ جاري حفظ بيانات الطالب...</div>
+
       <p id="msg" class="msg"></p>
-      <!-- <div class="debug-label">🔍 رد الـ API (للاختبار فقط):</div> -->
       <pre id="raw"></pre>
     </div>
 
@@ -405,19 +409,63 @@
 </div>
 
 <script>
-  // نفس رابط الـ API اللي يخدم معك في الصفحات الأخرى
-  const API_URL = "https://script.google.com/macros/s/AKfycbzX5Mxcco-l30KPzB1-oLNiBFPBgKoU3GUMgVnePM9jJGbYssfl_a54fId64JSyimOD-w/exec";
+  // نفس رابط الـ API الرئيسي (نفسه في بقية الصفحات)
+  const API_URL = "https://script.google.com/macros/s/AKfycbxSXzoccORX5DP_MwJXg13WPHDBV5vuuh3v0pX8Lch0xYX4tLrF8JjlVpdGpeQLt_7RKA/exec";
+
+  // عند فتح الصفحة نحمّل الكليات من جدول Courses
+  document.addEventListener("DOMContentLoaded", loadColleges);
+
+  async function loadColleges() {
+    const select = document.getElementById("college");
+    const msg    = document.getElementById("msg");
+
+    try {
+      const res  = await fetch(`${API_URL}?action=getColleges`);
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error("JSON error:", e, text);
+        msg.style.color = "red";
+        msg.textContent = "خطأ في قراءة بيانات الكليات من السيرفر.";
+        return;
+      }
+
+      // نتوقع: { colleges: ["كلية الصيدلة", "كلية الحاسوب", ...] }
+      if (Array.isArray(data.colleges)) {
+        while (select.options.length > 1) {
+          select.remove(1);
+        }
+        data.colleges.forEach(col => {
+          const opt = document.createElement("option");
+          opt.value = col;
+          opt.textContent = col;
+          select.appendChild(opt);
+        });
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "تعذر تحميل قائمة الكليات، راجع getColleges في Code.gs";
+      }
+    } catch (err) {
+      console.error(err);
+      msg.style.color = "red";
+      msg.textContent = "❌ خطأ في الاتصال عند جلب الكليات.";
+    }
+  }
 
   async function saveStudent() {
     const id      = document.getElementById('sid').value.trim();
     const name    = document.getElementById('sname').value.trim();
     const college = document.getElementById('college').value.trim();
     const dep     = document.getElementById('dep').value.trim();
-    const msg  = document.getElementById('msg');
-    const raw  = document.getElementById('raw');
+    const msg     = document.getElementById('msg');
+    const raw     = document.getElementById('raw');
+    const loading = document.getElementById('loading');
 
     msg.textContent = "";
     raw.textContent = "";
+    loading.classList.remove("show");
 
     if (!id || !name) {
       msg.style.color = "red";
@@ -425,32 +473,47 @@
       return;
     }
 
-    const url = `${API_URL}?action=addStudent&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&college=${encodeURIComponent(college)}&dep=${encodeURIComponent(dep)}`;
+    const url =
+      `${API_URL}?action=addStudent` +
+      `&id=${encodeURIComponent(id)}` +
+      `&name=${encodeURIComponent(name)}` +
+      `&college=${encodeURIComponent(college)}` +
+      `&dep=${encodeURIComponent(dep)}`;
 
     try {
+      // إظهار حالة الانتظار
+      loading.classList.add("show");
+
       const res  = await fetch(url);
       const text = await res.text();
-      raw.textContent = text;   // نعرض الرد الخام
+      raw.textContent = text;
 
       let data;
       try {
         data = JSON.parse(text);
       } catch (e) {
+        loading.classList.remove("show");
         msg.style.color = "red";
         msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
         return;
       }
 
+      loading.classList.remove("show");
+
       if (data.status === "OK") {
         msg.style.color = "green";
         msg.textContent = "✔ تم حفظ الطالب بنجاح";
-        // نفرغ الحقول بعد الحفظ
-        document.getElementById('sid').value = "";
-        document.getElementById('sname').value = "";
+        document.getElementById('sid').value     = "";
+        document.getElementById('sname').value   = "";
         document.getElementById('college').value = "";
-        document.getElementById('dep').value = "";
+        document.getElementById('dep').value     = "";
       }
-      else if (data.status === "EXISTS") {
+      // الحالات المحتملة لوجود الطالب مسبقاً
+      else if (
+        data.status === "STUDENT_EXISTS" ||
+        data.status === "STUDENT_EXISIS" ||
+        data.status === "EXISTS"
+      ) {
         msg.style.color = "red";
         msg.textContent = "⚠ رقم القيد هذا مسجّل مسبقًا.";
       }
@@ -465,6 +528,7 @@
 
     } catch (e) {
       console.error(e);
+      loading.classList.remove("show");
       msg.style.color = "red";
       msg.textContent = "❌ خطأ في الاتصال برابط الـ API";
     }
