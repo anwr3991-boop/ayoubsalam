@@ -24,18 +24,17 @@
     }
 
     body {
-  margin: 0;
-  font-family: "Cairo", sans-serif;
-  background: #e6e9c6;   /* ← الخلفية الهادية الجديدة */
-  color: #0f172a;
-  direction: rtl;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px 10px;
-}
-
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: #e6e9c6;   /* ← الخلفية الهادية الجديدة */
+      color: #0f172a;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 10px;
+    }
 
     /* الغلاف العام */
     .shell {
@@ -130,7 +129,7 @@
 
     .row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr; /* ثلاث خانات: رمز – اسم – كلية */
       gap: 10px;
       margin-top: 10px;
       margin-bottom: 6px;
@@ -147,7 +146,9 @@
       color: #374151;
     }
 
-    input {
+    /* نفس الشكل للـ input و select */
+    input,
+    select {
       width: 100%;
       padding: 9px 10px;
       border-radius: 10px;
@@ -162,7 +163,12 @@
       color: #9ca3af;
     }
 
-    input:focus {
+    select:invalid {
+      color: #9ca3af; /* لون placeholder للـ select */
+    }
+
+    input:focus,
+    select:focus {
       border-color: #0ea5e9;
       box-shadow: 0 0 0 1px rgba(14,165,233,0.5);
       outline: none;
@@ -219,19 +225,18 @@
     }
 
     #raw {
-  display: none !important;
-  margin-top: 6px;
-  background: #020617;
-  color: #22c55e;
-  padding: 6px 8px;
-  font-size: 11px;
-  max-height: 110px;
-  overflow: auto;
-  border-radius: 8px;
-  direction: ltr;
-  text-align: left;
-}
-
+      display: none !important;
+      margin-top: 6px;
+      background: #020617;
+      color: #22c55e;
+      padding: 6px 8px;
+      font-size: 11px;
+      max-height: 110px;
+      overflow: auto;
+      border-radius: 8px;
+      direction: ltr;
+      text-align: left;
+    }
 
     /* يسار: لوحة معلومات */
     .info-pane {
@@ -383,7 +388,7 @@
       }
 
       .row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* على الهاتف كل حقل في سطر */
       }
 
       button {
@@ -420,16 +425,28 @@
       <span class="icon">➕</span>
       <span>إضافة مادة جديدة</span>
     </h2>
-    <p class="subtitle">قم بإدخال رمز المادة واسمها بشكل صحيح ليتم استخدامها في تسجيل مواد الطلاب والتقارير.</p>
+    <p class="subtitle">
+      قم بإدخال رمز المادة واسمها وتحديد الكلية بشكل صحيح ليتم استخدامها في تسجيل مواد الطلاب والتقارير.
+    </p>
 
     <div class="row">
       <div class="field">
         <label for="code">رمز المادة</label>
         <input type="text" id="code" placeholder="مثال: IT101">
       </div>
+
       <div class="field">
         <label for="name">اسم المادة</label>
         <input type="text" id="name" placeholder="مثال: أساسيات تقنية المعلومات">
+      </div>
+
+      <div class="field">
+        <label for="college">الكلية</label>
+        <!-- قائمة منسدلة تتعبى من البيانات في الشيت -->
+        <select id="college" required>
+          <option value="" disabled selected hidden>اختر الكلية</option>
+          <!-- القيم تضاف هنا ديناميكياً من الـ API -->
+        </select>
       </div>
     </div>
 
@@ -438,12 +455,12 @@
         <span class="btn-icon">💾</span>
         <span>حفظ المادة</span>
       </button>
-      <span class="hint">يفضّل اعتماد نمط ثابت لرموز المواد (مثل IT101، PHAR201).</span>
+      <span class="hint">
+        يفضّل اعتماد نمط ثابت لرموز المواد (مثل IT101، PHAR201)، مع ربط كل مادة بالكلية الصحيحة.
+      </span>
     </div>
 
     <p id="msg" class="msg"></p>
-
-    <!-- <div class="debug-label">🔍 رد الـ API (للاختبار فقط):</div> -->
     <pre id="raw"></pre>
   </div>
 
@@ -476,11 +493,58 @@
 
 <script>
   // ⭐ نفس رابط الـ API اللي خدم معاك في استعلام الطالب
-  const API_URL = "https://script.google.com/macros/s/AKfycby82BG686GVU7lXSpDhiE6uWng7sUDYPCMap1ZrrO8O7EbXcu-0I8FAb6Odk5F44rb8KA/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbzX5Mxcco-l30KPzB1-oLNiBFPBgKoU3GUMgVnePM9jJGbYssfl_a54fId64JSyimOD-w/exec";
+
+  // عند تحميل الصفحة نجيب قائمة الكليات من الشيت
+  document.addEventListener('DOMContentLoaded', loadColleges);
+
+  async function loadColleges() {
+    const collegeSelect = document.getElementById('college');
+    const msg = document.getElementById('msg');
+
+    try {
+      const url = `${API_URL}?action=getColleges`;
+      const res = await fetch(url);
+      const text = await res.text();
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error("JSON error:", e, text);
+        msg.style.color = "red";
+        msg.textContent = "خطأ في قراءة بيانات الكليات من السيرفر.";
+        return;
+      }
+
+      // نتوقع شكل الرد: { status:"OK", colleges:["الصيدلة", "التمريض", ...] }
+      if (data.status === "OK" && Array.isArray(data.colleges)) {
+        // نفرغ الموجود (ما عدا أول خيار placeholder)
+        while (collegeSelect.options.length > 1) {
+          collegeSelect.remove(1);
+        }
+
+        data.colleges.forEach(col => {
+          const opt = document.createElement('option');
+          opt.value = col;
+          opt.textContent = col;
+          collegeSelect.appendChild(opt);
+        });
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "تعذر تحميل قائمة الكليات، راجع الأكشن getColleges في Code.gs";
+      }
+    } catch (err) {
+      console.error(err);
+      msg.style.color = "red";
+      msg.textContent = "❌ خطأ في الاتصال عند جلب الكليات.";
+    }
+  }
 
   async function saveCourse() {
-    const code = document.getElementById('code').value.trim();
-    const name = document.getElementById('name').value.trim();
+    const code    = document.getElementById('code').value.trim();
+    const name    = document.getElementById('name').value.trim();
+    const college = document.getElementById('college').value.trim();
     const msg  = document.getElementById('msg');
     const raw  = document.getElementById('raw');
 
@@ -488,17 +552,22 @@
     msg.style.color = "red";
     raw.textContent = "";
 
-    if (!code || !name) {
-      msg.textContent = "⚠ رمز المادة واسم المادة مطلوبان";
+    // التحقق من الحقول المطلوبة
+    if (!code || !name || !college) {
+      msg.textContent = "⚠ رمز المادة واسم المادة والكلية جميعها مطلوبة";
       return;
     }
 
-    const url = `${API_URL}?action=addCourse&code=${encodeURIComponent(code)}&name=${encodeURIComponent(name)}`;
+    const url =
+      `${API_URL}?action=addCourse` +
+      `&code=${encodeURIComponent(code)}` +
+      `&name=${encodeURIComponent(name)}` +
+      `&college=${encodeURIComponent(college)}`;
 
     try {
       const res  = await fetch(url);
       const text = await res.text();   // ناخذ الرد كنص
-      raw.textContent = text;          // نعرضه كما هو للعين
+      raw.textContent = text;          // نعرضه كما هو للعين (مخفي حالياً)
 
       let data;
       try {
@@ -514,12 +583,13 @@
         msg.textContent = "✔ تم حفظ المادة بنجاح";
         document.getElementById('code').value = "";
         document.getElementById('name').value = "";
+        document.getElementById('college').value = "";
       }
       else if (data.status === "EXISTS") {
         msg.textContent = "⚠ رمز المادة مسجّل مسبقًا، جرّب رمز آخر.";
       }
       else if (data.status === "MISSING_FIELDS") {
-        msg.textContent = "⚠ بيانات ناقصة، تأكد من رمز واسم المادة.";
+        msg.textContent = "⚠ بيانات ناقصة، تأكد من رمز المادة واسمها والكلية.";
       }
       else if (data.error === "UNKNOWN_ACTION") {
         msg.textContent = "السيرفر لا يتعرف على action=addCourse (مشكلة في رابط الـ API أو في doGet).";

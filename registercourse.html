@@ -28,13 +28,11 @@
       padding: 0;
       font-family: "Cairo", sans-serif;
       direction: rtl;
-      overflow-x: hidden;      /* يمنع سكرول يمين/يسار */
-      touch-action: pan-y;     /* يمنع سحب أفقي مزعج على الموبايل */
-      scroll-behavior: smooth; /* سكرول أنعم في الانتقالات */
-
-      /* ⭐ إخفاء السكروول شكلاً فقط (يبقى شغال) */
-      scrollbar-width: none;          /* فايرفوكس */
-      -ms-overflow-style: none;       /* IE/Edge قديم */
+      overflow-x: hidden;
+      touch-action: pan-y;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
     html::-webkit-scrollbar,
@@ -54,12 +52,11 @@
       position: relative;
       overflow-x: hidden;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch; /* سكرول سلس على iOS */
+      -webkit-overflow-scrolling: touch;
       overscroll-behavior-x: contain;
       background: radial-gradient(circle at top left, #0f172a 0, #020617 40%, #000 100%);
     }
 
-    /* خلفيات متحركة ناعمة */
     body::before,
     body::after {
       content: "";
@@ -99,7 +96,6 @@
       100% { transform: translate3d(25px,-20px,0); }
     }
 
-    /* شريط علوي فيه الشعار واسم الجامعة */
     .header-bar {
       position: relative;
       z-index: 2;
@@ -663,7 +659,6 @@
       50%     { transform: translateY(-3px); }
     }
 
-    /* موبايل */
     @media (max-width: 800px) {
       .shell {
         grid-template-columns: 1fr;
@@ -686,13 +681,11 @@
         background: #020617;
       }
 
-      /* ⭐ إلغاء الخلفيات المتحركة نهائياً في الموبايل لتخفيف الثقل */
       body::before,
       body::after {
         display: none !important;
       }
 
-      /* ⭐ إلغاء البلور الثقيل في الموبايل */
       .header-bar,
       .shell,
       .form-pane,
@@ -702,12 +695,10 @@
         -webkit-backdrop-filter: none !important;
       }
 
-      /* ⭐ تخفيف كل الشادو في الموبايل (يساعد على سكرول سلس) */
       * {
         box-shadow: none !important;
       }
 
-      /* زر التسجيل: نخفف الترانسفورم والأنيميشن عشان ما يعكش حوله */
       button {
         transform: none !important;
         transition: none !important;
@@ -783,7 +774,6 @@
 
 <body>
 
-<!-- شريط الشعار -->
 <div class="header-bar">
   <div class="header-left">
     <div class="header-logo">
@@ -809,7 +799,6 @@
     <div class="chip">نظام إدارة الجامعة</div>
   </div>
 
-  <!-- فورم التسجيل -->
   <div class="form-pane">
     <h2 class="form-title">
       <span class="icon">➕</span>
@@ -817,7 +806,6 @@
     </h2>
     <p class="subtitle">أدخل رقم القيد، اختر المادة، ثم اضغط تسجيل.</p>
 
-    <!-- صف رقم القيد + اسم الطالب -->
     <div class="row">
       <div class="field">
         <label for="sid">رقم القيد</label>
@@ -830,7 +818,6 @@
       </div>
     </div>
 
-    <!-- صف رمز المادة + اسم المادة -->
     <div class="row">
       <div class="field">
         <label for="code">رمز المادة (اختر أو اكتب من القائمة)</label>
@@ -843,7 +830,6 @@
       </div>
     </div>
 
-    <!-- الفصل الدراسي -->
     <div class="field">
       <label for="semester">الفصل الدراسي</label>
       <input type="text" id="semester" value="خريف 2026/2025" readonly>
@@ -863,7 +849,6 @@
     <pre id="raw"></pre>
   </div>
 
-  <!-- لوحة معلومات + قائمة مواد الطالب -->
   <div class="info-pane">
     <div class="badge">بوابة التسجيل الأكاديمي</div>
     <h3 class="info-title">دور صفحة تسجيل المواد</h3>
@@ -885,7 +870,6 @@
       <div class="pill">صيفي 2025</div>
     </div>
 
-    <!-- ✅ هنا قائمة مواد الطالب في الفصل الحالي -->
     <div class="mini-label" style="margin-top: 12px;">المواد المسجَّلة لهذا الطالب في هذا الفصل:</div>
     <ul class="bullet-list" id="studentCourses">
       <li><span class="dot"></span>أدخل رقم القيد لعرض المواد المسجّلة.</li>
@@ -894,12 +878,11 @@
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycby82BG686GVU7lXSpDhiE6uWng7sUDYPCMap1ZrrO8O7EbXcu-0I8FAb6Odk5F44rb8KA/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbzX5Mxcco-l30KPzB1-oLNiBFPBgKoU3GUMgVnePM9jJGbYssfl_a54fId64JSyimOD-w/exec";
 
   let allCourses = [];
   let allStudents = [];
 
-  // ✅ اسم المستخدم الحالي (مخزَّن من صفحة الدخول)
   function getCurrentUser() {
     return localStorage.getItem("USERNAME") || "";
   }
@@ -1114,7 +1097,7 @@
     }
 
     const sid = sidRaw;
-    const currentUser = getCurrentUser(); // ✅ المستخدم الحالي
+    const currentUser = getCurrentUser();
 
     msg.textContent = "";
     msg.style.color = "red";
@@ -1174,14 +1157,25 @@
         codeInput.value   = "";
         courseName.value  = "";
         loadStudentCourses();
+
       } else if (data.status === "MISSING_FIELDS") {
         msg.textContent = "⚠ بيانات ناقصة، تأكد من رقم القيد ورمز المادة.";
+
       } else if (data.status === "STUDENT_NOT_FOUND") {
         msg.textContent = "❌ رقم القيد غير موجود في جدول الطلاب (Students).";
+
       } else if (data.status === "COURSE_NOT_FOUND") {
         msg.textContent = "❌ رمز المادة غير موجود في جدول المواد (Courses).";
+
       } else if (data.status === "ALREADY_REGISTERED") {
         msg.textContent = "⚠ هذه المادة مسجلة لهذا الطالب من قبل (راه الطالب منزلها).";
+
+      // ⭐ أسبقية المادة
+      } else if (data.status === "PREREQ_MISSING") {
+        const pc = data.prereq_code || "";
+        const pn = data.prereq_name || "";
+        msg.textContent = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مادة الأسبقية: ${pc} - ${pn}`;
+
       } else {
         msg.textContent = "لم يتم التسجيل، تحقق من البيانات أو الكود. (راجع الرد في الصندوق الأسود)";
       }

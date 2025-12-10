@@ -480,7 +480,7 @@
       border-top: 1px dashed rgba(148, 163, 184, 0.6);
       font-size: 0.9rem;
       color: #e5e7eb;
-      animation: resultIn 0.4s ease-out;
+      animation: resultIn 0.4s.ease-out;
     }
 
     @keyframes resultIn {
@@ -598,51 +598,47 @@
       font-weight: 600;
     }
 
-/* 🔻 تنسيق فلتر الفصول (شكل أوضح وأكبر) */
-.semester-filter {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 0.85rem;
-  position: relative;
-  flex-wrap: wrap; /* لو الشاشة ضيقة ينزل السطر للسطـر اللي بعده */
-}
+    /* 🔻 تنسيق فلتر الفصول */
+    .semester-filter {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      position: relative;
+      flex-wrap: wrap;
+    }
 
-.semester-label {
-  color: #e5e7eb;
-  font-weight: 600;
-}
+    .semester-label {
+      color: #e5e7eb;
+      font-weight: 600;
+    }
 
-/* الحبة اللي فيها اسم الفصل */
-.semester-pill-btn {
-  padding: 7px 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.85);
-  background: radial-gradient(circle at top, rgba(15,23,42,1), rgba(15,23,42,0.96));
-  color: #e5e7eb;
-  font-size: 0.9rem;
-  font-weight: 700;
-  box-shadow:
-    0 8px 20px rgba(15,23,42,0.9),
-    0 0 0 1px rgba(15,23,42,1);
-  min-width: 170px;          /* يخليها أعرض عشان اسم الفصل يبان كامل */
-  justify-content: space-between;
-}
+    .semester-pill-btn {
+      padding: 7px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.85);
+      background: radial-gradient(circle at top, rgba(15,23,42,1), rgba(15,23,42,0.96));
+      color: #e5e7eb;
+      font-size: 0.9rem;
+      font-weight: 700;
+      box-shadow:
+        0 8px 20px rgba(15,23,42,0.9),
+        0 0 0 1px rgba(15,23,42,1);
+      min-width: 170px;
+      justify-content: space-between;
+    }
 
-/* نص اسم الفصل نفسه */
-.semester-pill-btn .semester-current {
-  display: inline-block;
-  max-width: 100%;
-}
+    .semester-pill-btn .semester-current {
+      display: inline-block;
+      max-width: 100%;
+    }
 
-/* سهم صغير */
-.semester-pill-btn .semester-icon {
-  font-size: 0.8rem;
-  opacity: 0.9;
-}
-
+    .semester-pill-btn .semester-icon {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
 
     .semester-dropdown {
       position: absolute;
@@ -825,63 +821,63 @@
   <span class="title">استعلام رقم القيد</span>
 </div>
 
-  <div class="wrapper">
+<div class="wrapper">
 
-    <!-- شريط أعلى بالشعار واسم الجامعة -->
-    <div class="page-header">
-      <div class="page-header-left">
-        <div class="page-logo">
-          <img src="aiu-logo.png" alt="شعار الجامعة">
-        </div>
-        <div class="page-texts">
-          <div class="uni-name">جامعة السلام الدولية</div>
-          <div class="uni-sub">بوابة استعلام المواد للطلبة</div>
-        </div>
-      </div>
-      <div class="page-pill">استعلام رقم القيد</div>
-      <div class="page-pill">م.أيوب الحوات</div>
-    </div>
-
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-
-    <div class="card">
-      <div class="card-glow-line"></div>
-
-      <div class="logo-box">
+  <!-- شريط أعلى بالشعار واسم الجامعة -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-logo">
         <img src="aiu-logo.png" alt="شعار الجامعة">
       </div>
-
-      <h2>📘 استعلام المواد</h2>
-      <p class="subtitle">أدخل رقم القيد لمعرفة بياناتك والمواد المسجلة لهذا الفصل</p>
-
-      <div class="input-label">رقم القيد</div>
-      <input id="sid" type="number" placeholder="أدخل رقم القيد">
-
-      <div class="actions-row">
-        <button class="btn-primary" onclick="lookup()">
-          <span class="icon">🔍</span>
-          <span>استعلام</span>
-        </button>
-
-        <!-- زر طباعة PDF -->
-        <button class="btn-ghost" type="button" onclick="printPdf()">
-          <span class="icon">🖨️</span>
-          <span>طباعة PDF</span>
-        </button>
-      </div>
-
-      <p id="error" class="error"></p>
-      <p id="status" class="status"></p>
-
-      <div class="student-id-print"></div>
-      <div id="result" class="result"></div>
-
-      <div class="note">
-        عند الضغط على <span>طباعة PDF</span> سيتم طباعة كشف المواد الظاهر في الشاشة.
+      <div class="page-texts">
+        <div class="uni-name">جامعة السلام الدولية</div>
+        <div class="uni-sub">بوابة استعلام المواد للطلبة</div>
       </div>
     </div>
+    <div class="page-pill">استعلام رقم القيد</div>
+    <div class="page-pill">م.أيوب الحوات</div>
   </div>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="card">
+    <div class="card-glow-line"></div>
+
+    <div class="logo-box">
+      <img src="aiu-logo.png" alt="شعار الجامعة">
+    </div>
+
+    <h2>📘 استعلام المواد</h2>
+    <p class="subtitle">أدخل رقم القيد لمعرفة بياناتك والمواد المسجلة لهذا الفصل</p>
+
+    <div class="input-label">رقم القيد</div>
+    <input id="sid" type="number" placeholder="أدخل رقم القيد">
+
+    <div class="actions-row">
+      <button class="btn-primary" onclick="lookup()">
+        <span class="icon">🔍</span>
+        <span>استعلام</span>
+      </button>
+
+      <!-- زر طباعة PDF -->
+      <button class="btn-ghost" type="button" onclick="printPdf()">
+        <span class="icon">🖨️</span>
+        <span>طباعة PDF</span>
+      </button>
+    </div>
+
+    <p id="error" class="error"></p>
+    <p id="status" class="status"></p>
+
+    <div class="student-id-print"></div>
+    <div id="result" class="result"></div>
+
+    <div class="note">
+      عند الضغط على <span>طباعة PDF</span> سيتم طباعة كشف المواد الظاهر في الشاشة.
+    </div>
+  </div>
+</div>
 
 <script>
   // 🔹 متغيرات عامة لتخزين كل المواد والفصول
@@ -908,14 +904,22 @@
     }
 
     status.textContent = "⏳ جاري جلب البيانات...";
-
-    let api = "https://script.google.com/macros/s/AKfycby82BG686GVU7lXSpDhiE6uWng7sUDYPCMap1ZrrO8O7EbXcu-0I8FAb6Odk5F44rb8KA/exec";
-    let url = api + "?action=getStudent&id=" + encodeURIComponent(id);
+               
+    let api = "https://script.google.com/macros/s/AKfycbzX5Mxcco-l30KPzB1-oLNiBFPBgKoU3GUMgVnePM9jJGbYssfl_a54fId64JSyimOD-w/exec";
+    // منع الكاش + نفس رابطك
+    let url = api + "?action=getStudent&id=" + encodeURIComponent(id) + "&t=" + Date.now();
 
     try {
-      let res  = await fetch(url);
+      let res  = await fetch(url, { cache: "no-store" });
       let data = await res.json();
       status.textContent = "";
+
+      // 🔴 هنا فحص OPEN / CLOSED من الـ APL
+      if ((data.status || "").toString().trim().toUpperCase() === "CLOSED") {
+        error.textContent = data.message || "النظام متوقف مؤقتاً من قبل إدارة الجامعة. يرجى المحاولة لاحقاً.";
+        box.innerHTML = "";
+        return;
+      }
 
       if (data.error === "STUDENT_NOT_FOUND") {
         error.textContent = "رقم القيد غير موجود. يرجى مراجعة مكتب الدراسة والامتحانات.";

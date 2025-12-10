@@ -194,16 +194,13 @@
       white-space: nowrap;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-    }
+    .btn:hover { transform: translateY(-1px); }
 
     .btn.secondary {
       background: linear-gradient(135deg, #0ea5e9, #0369a1);
       box-shadow: 0 8px 18px rgba(14,165,233,0.6);
     }
 
-    /* شريط الفلترة بالكليات */
     .filter-bar {
       display: flex;
       flex-wrap: wrap;
@@ -224,9 +221,7 @@
       color: #374151;
     }
 
-    .filter-chip span.icon {
-      font-size: 1rem;
-    }
+    .filter-chip span.icon { font-size: 1rem; }
 
     .filter-chip.active {
       background: #0ea5e9;
@@ -287,7 +282,6 @@
       font-weight: 600;
     }
 
-    /* 4 أعمدة لجدول الملخص */
     #summaryTable th:nth-child(1),
     #summaryTable td:nth-child(1) { width: 15%; }
     #summaryTable th:nth-child(2),
@@ -306,9 +300,7 @@
       z-index: 1;
     }
 
-    tr:nth-child(even) td {
-      background: #f9fafb;
-    }
+    tr:nth-child(even) td { background: #f9fafb; }
 
     .badge-small {
       display: inline-block;
@@ -320,16 +312,9 @@
       font-weight: 700;
     }
 
-    /* مواد أقل من 3 طلاب */
     .low-enroll td {
       background: #fef2f2 !important;
       color: #991b1b !important;
-    }
-
-    .debug-label {
-      margin-top: 6px;
-      font-size: 0.75rem;
-      color: #6b7280;
     }
 
     #raw {
@@ -346,7 +331,6 @@
       display: none;
     }
 
-    /* جدول تجميع المواد المتشابهة */
     .group-title {
       margin: 8px 0 4px;
       font-size: 0.85rem;
@@ -367,139 +351,87 @@
     #groupTable th:nth-child(3),
     #groupTable td:nth-child(3) { width: 20%; }
 
-    /* طباعة */
     @media print {
       body {
         background: #ffffff;
         padding: 0;
       }
-
       .shell {
         box-shadow: none;
         border-radius: 0;
         border: none;
         max-width: 100%;
       }
-
-      .content {
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
-
+      .content { grid-template-columns: 1fr; gap: 8px; }
       .top-bar {
         background: #ffffff !important;
         color: #000000 !important;
         border-bottom: 1px solid #000;
       }
-
-      .top-text h1 {
-        font-size: 1rem;
-      }
-
-      .top-text p {
-        display: none;
-      }
-
+      .top-text h1 { font-size: 1rem; }
+      .top-text p { display: none; }
       .logo-circle,
       .card-title .icon,
-      .semester-bar {
-        display: none !important;
-      }
-
+      .semester-bar { display: none !important; }
       .btn,
       .chip,
       .filter-bar,
-      .debug-label,
-      #raw {
-        display: none !important;
-      }
-
+      #raw { display: none !important; }
       .card {
         background: #ffffff !important;
         border-radius: 0;
         border: none;
         padding: 8px 0;
       }
-
       .table-wrapper {
         border-radius: 0;
         border: none;
         max-height: none;
       }
-
       th {
         background: #ffffff !important;
         border-bottom: 1px solid #000;
       }
-
-      tr:nth-child(even) td {
-        background: #ffffff !important;
-      }
-
+      tr:nth-child(even) td { background: #ffffff !important; }
       .badge-small {
         background: transparent;
         color: #000;
         border-radius: 0;
         padding: 0;
       }
-
-      body.print-summary .card-summary {
-        display: block !important;
-      }
-      body.print-summary .card-details {
-        display: none !important;
-      }
-
-      body.print-details .card-summary {
-        display: none !important;
-      }
-      body.print-details .card-details {
-        display: block !important;
-      }
+      body.print-summary .card-summary { display: block !important; }
+      body.print-summary .card-details { display: none !important; }
+      body.print-details .card-summary { display: none !important; }
+      body.print-details .card-details { display: block !important; }
     }
 
     @media (max-width: 900px) {
-      .content {
-        grid-template-columns: 1fr;
-      }
+      .content { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 550px) {
-      body {
-        padding: 14px 8px;
-      }
-
-      .shell {
-        border-radius: 18px;
-      }
-
+      body { padding: 14px 8px; }
+      .shell { border-radius: 18px; }
       .top-bar {
         padding: 8px 12px 6px;
         flex-direction: column;
         align-items: flex-start;
       }
-
-      .content {
-        padding: 12px 10px 14px;
-      }
-
+      .content { padding: 12px 10px 14px; }
       .field-row {
         flex-direction: column;
         align-items: stretch;
       }
-
       .btn {
         width: 100%;
         justify-content: center;
       }
-
       .card-header {
         flex-direction: column;
         align-items: stretch;
       }
     }
 
-    /* لودر صغير */
     .spinner {
       display: inline-block;
       width: 14px;
@@ -536,7 +468,7 @@
     <select id="semesterSelect" class="semester-select" onchange="onSemesterChange()">
       <option value="">كل الفصول</option>
     </select>
-    <span class="sem-hint">الاختيار يطبَّق على التقرير العام والتفصيلي.</span>
+    <span class="sem-hint">اختر الفصل ثم اضغط "تحديث الملخص".</span>
   </div>
 
   <div class="content">
@@ -641,7 +573,7 @@
             <span class="icon">🔎</span>
             <span>تقرير تفصيلي لمادة</span>
           </div>
-          <p class="card-sub">أدخل رمز المادة لعرض قائمة الطلاب المسجَّلين.</p>
+          <p class="card-sub">اختر الفصل من الأعلى، ثم أدخل رمز المادة.</p>
         </div>
       </div>
 
@@ -677,7 +609,7 @@
 
 <script>
   const API_URL =
-    "https://script.google.com/macros/s/AKfycby82BG686GVU7lXSpDhiE6uWng7sUDYPCMap1ZrrO8O7EbXcu-0I8FAb6Odk5F44rb8KA/exec";
+    "https://script.google.com/macros/s/AKfycbzX5Mxcco-l30KPzB1-oLNiBFPBgKoU3GUMgVnePM9jJGbYssfl_a54fId64JSyimOD-w/exec";
 
   let allSummaryData = [];
   let SELECTED_SEMESTER = "";
@@ -713,7 +645,7 @@
     const select = document.getElementById("semesterSelect");
     SELECTED_SEMESTER = select ? select.value : "";
 
-    // نحدّث الملخص إن وجد
+    // لو حاب، نحدّث الملخص مباشرة لما يغيّر الفصل
     if (allSummaryData.length > 0) {
       loadSummary();
     }
@@ -734,9 +666,7 @@
       const tr = document.createElement("tr");
       const total = parseInt(item.total, 10) || 0;
 
-      if (total < 3) {
-        tr.classList.add("low-enroll");
-      }
+      if (total < 3) tr.classList.add("low-enroll");
 
       tr.innerHTML = `
         <td>${item.code || ""}</td>
@@ -748,30 +678,25 @@
     });
   }
 
-  // بناء جدول تجميع المواد المتشابهة (نفس الاسم – أكواد مختلفة)
+  // جدول تجميع المواد المتشابهة (نفس الاسم – أكواد مختلفة)
   function buildGroupedTable() {
     const tbody = document.querySelector("#groupTable tbody");
     tbody.innerHTML = "";
 
-    if (!allSummaryData || allSummaryData.length === 0) {
-      return;
-    }
+    if (!allSummaryData || allSummaryData.length === 0) return;
 
     const groups = {};
 
     allSummaryData.forEach(item => {
       const name = (item.name || "").trim();
       if (!name) return;
-
-      if (!groups[name]) {
-        groups[name] = [];
-      }
+      if (!groups[name]) groups[name] = [];
       groups[name].push(item);
     });
 
     Object.keys(groups).forEach(name => {
       const arr = groups[name];
-      if (arr.length < 2) return; // نعرض فقط المواد اللي لها أكثر من كود
+      if (arr.length < 2) return; // نعرض فقط اللي لها أكثر من كود
 
       const codesWithCounts = arr
         .map(i => `${i.code || ""} (${parseInt(i.total,10) || 0})`)
@@ -799,14 +724,13 @@
     }
   }
 
-  // تحميل ملخص المواد (حسب الفصل المختار)
+  // تحميل ملخص المواد – مع إخفاء المواد اللي مافيهاش طلاب
   async function loadSummary() {
     const msg = document.getElementById("summaryMsg");
     msg.style.color = "#6b7280";
     msg.innerHTML = `<span class="spinner"></span> جاري تحميل الملخص...`;
 
     const url = `${API_URL}?action=courseSummary&semester=${encodeURIComponent(SELECTED_SEMESTER || "")}`;
-
 
     try {
       const res = await fetch(url);
@@ -826,9 +750,12 @@
         return;
       }
 
-      allSummaryData = data.summary;
+      // ✅ نعرض فقط المواد اللي فيها طلاب (total > 0)
+      const nonEmpty = data.summary.filter(item => (parseInt(item.total, 10) || 0) > 0);
+
+      allSummaryData = nonEmpty;
       renderSummaryTable(allSummaryData);
-      buildGroupedTable(); // نبني جدول التجميع على نفس الفصل
+      buildGroupedTable();
 
       msg.style.color = "green";
       msg.textContent = "✔ تم تحميل الملخص بنجاح";
@@ -843,9 +770,7 @@
   function filterByCollege(collegeName, btnElement) {
     const chips = document.querySelectorAll(".filter-chip");
     chips.forEach(ch => ch.classList.remove("active"));
-    if (btnElement) {
-      btnElement.classList.add("active");
-    }
+    if (btnElement) btnElement.classList.add("active");
 
     if (collegeName === "ALL") {
       renderSummaryTable(allSummaryData);
@@ -857,7 +782,7 @@
     }
   }
 
-  // تفاصيل مادة مع تسلسل (حسب الفصل المختار)
+  // تفاصيل مادة – مع الفصل + الأسماء
   async function loadDetails() {
     const code = document.getElementById("detailCode").value.trim();
     const header = document.getElementById("detailsHeader");
@@ -879,7 +804,7 @@
     msg.style.color = "#0ea5e9";
     msg.innerHTML = `<span class="spinner"></span> جاري جلب البيانات...`;
 
-    let url = `${API_URL}?action=courseDetails&code=${encodeURIComponent(code)}`;
+    let url = `${API_URL}?action=reportByCourse&code=${encodeURIComponent(code)}`;
     if (SELECTED_SEMESTER) {
       url += `&semester=${encodeURIComponent(SELECTED_SEMESTER)}`;
     }
@@ -898,14 +823,14 @@
         return;
       }
 
-      if (data.error === "COURSE_NOT_FOUND") {
+      if (data.error === "COURSE_NOT_FOUND" || data.error === "NO_CODE") {
         msg.style.color = "red";
         msg.textContent = "المادة غير موجودة، تأكد من رمز المادة.";
         return;
       }
 
       header.innerHTML = `
-        <span>مادة: <strong>${data.course_name || ""}</strong></span>
+        <span>مادة: <strong>${data.name || data.course_name || ""}</strong></span>
         &nbsp; | &nbsp;
         <span class="badge-small">${data.code || code}</span>
         ${data.semester ? `&nbsp; | &nbsp;<span>${data.semester}</span>` : ""}
@@ -936,7 +861,6 @@
     }
   }
 
-  // طباعة ملخص
   function printSummary() {
     document.body.classList.add("print-summary");
     document.body.classList.remove("print-details");
@@ -946,7 +870,6 @@
     }, 500);
   }
 
-  // طباعة تقرير مادة
   function printDetails() {
     document.body.classList.add("print-details");
     document.body.classList.remove("print-summary");
@@ -956,9 +879,10 @@
     }, 500);
   }
 
-  // عند تحميل الصفحة نجيب الفصول
+  // عند تحميل الصفحة: نجيب الفصول + نحمّل الملخص (كل الفصول)
   document.addEventListener("DOMContentLoaded", () => {
     loadSemesters();
+    loadSummary();
   });
 </script>
 
