@@ -263,7 +263,7 @@
       box-shadow:
         0 0 0 1px rgba(148,163,184,0.6),
         0 10px 22px rgba(15,23,42,0.9);
-      animation: floatIcon 3s ease-in-out infinite;
+      animation: floatIcon 3s.ease-in-out infinite;
     }
 
     .top-text h1 {
@@ -440,7 +440,7 @@
       font-size: 0.95rem;
       cursor: pointer;
       font-weight: 800;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s.ease, filter 0.18s.ease;
       box-shadow:
         0 0 0 1px rgba(22,163,74,0.7),
         0 18px 35px rgba(22,163,74,0.8);
@@ -784,7 +784,7 @@
       <div class="uni-sub">نظام إدارة وتسجيل المقررات الدراسية</div>
     </div>
   </div>
-    <div class="header-tag">م.أيوب الحوات</div>
+  <div class="header-tag">م.أيوب الحوات</div>
   <div class="header-tag">بوابة الموظفين الأكاديمية</div>
 </div>
 
@@ -794,7 +794,7 @@
       <div class="logo-circle">📝</div>
       <div class="top-text">
         <h1>تسجيل مواد للطلاب</h1>
-        <p>    تنزيل المواد الدراسية للطالب في الفصل الحالي.</p>
+        <p>تنزيل المواد الدراسية للطالب في الفصل الحالي.</p>
       </div>
     </div>
     <div class="chip">وحدة المنظومة الإلكترونية</div>
@@ -806,9 +806,11 @@
       <span class="icon">➕</span>
       <span>إضافة تسجيل جديد</span>
     </h2>
-<p class="subtitle" style="color:#F4C46A;">
-  أدخل رقم القيد ثم اختر المادة، ثم اضغط تسجيل.
-</p>
+
+    <!-- النص بالذهبي -->
+    <p class="subtitle" style="color:#F4C46A;">
+      أدخل رقم القيد ثم اختر المادة، ثم اضغط تسجيل.
+    </p>
 
     <div class="row">
       <div class="field">
@@ -881,8 +883,9 @@
   </div>
 </div>
 
-<script>           
-  const API_URL = "https://script.google.com/macros/s/AKfycbxSXzoccORX5DP_MwJXg13WPHDBV5vuuh3v0pX8Lch0xYX4tLrF8JjlVpdGpeQLt_7RKA/exec";
+<script>
+  // نفس رابط الويب آب اللي تستخدمينه لباقي الصفحات
+  const API_URL = "https://script.google.com/macros/s/AKfycbyBgaXcuebXQpTaHMYLx0jie1kPyUfp1JUGEZHWnF90hk20OUj4NVR6rjq_aRa0Rwr_ew/exec";
 
   let allCourses = [];
   let allStudents = [];
@@ -904,16 +907,22 @@
     return val.toUpperCase();
   }
 
+  // ⭐ الآن نستخدم coursesAll عشان نجيب كل المواد حتى اللي ما فيهاش طلاب
   async function loadCoursesList() {
     try {
-      const res  = await fetch(`${API_URL}?action=courseSummary`);
+      const res  = await fetch(`${API_URL}?action=coursesAll`);
       const text = await res.text();
       let data;
-      try { data = JSON.parse(text); } catch(e){ console.log("Course list not JSON:", text); return;}
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.log("Course list not JSON:", text);
+        return;
+      }
 
-      if (!data.summary || !Array.isArray(data.summary)) return;
+      if (!data.courses || !Array.isArray(data.courses)) return;
 
-      allCourses = data.summary;
+      allCourses = data.courses;
       const dl = document.getElementById("courseList");
       dl.innerHTML = "";
 
@@ -1175,13 +1184,13 @@
         msg.textContent = "⚠ هذه المادة مسجلة لهذا الطالب من قبل (راه الطالب منزلها).";
 
       // ⭐ أسبقية المادة
-} else if (
-  data.status === "PREREQ_REQUIRED" ||   // اللي يرجعه Code.gs
-  data.status === "PREREQ_MISSING"       // نخليها احتياط لو تغيرت مستقبلاً
-) {
-  const pc = data.prereq_code || "";
-  const pn = data.prereq_name || "";
-  msg.textContent = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مادة الأسبقية: ${pc} - ${pn}`;
+      } else if (
+        data.status === "PREREQ_REQUIRED" ||
+        data.status === "PREREQ_MISSING"
+      ) {
+        const pc = data.prereq_code || "";
+        const pn = data.prereq_name || "";
+        msg.textContent = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مادة الأسبقية: ${pc} - ${pn}`;
 
       // ⭐ النظام مقفول
       } else if (data.status === "SYSTEM_CLOSED") {
