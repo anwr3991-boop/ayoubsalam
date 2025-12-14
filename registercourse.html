@@ -19,9 +19,7 @@
       --border-soft: rgba(148,163,184,0.5);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
@@ -263,7 +261,7 @@
       box-shadow:
         0 0 0 1px rgba(148,163,184,0.6),
         0 10px 22px rgba(15,23,42,0.9);
-      animation: floatIcon 3s.ease-in-out infinite;
+      animation: floatIcon 3s ease-in-out infinite;
     }
 
     .top-text h1 {
@@ -364,11 +362,7 @@
       margin-bottom: 6px;
     }
 
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
+    .field { display: flex; flex-direction: column; gap: 5px; }
 
     label {
       font-size: 0.8rem;
@@ -385,8 +379,7 @@
       font-weight: 400;
     }
 
-    input,
-    select {
+    input, select {
       width: 100%;
       padding: 9px 11px;
       border-radius: 12px;
@@ -401,12 +394,9 @@
         0 10px 18px rgba(15,23,42,0.85);
     }
 
-    input::placeholder {
-      color: #6b7280;
-    }
+    input::placeholder { color: #6b7280; }
 
-    input:focus,
-    select:focus {
+    input:focus, select:focus {
       border-color: rgba(56,189,248,0.9);
       box-shadow:
         0 0 0 1px rgba(56,189,248,0.9),
@@ -440,7 +430,7 @@
       font-size: 0.95rem;
       cursor: pointer;
       font-weight: 800;
-      transition: transform 0.18s ease, box-shadow 0.18s.ease, filter 0.18s.ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
       box-shadow:
         0 0 0 1px rgba(22,163,74,0.7),
         0 18px 35px rgba(22,163,74,0.8);
@@ -462,9 +452,7 @@
       transition: opacity 0.3s ease, transform 0.45s ease;
     }
 
-    button span.btn-icon {
-      font-size: 1.1rem;
-    }
+    button span.btn-icon { font-size: 1.1rem; }
 
     button:hover {
       transform: translateY(-2px);
@@ -500,11 +488,7 @@
       transition: 0.18s ease;
     }
 
-    .debug-label {
-      margin-top: 10px;
-      font-size: 0.74rem;
-      color: #9ca3af;
-    }
+    .debug-label { margin-top: 10px; font-size: 0.74rem; color: #9ca3af; }
 
     #raw {
       margin-top: 6px;
@@ -581,22 +565,9 @@
       box-shadow: 0 0 0 5px rgba(34,197,94,0.24);
     }
 
-    .info-title {
-      position: relative;
-      margin: 2px 0 8px;
-      font-size: 1.02rem;
-      font-weight: 800;
-      color: #f9fafb;
-      z-index: 1;
-    }
+    .info-title { position: relative; margin: 2px 0 8px; font-size: 1.02rem; font-weight: 800; color: #f9fafb; z-index: 1; }
 
-    .info-text {
-      position: relative;
-      margin: 0 0 10px;
-      font-size: 0.8rem;
-      color: #cbd5f5;
-      z-index: 1;
-    }
+    .info-text { position: relative; margin: 0 0 10px; font-size: 0.8rem; color: #cbd5f5; z-index: 1; }
 
     .bullet-list {
       position: relative;
@@ -625,22 +596,9 @@
       flex-shrink: 0;
     }
 
-    .mini-label {
-      position: relative;
-      font-size: 0.74rem;
-      color: #9ca3af;
-      margin-top: 6px;
-      z-index: 1;
-    }
+    .mini-label { position: relative; font-size: 0.74rem; color: #9ca3af; margin-top: 6px; z-index: 1; }
 
-    .pill-row {
-      position: relative;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 6px;
-      z-index: 1;
-    }
+    .pill-row { position: relative; display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; z-index: 1; }
 
     .pill {
       font-size: 0.72rem;
@@ -660,115 +618,36 @@
     }
 
     @media (max-width: 800px) {
-      .shell {
-        grid-template-columns: 1fr;
-        border-radius: 22px;
-      }
-
-      .form-pane {
-        border-left: none;
-        border-top: 1px solid rgba(31,41,55,0.85);
-      }
-
-      .info-pane {
-        order: -1;
-      }
+      .shell { grid-template-columns: 1fr; border-radius: 22px; }
+      .form-pane { border-left: none; border-top: 1px solid rgba(31,41,55,0.85); }
+      .info-pane { order: -1; }
     }
 
     @media (max-width: 550px) {
-      body {
-        padding: 8px 6px 10px;
-        background: #020617;
-      }
-
-      body::before,
-      body::after {
-        display: none !important;
-      }
-
-      .header-bar,
-      .shell,
-      .form-pane,
-      .info-pane,
-      .top-bar {
+      body { padding: 8px 6px 10px; background: #020617; }
+      body::before, body::after { display: none !important; }
+      .header-bar, .shell, .form-pane, .info-pane, .top-bar {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
       }
+      * { box-shadow: none !important; }
+      button { transform: none !important; transition: none !important; }
+      button:hover, button:active { transform: none !important; }
 
-      * {
-        box-shadow: none !important;
-      }
-
-      button {
-        transform: none !important;
-        transition: none !important;
-      }
-
-      button:hover,
-      button:active {
-        transform: none !important;
-      }
-
-      .header-bar {
-        max-width: 100%;
-        border-radius: 16px;
-        padding: 7px 10px;
-      }
-
-      .shell {
-        max-width: 100%;
-        border-radius: 18px;
-      }
-
-      .top-bar {
-        padding: 9px 12px 7px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-      }
-
-      .form-pane,
-      .info-pane {
-        padding: 14px 12px 16px;
-      }
-
-      .row {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      button {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .hint {
-        max-width: 100%;
-      }
-
-      .header-text-main .uni-name {
-        font-size: 0.88rem;
-      }
-
-      .header-left {
-        gap: 8px;
-      }
-
-      .header-tag {
-        display: none;
-      }
+      .header-bar { max-width: 100%; border-radius: 16px; padding: 7px 10px; }
+      .shell { max-width: 100%; border-radius: 18px; }
+      .top-bar { padding: 9px 12px 7px; flex-direction: column; align-items: flex-start; gap: 4px; }
+      .form-pane, .info-pane { padding: 14px 12px 16px; }
+      .row { grid-template-columns: 1fr; gap: 10px; }
+      button { width: 100%; justify-content: center; }
+      .actions { flex-direction: column; align-items: stretch; }
+      .hint { max-width: 100%; }
+      .header-text-main .uni-name { font-size: 0.88rem; }
+      .header-left { gap: 8px; }
+      .header-tag { display: none; }
     }
 
-    .debug-label,
-    #raw,
-    .debug-bar {
-      display: none !important;
-    }
+    .debug-label, #raw, .debug-bar { display: none !important; }
   </style>
 </head>
 
@@ -807,7 +686,6 @@
       <span>إضافة تسجيل جديد</span>
     </h2>
 
-    <!-- النص بالذهبي -->
     <p class="subtitle" style="color:#F4C46A;">
       أدخل رقم القيد ثم اختر المادة، ثم اضغط تسجيل.
     </p>
@@ -884,11 +762,17 @@
 </div>
 
 <script>
-  // نفس رابط الويب آب اللي تستخدمينه لباقي الصفحات
-  const API_URL = "https://script.google.com/macros/s/AKfycbyBgaXcuebXQpTaHMYLx0jie1kPyUfp1JUGEZHWnF90hk20OUj4NVR6rjq_aRa0Rwr_ew/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbyStNKqTwZiAmGYhNZyOdtE3iqIe4dck8V5lDD8cgMmmrmFcpm4SAoOPpmniBtFc4SbXQ/exec";
 
   let allCourses = [];
   let allStudents = [];
+
+  // ✅ تخزين بيانات الطالب كاملة (اسم + كلية) بعد إدخال القيد
+  let currentStudent = {
+    id: "",
+    full_name: "",
+    college: ""
+  };
 
   function getCurrentUser() {
     return localStorage.getItem("USERNAME") || "";
@@ -900,32 +784,65 @@
 
     const sep = " - ";
     const idx = val.indexOf(sep);
-    if (idx !== -1) {
-      val = val.slice(0, idx).trim();
-    }
+    if (idx !== -1) val = val.slice(0, idx).trim();
 
     return val.toUpperCase();
   }
 
-  // ⭐ الآن نستخدم coursesAll عشان نجيب كل المواد حتى اللي ما فيهاش طلاب
+  function escapeHtml(s) {
+    return String(s || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  // ✅ استخراج القيد من "123 - الاسم"
+  function extractIdFromListValue(v) {
+    let raw = String(v || "").trim();
+    const dashIndex = raw.indexOf("-");
+    if (dashIndex !== -1) raw = raw.slice(0, dashIndex).trim();
+    return raw;
+  }
+
+  // ✅ العثور على مادة مطابقة لكود + كلية
+  function findCourseByCodeAndCollege(code, college) {
+    const cc = String(code || "").trim().toUpperCase();
+    const col = String(college || "").trim();
+    if (!cc) return null;
+    if (!Array.isArray(allCourses) || allCourses.length === 0) return null;
+
+    // لو في كلية: نفضّل المطابقة الدقيقة
+    if (col) {
+      const exact = allCourses.find(c =>
+        String(c.code || "").trim().toUpperCase() === cc &&
+        String(c.college || "").trim() === col
+      );
+      if (exact) return exact;
+    }
+
+    // fallback: أول مادة بنفس الكود
+    return allCourses.find(c => String(c.code || "").trim().toUpperCase() === cc) || null;
+  }
+
+  // ✅ تحميل قائمة المواد (كلها)
   async function loadCoursesList() {
     try {
       const res  = await fetch(`${API_URL}?action=coursesAll`);
       const text = await res.text();
       let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.log("Course list not JSON:", text);
-        return;
-      }
+      try { data = JSON.parse(text); } catch { return; }
 
       if (!data.courses || !Array.isArray(data.courses)) return;
 
       allCourses = data.courses;
+
       const dl = document.getElementById("courseList");
       dl.innerHTML = "";
 
+      // نعرض في الداتا ليست: "CODE - NAME" فقط (زي ما تبي)
+      // والاختيار الفعلي للكلية يتم تلقائياً حسب كلية الطالب
       allCourses.forEach(c => {
         if (!c.code && !c.name) return;
         const opt = document.createElement("option");
@@ -937,16 +854,18 @@
     }
   }
 
+  // ✅ تحميل قائمة الطلبة (id + الاسم فقط)
   async function loadStudentsList() {
     try {
       const res  = await fetch(`${API_URL}?action=studentsSummary`);
       const text = await res.text();
       let data;
-      try { data = JSON.parse(text); } catch(e){ console.log("Students list not JSON:", text); return;}
+      try { data = JSON.parse(text); } catch { return; }
 
       if (!data.students || !Array.isArray(data.students)) return;
 
       allStudents = data.students;
+
       const dl = document.getElementById("studentsList");
       dl.innerHTML = "";
 
@@ -956,13 +875,36 @@
         opt.value = `${s.id} - ${s.full_name}`;
         dl.appendChild(opt);
       });
-
     } catch (e) {
       console.error("Error loading students:", e);
     }
   }
 
-  function validateStudentFromInput() {
+  // ✅ بعد إدخال القيد: نجيب بيانات الطالب من Students (الاسم + الكلية)
+  async function fetchStudentById(sid) {
+    const url  = `${API_URL}?action=getStudent&id=${encodeURIComponent(sid)}`;
+    const res  = await fetch(url);
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch { return null; }
+
+    if (data.error === "STUDENT_NOT_FOUND") return null;
+
+    // Code.gs يرجع student ككائن
+    if (data.student && typeof data.student === "object") return data.student;
+
+    // fallback لو رجع مسطح
+    if (data.id) {
+      return {
+        id: data.id,
+        full_name: data.full_name || "",
+        college: data.college || ""
+      };
+    }
+    return null;
+  }
+
+  async function validateStudentFromInput() {
     const sidInput    = document.getElementById("sid");
     const studentName = document.getElementById("studentName");
     const msg         = document.getElementById("msg");
@@ -970,6 +912,8 @@
     let rawValue = sidInput.value.trim();
     studentName.value = "";
     msg.textContent = "";
+
+    currentStudent = { id: "", full_name: "", college: "" };
 
     if (!rawValue) {
       const listEl = document.getElementById("studentCourses");
@@ -979,51 +923,70 @@
       return;
     }
 
-    const dashIndex = rawValue.indexOf("-");
-    if (dashIndex !== -1) {
-      rawValue = rawValue.slice(0, dashIndex).trim();
-      sidInput.value = rawValue;
-    }
+    // clean sid
+    const sid = extractIdFromListValue(rawValue);
+    sidInput.value = sid;
 
-    if (!allStudents || allStudents.length === 0) {
-      msg.style.color = "red";
-      msg.textContent = "⚠ لم يتم تحميل قائمة الطلبة.";
-      return;
-    }
-
-    const found = allStudents.find(s => String(s.id).trim() === rawValue);
-
-    if (found) {
-      studentName.value = found.full_name || "";
-      msg.style.color = "#16a34a";
-      msg.textContent = "✔ الطالب موجود ضمن قائمة الطلبة";
-      loadStudentCourses();
-    } else {
+    // ✅ تحقق سريع من الداتا ليست
+    const found = (Array.isArray(allStudents) ? allStudents : []).find(s => String(s.id).trim() === sid);
+    if (!found) {
       msg.style.color = "red";
       msg.textContent = "❌ رقم القيد غير موجود ضمن الطلبة المسجلين";
       sidInput.value = "";
-
       const listEl = document.getElementById("studentCourses");
       if (listEl) {
         listEl.innerHTML = `<li><span class="dot"></span>رقم القيد غير موجود في قاعدة البيانات.</li>`;
       }
+      return;
     }
+
+    // ✅ نجيب بياناته من Students (الاسم + الكلية)
+    msg.style.color = "#9ca3af";
+    msg.textContent = "⏳ جاري جلب بيانات الطالب...";
+    const student = await fetchStudentById(sid);
+
+    if (!student) {
+      msg.style.color = "red";
+      msg.textContent = "❌ لم يتم العثور على بيانات الطالب في Students.";
+      return;
+    }
+
+    currentStudent.id = String(student.id || sid).trim();
+    currentStudent.full_name = String(student.full_name || found.full_name || "").trim();
+    currentStudent.college = String(student.college || "").trim();
+
+    studentName.value = currentStudent.full_name;
+
+    msg.style.color = "#16a34a";
+    msg.textContent = currentStudent.college
+      ? `✔ الطالب موجود (كلية: ${currentStudent.college})`
+      : "✔ الطالب موجود (ملاحظة: كلية الطالب غير مسجلة في Students)";
+
+    // ✅ بعد معرفة الكلية، حدّث اسم المادة إذا الكود مكتوب
+    updateCourseNameFromInput();
+    // ✅ حمّل مواد الطالب
+    loadStudentCourses();
   }
 
   function updateCourseNameFromInput() {
     const codeInput   = document.getElementById("code");
     const courseName  = document.getElementById("courseName");
-    const rawCode     = codeInput.value;
-    const cleanCode   = normalizeCode(rawCode);
 
+    const cleanCode = normalizeCode(codeInput.value);
     courseName.value = "";
 
-    if (!cleanCode || allCourses.length === 0) return;
+    if (!cleanCode) return;
 
-    const found = allCourses.find(c => String(c.code).trim().toUpperCase() === cleanCode);
-    if (found) {
-      courseName.value = found.name || "";
+    // ✅ نختار المادة حسب كلية الطالب (لو متوفرة)
+    const course = findCourseByCodeAndCollege(cleanCode, currentStudent.college);
+    if (course) {
+      courseName.value = course.name || "";
+      return;
     }
+
+    // fallback
+    const any = (Array.isArray(allCourses) ? allCourses : []).find(c => String(c.code || "").trim().toUpperCase() === cleanCode);
+    if (any) courseName.value = any.name || "";
   }
 
   async function loadStudentCourses() {
@@ -1033,18 +996,13 @@
 
     if (!listEl) return;
 
-    let sidRaw = sidInput.value.trim();
-    if (!sidRaw) {
+    const sid = String(sidInput.value || "").trim();
+    const sem = String(semInput.value || "").trim();
+
+    if (!sid) {
       listEl.innerHTML = `<li><span class="dot"></span>أدخل رقم القيد لعرض المواد المسجّلة.</li>`;
       return;
     }
-
-    const dashIndex = sidRaw.indexOf("-");
-    if (dashIndex !== -1) {
-      sidRaw = sidRaw.slice(0, dashIndex).trim();
-    }
-    const sid = sidRaw;
-    const sem = semInput.value.trim();
 
     listEl.innerHTML = `<li><span class="dot"></span>⏳ جاري تحميل مواد الطالب لهذا الفصل...</li>`;
 
@@ -1055,7 +1013,6 @@
 
       let data;
       try { data = JSON.parse(text); } catch (e) {
-        console.error("Student data not JSON:", text);
         listEl.innerHTML = `<li><span class="dot"></span>⚠ خطأ في قراءة بيانات الطالب.</li>`;
         return;
       }
@@ -1065,12 +1022,17 @@
         return;
       }
 
+      // تحديث currentStudent من الرد (فيه الكلية)
+      if (data.student) {
+        currentStudent.id = String(data.student.id || sid).trim();
+        currentStudent.full_name = String(data.student.full_name || "").trim();
+        currentStudent.college = String(data.student.college || "").trim();
+      }
+
       const all = Array.isArray(data.courses) ? data.courses : [];
       let filtered = all;
 
-      if (sem) {
-        filtered = all.filter(c => String(c.semester || "").trim() === sem);
-      }
+      if (sem) filtered = all.filter(c => String(c.semester || "").trim() === sem);
 
       if (!filtered.length) {
         listEl.innerHTML = `<li><span class="dot"></span>لا توجد مواد مسجّلة لهذا الطالب في هذا الفصل.</li>`;
@@ -1079,8 +1041,12 @@
 
       listEl.innerHTML = "";
       filtered.forEach(c => {
+        const code = escapeHtml(c.code || "");
+        const name = escapeHtml(c.name || "");
+        const col  = escapeHtml(c.college || "");
         const li = document.createElement("li");
-        li.innerHTML = `<span class="dot"></span><span>${c.code || ""} - <strong>${c.name || ""}</strong></span>`;
+        // ✅ نعرض الكلية بين قوسين لو موجودة (تفيد عند تكرار الأكواد)
+        li.innerHTML = `<span class="dot"></span><span>${code} - <strong>${name}</strong>${col ? ` <span style="color:#94a3b8">(${col})</span>` : ""}</span>`;
         listEl.appendChild(li);
       });
 
@@ -1099,17 +1065,10 @@
     const studentName = document.getElementById('studentName');
     const courseName  = document.getElementById('courseName');
 
-    let sidRaw  = sidInput.value.trim();
-    const sem   = semInput.value.trim();
+    const sid = String(sidInput.value || "").trim();
+    const sem = String(semInput.value || "").trim();
     const cleanCode = normalizeCode(codeInput.value);
 
-    const dashIndex = sidRaw.indexOf("-");
-    if (dashIndex !== -1) {
-      sidRaw = sidRaw.slice(0, dashIndex).trim();
-      sidInput.value = sidRaw;
-    }
-
-    const sid = sidRaw;
     const currentUser = getCurrentUser();
 
     msg.textContent = "";
@@ -1121,37 +1080,50 @@
       return;
     }
 
-    if (!allStudents || allStudents.length === 0) {
-      msg.textContent = "⚠ لم يتم تحميل قائمة الطلبة، حدّث الصفحة.";
-      return;
-    }
-    const stu = allStudents.find(s => String(s.id).trim() === sid);
-    if (!stu) {
-      msg.textContent = "❌ رقم القيد غير موجود ضمن الطلبة، لا يمكن إتمام التسجيل.";
-      return;
-    }
-    if (!studentName.value) {
-      studentName.value = stu.full_name || "";
+    // ✅ لازم تكون بيانات الطالب متحمّلة (عشان نعرف الكلية)
+    if (!currentStudent.id || currentStudent.id !== sid) {
+      await validateStudentFromInput();
     }
 
-    if (!allCourses || allCourses.length === 0) {
+    if (!currentStudent.id) {
+      msg.textContent = "❌ رقم القيد غير صحيح أو لم يتم جلب بيانات الطالب.";
+      return;
+    }
+
+    if (!studentName.value) studentName.value = currentStudent.full_name || "";
+
+    if (!Array.isArray(allCourses) || allCourses.length === 0) {
       msg.textContent = "⚠ لم يتم تحميل قائمة المواد، حدّث الصفحة.";
       return;
     }
-    const course = allCourses.find(c => String(c.code).trim().toUpperCase() === cleanCode);
-    if (!course) {
+
+    // ✅ اختيار المادة الصحيحة حسب كلية الطالب
+    const selectedCourse = findCourseByCodeAndCollege(cleanCode, currentStudent.college);
+
+    if (!selectedCourse) {
       msg.textContent = "⚠ رمز المادة غير موجود في قائمة المواد.";
       return;
     }
-    if (!courseName.value) {
-      courseName.value = course.name || "";
+
+    // لو الكود مكرر والطالب كليته فاضية -> نوقف ونوضح
+    const sameCodeCount = allCourses.filter(c => String(c.code || "").trim().toUpperCase() === cleanCode).length;
+    if (sameCodeCount > 1 && !currentStudent.college) {
+      msg.textContent = "⚠ هذا الكود مكرر بين كليات مختلفة، لكن كلية الطالب فارغة في Students. عدّل كلية الطالب في Students أولاً.";
+      return;
     }
 
+    if (!courseName.value) courseName.value = selectedCourse.name || "";
+
+    // ✅ هذه كلية المادة اللي حتنرسل للسيرفر (نفس كلية الطالب عادة)
+    const courseCollege = String(selectedCourse.college || currentStudent.college || "").trim();
+
+    // ✅ نرسل course_college تلقائياً (بدون ما المستخدم يدخلها)
     const url = `${API_URL}?action=registerCourse`
       + `&sid=${encodeURIComponent(sid)}`
       + `&code=${encodeURIComponent(cleanCode)}`
       + `&semester=${encodeURIComponent(sem)}`
-      + `&user=${encodeURIComponent(currentUser)}`;
+      + `&user=${encodeURIComponent(currentUser)}`
+      + `&course_college=${encodeURIComponent(courseCollege)}`;
 
     try {
       const res  = await fetch(url);
@@ -1159,7 +1131,7 @@
       raw.textContent = text;
 
       let data;
-      try { data = JSON.parse(text); } catch(e){
+      try { data = JSON.parse(text); } catch (e) {
         msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
         return;
       }
@@ -1177,27 +1149,27 @@
       } else if (data.status === "STUDENT_NOT_FOUND") {
         msg.textContent = "❌ رقم القيد غير موجود في جدول الطلاب (Students).";
 
-      } else if (data.status === "COURSE_NOT_FOUND") {
-        msg.textContent = "❌ رمز المادة غير موجود في جدول المواد (Courses).";
+      } else if (data.status === "COURSE_NOT_FOUND" || data.status === "COURSE_NOT_FOUND_IN_COLLEGE") {
+        msg.textContent = "❌ رمز المادة غير موجود/غير مطابق لكلية الطالب في جدول المواد (Courses).";
 
       } else if (data.status === "ALREADY_REGISTERED") {
-        msg.textContent = "⚠ هذه المادة مسجلة لهذا الطالب من قبل (راه الطالب منزلها).";
+        msg.textContent = "⚠ هذه المادة مسجلة لهذا الطالب من قبل في هذا الفصل.";
 
-      // ⭐ أسبقية المادة
-      } else if (
-        data.status === "PREREQ_REQUIRED" ||
-        data.status === "PREREQ_MISSING"
-      ) {
+      } else if (data.status === "AMBIGUOUS_CODE") {
+        // لو السيرفر قال الكود مكرر ويحتاج تحديد كلية
+        msg.textContent = "⚠ الكود هذا مكرر بين كليات. (تأكد كلية الطالب في Students)";
+
+      } else if (data.status === "PREREQ_REQUIRED" || data.status === "PREREQ_MISSING") {
         const pc = data.prereq_code || "";
         const pn = data.prereq_name || "";
         msg.textContent = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مادة الأسبقية: ${pc} - ${pn}`;
 
-      // ⭐ النظام مقفول
       } else if (data.status === "SYSTEM_CLOSED") {
         msg.textContent = "⛔ النظام مغلق حالياً، لا يمكن تسجيل مواد.";
       } else {
-        msg.textContent = "لم يتم التسجيل، تحقق من البيانات أو الكود. (راجع الرد في الصندوق الأسود)";
+        msg.textContent = "لم يتم التسجيل، تحقق من البيانات أو الكود.";
       }
+
     } catch (e) {
       console.error(e);
       msg.textContent = "❌ خطأ في الاتصال برابط الـ API";
