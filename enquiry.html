@@ -397,9 +397,6 @@
       flex-wrap: nowrap;
       white-space: nowrap;
 
-      /* ✅✅ التعديل المهم:
-         نخلي "استعلام رقم القيد" تكون يمين
-         و "م. أيوب الحوات" تكون يسارها (على الكمبيوتر والهاتف) */
       flex-direction: row-reverse;
     }
 
@@ -931,14 +928,14 @@
           <div class="t1">جامعة السلام الدولية</div>
           <div class="t2">بوابة استعلام المواد للطلبة</div>
         </div>
-        <div class="splash-badge">🎓 Smart Portal</div>
+        <!-- <div class="splash-badge">🎓 Smart Portal</div> -->
       </div>
 
       <div class="splash-mid">
         <p class="splash-welcome">مرحباً بك 👋</p>
         <p class="splash-sub">
           يتم تجهيز الخدمة الآن…<br>
-          يمكنك التخطي بالنقر أو بالضغط على <b>ESC</b>.
+          <!-- يمكنك التخطي بالنقر أو بالضغط على <b>ESC</b>. -->
         </p>
 
         <div class="splash-progress"></div>
@@ -970,7 +967,6 @@
         </div>
       </div>
 
-      <!-- ✅ الآن: "استعلام رقم القيد" يمين و "م. أيوب الحوات" يسارها (بسبب row-reverse) -->
       <div class="page-header-right">
         <!-- <div class="page-pill">استعلام رقم القيد</div> -->
         <div class="page-pill">م. أيوب الحوات</div>
@@ -1019,9 +1015,14 @@
 
 <script>
   /* =================================================
-     ✅✅ صوت نزيك للاستعلام + صوت نجاح بعد ظهور البيانات
+     ✅✅ 3 أصوات:
+     1) بعد شريط splash يعبي
+     2) عند النقر على استعلام
+     3) بعد ظهور المواد
      ================================================= */
+
   let _audioCtx = null;
+  let _splashDonePlayed = false; // يمنع تكرار صوت (1)
 
   function getAudioCtx() {
     if (_audioCtx) return _audioCtx;
@@ -1031,14 +1032,77 @@
     return _audioCtx;
   }
 
-  async function unlockAudioOnce() {
+   async function unlockAudioOnce() {
     const ctx = getAudioCtx();
     if (!ctx) return;
     try { if (ctx.state === "suspended") await ctx.resume(); } catch (e) {}
+
+    // لو الشريط كمل قبل التفاعل، نشغل صوت “تم” أول ما يفك الصوت
+    if (!_splashDonePlayed) {
+      // محاولة تشغيله بعد فك الصوت (اختياري)
+      playSplashDoneChime();
+    }
+
     document.removeEventListener("pointerdown", unlockAudioOnce);
     document.removeEventListener("keydown", unlockAudioOnce);
   }
 
+  // ✅ (1) صوت بعد امتلاء شريط الـ Splash
+  // ✅ (1) صوت بعد امتلاء شريط الـ Splash (أقوى)
+async function playSplashDoneChime() {
+  if (_splashDonePlayed) return;
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+
+  // لو ممنوع أو suspended بدون تفاعل: نطلع بدون خطأ
+  try { if (ctx.state === "suspended") return; } catch (e) { return; }
+
+  _splashDonePlayed = true;
+
+  const now = ctx.currentTime;
+
+  // ✅ رفعنا الصوت + مددنا الزمن شوي + أضفنا limiter بسيط
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.18, now + 0.02);   // كان 0.06 -> صار 0.18 (أقوى)
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55); // كان 0.32 -> صار 0.55
+  gain.connect(ctx.destination);
+
+  // Limiter خفيف لمنع تشويه/تفجير الصوت
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.setValueAtTime(-18, now);
+  comp.knee.setValueAtTime(18, now);
+  comp.ratio.setValueAtTime(8, now);
+  comp.attack.setValueAtTime(0.003, now);
+  comp.release.setValueAtTime(0.18, now);
+
+  // نركب السلسلة: osc -> comp -> gain -> destination
+  comp.connect(gain);
+
+  const o1 = ctx.createOscillator();
+  o1.type = "sine";
+  o1.frequency.setValueAtTime(784.0, now); // G5
+  o1.connect(comp);
+  o1.start(now);
+  o1.stop(now + 0.18);
+
+  const o2 = ctx.createOscillator();
+  o2.type = "triangle";
+  o2.frequency.setValueAtTime(988.0, now + 0.18); // B5
+  o2.connect(comp);
+  o2.start(now + 0.18);
+  o2.stop(now + 0.36);
+
+  const o3 = ctx.createOscillator();
+  o3.type = "sine";
+  o3.frequency.setValueAtTime(1174.66, now + 0.36); // D6
+  o3.connect(comp);
+  o3.start(now + 0.36);
+  o3.stop(now + 0.55);
+}
+
+
+  // ✅ (2) صوت عند النقر على "استعلام"
   async function playLookupChime() {
     const ctx = getAudioCtx();
     if (!ctx) return;
@@ -1067,6 +1131,7 @@
     oscB.stop(now + 0.22);
   }
 
+  // ✅ (3) صوت نجاح بعد ظهور المواد/البيانات
   async function playSuccessChime() {
     const ctx = getAudioCtx();
     if (!ctx) return;
@@ -1117,7 +1182,7 @@
     let status = document.getElementById("status");
     let box    = document.getElementById("result");
 
-    // ✅ صوت فور الضغط على استعلام
+    // ✅ (2) صوت فور الضغط على استعلام
     playLookupChime();
 
     error.textContent = "";
@@ -1223,7 +1288,7 @@
 
       box.innerHTML = html;
 
-      // ✅ صوت نجاح بعد ظهور البيانات
+      // ✅ (3) صوت نجاح بعد ظهور البيانات
       setTimeout(() => { playSuccessChime(); }, 120);
 
       setupSemesterDropdown();
@@ -1328,6 +1393,10 @@
     const wrapper = document.getElementById("wrapper");
     if (!splash) return;
 
+    // ✅ لو المستخدم ضغط للتخطي (تفاعل) غالبًا الصوت مفكوك -> نخلي صوت الشريط يشتغل قبل الإخفاء
+    // ملاحظة: لو هو لعب من قبل بسبب التوقيت، ما ينعاد.
+    playSplashDoneChime();
+
     splash.classList.add("hide");
     setTimeout(() => {
       splash.style.display = "none";
@@ -1347,7 +1416,11 @@
     document.addEventListener("pointerdown", unlockAudioOnce);
     document.addEventListener("keydown", unlockAudioOnce);
 
-    // ✅✅ مدة عرض splash = 5 ثواني
+    // ✅ (1) نحاول تشغيل صوت بعد امتلاء شريط التحميل (1.65s)
+    // لو المتصفح مانع الصوت بدون تفاعل، مش حيسمعه إلا بعد أول تفاعل (وهذا معمول له fallback داخل unlockAudioOnce/hideSplash)
+    setTimeout(() => { playSplashDoneChime(); }, 1700);
+
+    // ✅ مدة عرض splash
     setTimeout(hideSplash, 3700);
 
     // تخطي بالنقر
