@@ -894,7 +894,7 @@
         <p class="splash-welcome">مرحباً بك 👋</p>
         <p class="splash-sub">
           يتم تجهيز الخدمة الآن…<br>
-          يمكنك التخطي بالنقر أو بالضغط على <b>ESC</b>.
+       
         </p>
 
         <div class="splash-progress" id="splashProgress"></div>
@@ -976,6 +976,27 @@
      - صوت عند الضغط على "استعلام"
      - صوت نجاح بعد ظهور البيانات
      ================================================= */
+      // ✅ قراءة اسم الطالب بالصوت (عربي)
+function speakStudentName(name) {
+  if (!("speechSynthesis" in window)) return;
+
+  // نوقف أي قراءة سابقة
+  window.speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance();
+  utter.text = `مرحباً ${name}`;
+  utter.lang = "ar-SA"; // عربي
+  utter.rate = 0.9;     // سرعة القراءة
+  utter.pitch = 1.0;    // نغمة طبيعية
+  utter.volume = 1.0;
+
+  // اختيار صوت عربي إن وجد
+  const voices = speechSynthesis.getVoices();
+  const arabicVoice = voices.find(v => v.lang.startsWith("ar"));
+  if (arabicVoice) utter.voice = arabicVoice;
+
+  window.speechSynthesis.speak(utter);
+}
 
   let _audioCtx = null;
   let _splashIntroPlayed = false;
@@ -1355,7 +1376,7 @@
     setTimeout(() => { playSplashIntroChimeOnce(); }, 1650);
 
     // ✅ مدة عرض splash
-    setTimeout(hideSplash, 1700);
+    setTimeout(hideSplash, 3700);
 
     // ✅ تخطي بالنقر + ضمان تشغيل الصوت الافتتاحي لو كان ممنوع تلقائياً
     const splash = document.getElementById("splash");
