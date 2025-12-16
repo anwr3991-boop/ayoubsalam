@@ -334,6 +334,8 @@
       gap: 10px;
       position: relative;
       z-index: 1;
+      min-width: 0;
+      flex: 1 1 auto;
     }
 
     .page-logo {
@@ -341,7 +343,7 @@
       height: 40px;
       border-radius: 999px;
       overflow: hidden;
-      border: 1px solid rgba(148,163,184,0.9);
+      border: 1px solid rgba(148,140,184,0.9);
       background: #020617;
       box-shadow:
         0 0 0 1px rgba(15,23,42,1),
@@ -349,6 +351,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex: 0 0 auto;
     }
 
     .page-logo img {
@@ -361,17 +364,43 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      min-width: 0;
     }
 
     .page-texts .uni-name {
       font-size: 0.9rem;
       font-weight: 800;
       color: #e5e7eb;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
     }
 
     .page-texts .uni-sub {
       font-size: 0.7rem;
       color: #9ca3af;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
+    }
+
+    /* ✅✅ مجموعة الحبوب */
+    .page-header-right{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      position:relative;
+      z-index:1;
+      flex: 0 0 auto;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+
+      /* ✅✅ التعديل المهم:
+         نخلي "استعلام رقم القيد" تكون يمين
+         و "م. أيوب الحوات" تكون يسارها (على الكمبيوتر والهاتف) */
+      flex-direction: row-reverse;
     }
 
     .page-pill {
@@ -385,8 +414,7 @@
       align-items: center;
       gap: 6px;
       white-space: nowrap;
-      position: relative;
-      z-index: 1;
+      flex: 0 0 auto;
     }
 
     .page-pill::before {
@@ -810,13 +838,29 @@
       .page-header { max-width: 100%; margin-bottom: 10px; }
     }
 
-    @media (max-width: 520px) {
-      .page-header { border-radius: 16px; padding: 7px 10px; }
-    }
-
+    /* ✅✅ في الهاتف: نفس سطر الكمبيوتر + سكرول بسيط بدل الكسر */
     @media (max-width: 460px) {
-      .page-header { flex-direction: column; align-items: flex-start; gap: 6px; }
-      .page-pill { align-self: flex-start; }
+      .page-header {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+      }
+
+      .page-texts .uni-name, .page-texts .uni-sub { max-width: 160px !important; }
+
+      .page-header-right{
+        gap: 6px !important;
+        max-width: 190px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .page-header-right::-webkit-scrollbar{ display:none; }
+
+      .page-pill { font-size: 0.68rem !important; padding: 4px 9px !important; }
+
       .actions-row { flex-direction: column; }
       button { width: 100%; }
     }
@@ -887,17 +931,17 @@
           <div class="t1">جامعة السلام الدولية</div>
           <div class="t2">بوابة استعلام المواد للطلبة</div>
         </div>
-        <div class="splash-badge">🎓 الاستعداد للإنطلاق</div>
+        <div class="splash-badge">🎓 Smart Portal</div>
       </div>
 
       <div class="splash-mid">
         <p class="splash-welcome">مرحباً بك 👋</p>
         <p class="splash-sub">
           يتم تجهيز الخدمة الآن…<br>
-       
+          يمكنك التخطي بالنقر أو بالضغط على <b>ESC</b>.
         </p>
 
-        <div class="splash-progress" id="splashProgress"></div>
+        <div class="splash-progress"></div>
 
         <div class="splash-hint">
           <span>المطور: <b>م. أيوب الحوات</b></span>
@@ -925,8 +969,12 @@
           <div class="uni-sub">بوابة استعلام المواد للطلبة</div>
         </div>
       </div>
-      <div class="page-pill">استعلام رقم القيد</div>
-      <div class="page-pill">م.أيوب الحوات</div>
+
+      <!-- ✅ الآن: "استعلام رقم القيد" يمين و "م. أيوب الحوات" يسارها (بسبب row-reverse) -->
+      <div class="page-header-right">
+        <!-- <div class="page-pill">استعلام رقم القيد</div> -->
+        <div class="page-pill">م. أيوب الحوات</div>
+      </div>
     </div>
 
     <div class="orb orb-1"></div>
@@ -971,35 +1019,9 @@
 
 <script>
   /* =================================================
-     ✅✅ أصوات (مضمونة من أول مرة)
-     - صوت افتتاحي بعد ما البار يعبي
-     - صوت عند الضغط على "استعلام"
-     - صوت نجاح بعد ظهور البيانات
+     ✅✅ صوت نزيك للاستعلام + صوت نجاح بعد ظهور البيانات
      ================================================= */
-      // ✅ قراءة اسم الطالب بالصوت (عربي)
-function speakStudentName(name) {
-  if (!("speechSynthesis" in window)) return;
-
-  // نوقف أي قراءة سابقة
-  window.speechSynthesis.cancel();
-
-  const utter = new SpeechSynthesisUtterance();
-  utter.text = `مرحباً ${name}`;
-  utter.lang = "ar-SA"; // عربي
-  utter.rate = 0.9;     // سرعة القراءة
-  utter.pitch = 1.0;    // نغمة طبيعية
-  utter.volume = 1.0;
-
-  // اختيار صوت عربي إن وجد
-  const voices = speechSynthesis.getVoices();
-  const arabicVoice = voices.find(v => v.lang.startsWith("ar"));
-  if (arabicVoice) utter.voice = arabicVoice;
-
-  window.speechSynthesis.speak(utter);
-}
-
   let _audioCtx = null;
-  let _splashIntroPlayed = false;
 
   function getAudioCtx() {
     if (_audioCtx) return _audioCtx;
@@ -1009,71 +1031,21 @@ function speakStudentName(name) {
     return _audioCtx;
   }
 
-  // ✅ تفعيل الصوت مرة واحدة على أول تفاعل (باش أي صوت لاحق يكون مضمون)
   async function unlockAudioOnce() {
     const ctx = getAudioCtx();
     if (!ctx) return;
-    try {
-      if (ctx.state === "suspended") await ctx.resume();
-    } catch (e) {}
+    try { if (ctx.state === "suspended") await ctx.resume(); } catch (e) {}
     document.removeEventListener("pointerdown", unlockAudioOnce);
     document.removeEventListener("keydown", unlockAudioOnce);
   }
 
-  // ✅ صوت افتتاحي بعد ما شريط التحميل يعبي (مرة واحدة فقط)
-  async function playSplashIntroChimeOnce() {
-    if (_splashIntroPlayed) return;
-    _splashIntroPlayed = true;
-
-    const ctx = getAudioCtx();
-    if (!ctx) return;
-
-    try {
-      if (ctx.state === "suspended") await ctx.resume();
-    } catch (e) {
-      // لو المتصفح منع، راح يتفعل عند أول نقرة (unlockAudioOnce)
-      _splashIntroPlayed = false; // نخليها قابلة للتشغيل أول نقرة
-      return;
-    }
-
-    const now = ctx.currentTime;
-
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.06, now + 0.03);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
-    gain.connect(ctx.destination);
-
-    const o1 = ctx.createOscillator();
-    const o2 = ctx.createOscillator();
-    const o3 = ctx.createOscillator();
-
-    o1.type = "sine";
-    o2.type = "triangle";
-    o3.type = "sine";
-
-    o1.frequency.setValueAtTime(392.00, now);        // G4
-    o2.frequency.setValueAtTime(523.25, now + 0.18); // C5
-    o3.frequency.setValueAtTime(659.25, now + 0.34); // E5
-
-    o1.connect(gain); o2.connect(gain); o3.connect(gain);
-
-    o1.start(now);        o1.stop(now + 0.22);
-    o2.start(now + 0.18); o2.stop(now + 0.40);
-    o3.start(now + 0.34); o3.stop(now + 0.55);
-  }
-
-  // ✅ صوت عند الضغط على "استعلام" (كل مرة)
   async function playLookupChime() {
     const ctx = getAudioCtx();
     if (!ctx) return;
 
-    try {
-      if (ctx.state === "suspended") await ctx.resume();
-    } catch (e) { return; }
+    try { if (ctx.state === "suspended") await ctx.resume(); } catch (e) { return; }
 
     const now = ctx.currentTime;
-
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.0001, now);
     gain.gain.exponentialRampToValueAtTime(0.08, now + 0.02);
@@ -1095,17 +1067,13 @@ function speakStudentName(name) {
     oscB.stop(now + 0.22);
   }
 
-  // ✅ صوت نجاح / افتتاح بعد ظهور البيانات
   async function playSuccessChime() {
     const ctx = getAudioCtx();
     if (!ctx) return;
 
-    try {
-      if (ctx.state === "suspended") await ctx.resume();
-    } catch (e) { return; }
+    try { if (ctx.state === "suspended") await ctx.resume(); } catch (e) { return; }
 
     const now = ctx.currentTime;
-
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.0001, now);
     gain.gain.exponentialRampToValueAtTime(0.07, now + 0.03);
@@ -1113,22 +1081,29 @@ function speakStudentName(name) {
     gain.connect(ctx.destination);
 
     const osc1 = ctx.createOscillator();
-    const osc2 = ctx.createOscillator();
-    const osc3 = ctx.createOscillator();
-
     osc1.type = "sine";
-    osc2.type = "triangle";
-    osc3.type = "sine";
+    osc1.frequency.setValueAtTime(523.25, now); // C5
 
-    osc1.frequency.setValueAtTime(523.25, now);        // C5
+    const osc2 = ctx.createOscillator();
+    osc2.type = "triangle";
     osc2.frequency.setValueAtTime(659.25, now + 0.18); // E5
+
+    const osc3 = ctx.createOscillator();
+    osc3.type = "sine";
     osc3.frequency.setValueAtTime(783.99, now + 0.36); // G5
 
-    osc1.connect(gain); osc2.connect(gain); osc3.connect(gain);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    osc3.connect(gain);
 
-    osc1.start(now);        osc1.stop(now + 0.25);
-    osc2.start(now + 0.18); osc2.stop(now + 0.43);
-    osc3.start(now + 0.36); osc3.stop(now + 0.6);
+    osc1.start(now);
+    osc1.stop(now + 0.25);
+
+    osc2.start(now + 0.18);
+    osc2.stop(now + 0.43);
+
+    osc3.start(now + 0.36);
+    osc3.stop(now + 0.6);
   }
 
   // 🔹 متغيرات عامة لتخزين كل المواد والفصول
@@ -1142,7 +1117,7 @@ function speakStudentName(name) {
     let status = document.getElementById("status");
     let box    = document.getElementById("result");
 
-    // ✅ صوت فور الضغط على استعلام (user gesture -> مضمون)
+    // ✅ صوت فور الضغط على استعلام
     playLookupChime();
 
     error.textContent = "";
@@ -1158,7 +1133,7 @@ function speakStudentName(name) {
     }
 
     status.textContent = "⏳ جاري جلب البيانات...";
-               
+
     let api = "https://script.google.com/macros/s/AKfycbyStNKqTwZiAmGYhNZyOdtE3iqIe4dck8V5lDD8cgMmmrmFcpm4SAoOPpmniBtFc4SbXQ/exec";
     let url = api + "?action=getStudent&id=" + encodeURIComponent(id) + "&t=" + Date.now();
 
@@ -1248,7 +1223,7 @@ function speakStudentName(name) {
 
       box.innerHTML = html;
 
-      // ✅ صوت النجاح بعد ظهور البيانات
+      // ✅ صوت نجاح بعد ظهور البيانات
       setTimeout(() => { playSuccessChime(); }, 120);
 
       setupSemesterDropdown();
@@ -1372,29 +1347,16 @@ function speakStudentName(name) {
     document.addEventListener("pointerdown", unlockAudioOnce);
     document.addEventListener("keydown", unlockAudioOnce);
 
-    // ✅ تشغيل الصوت الافتتاحي بعد اكتمال شريط التحميل (تقريباً 1.65s)
-    setTimeout(() => { playSplashIntroChimeOnce(); }, 1650);
-
-    // ✅ مدة عرض splash
+    // ✅✅ مدة عرض splash = 5 ثواني
     setTimeout(hideSplash, 3700);
 
-    // ✅ تخطي بالنقر + ضمان تشغيل الصوت الافتتاحي لو كان ممنوع تلقائياً
+    // تخطي بالنقر
     const splash = document.getElementById("splash");
-    if (splash) {
-      splash.addEventListener("click", async () => {
-        await unlockAudioOnce();
-        playSplashIntroChimeOnce();
-        hideSplash();
-      });
-    }
+    if (splash) splash.addEventListener("click", hideSplash);
 
     // تخطي بـ ESC
-    window.addEventListener("keydown", async (e) => {
-      if (e.key === "Escape") {
-        await unlockAudioOnce();
-        playSplashIntroChimeOnce();
-        hideSplash();
-      }
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") hideSplash();
     });
   });
 </script>
