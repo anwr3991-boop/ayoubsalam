@@ -486,6 +486,8 @@
       font-size: 0.9rem;
       min-height: 1.2rem;
       transition: 0.18s ease;
+      line-height: 1.7;
+      white-space: normal;
     }
 
     .debug-label { margin-top: 10px; font-size: 0.74rem; color: #9ca3af; }
@@ -762,7 +764,7 @@
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbyStNKqTwZiAmGYhNZyOdtE3iqIe4dck8V5lDD8cgMmmrmFcpm4SAoOPpmniBtFc4SbXQ/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbzCAEfO2VTmoOfrCC82VCTAEc2D6i5-8FexwwHMSWkInrnzVOyGVT1UsNeMSJbWtilQFg/exec";
 
   let allCourses = [];
   let allStudents = [];
@@ -773,6 +775,64 @@
     full_name: "",
     college: ""
   };
+
+  /* =========================
+     ✅ أصوات (تحقق / نجاح / خطأ)
+     - بدون ملفات صوت
+     - صوت قوي وواضح
+  ========================= */
+  let _audioCtx = null;
+
+  function _getAudioCtx() {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return _audioCtx;
+  }
+
+  function _beep(freq, durationMs, volume = 0.22, type = "sine") {
+    try {
+      const ctx = _getAudioCtx();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+
+      o.type = type;
+      o.frequency.value = freq;
+
+      g.gain.value = 0;
+      o.connect(g);
+      g.connect(ctx.destination);
+
+      const now = ctx.currentTime;
+      const dur = durationMs / 1000;
+
+      // envelope (صوت أنظف)
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(volume, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+      o.start(now);
+      o.stop(now + dur + 0.02);
+    } catch (e) { /* ignore */ }
+  }
+
+  function playCheckSound() {
+    // نغمة تحقق (قصيرة)
+    _beep(720, 110, 0.22, "square");
+    setTimeout(() => _beep(820, 110, 0.18, "square"), 130);
+  }
+
+  function playSuccessSound() {
+    // نجاح (تصاعدية)
+    _beep(700, 110, 0.22, "sine");
+    setTimeout(() => _beep(880, 140, 0.26, "sine"), 140);
+    setTimeout(() => _beep(1050, 160, 0.22, "sine"), 310);
+  }
+
+  function playErrorSound() {
+    // خطأ (نزول + خشونة)
+    _beep(320, 160, 0.30, "sawtooth");
+    setTimeout(() => _beep(220, 180, 0.28, "sawtooth"), 170);
+  }
+  /* ========================= */
 
   function getCurrentUser() {
     return localStorage.getItem("USERNAME") || "";
@@ -841,8 +901,6 @@
       const dl = document.getElementById("courseList");
       dl.innerHTML = "";
 
-      // نعرض في الداتا ليست: "CODE - NAME" فقط (زي ما تبي)
-      // والاختيار الفعلي للكلية يتم تلقائياً حسب كلية الطالب
       allCourses.forEach(c => {
         if (!c.code && !c.name) return;
         const opt = document.createElement("option");
@@ -890,10 +948,8 @@
 
     if (data.error === "STUDENT_NOT_FOUND") return null;
 
-    // Code.gs يرجع student ككائن
     if (data.student && typeof data.student === "object") return data.student;
 
-    // fallback لو رجع مسطح
     if (data.id) {
       return {
         id: data.id,
@@ -923,11 +979,9 @@
       return;
     }
 
-    // clean sid
     const sid = extractIdFromListValue(rawValue);
     sidInput.value = sid;
 
-    // ✅ تحقق سريع من الداتا ليست
     const found = (Array.isArray(allStudents) ? allStudents : []).find(s => String(s.id).trim() === sid);
     if (!found) {
       msg.style.color = "red";
@@ -940,7 +994,6 @@
       return;
     }
 
-    // ✅ نجيب بياناته من Students (الاسم + الكلية)
     msg.style.color = "#9ca3af";
     msg.textContent = "⏳ جاري جلب بيانات الطالب...";
     const student = await fetchStudentById(sid);
@@ -962,9 +1015,7 @@
       ? `✔ الطالب موجود (كلية: ${currentStudent.college})`
       : "✔ الطالب موجود (ملاحظة: كلية الطالب غير مسجلة في Students)";
 
-    // ✅ بعد معرفة الكلية، حدّث اسم المادة إذا الكود مكتوب
     updateCourseNameFromInput();
-    // ✅ حمّل مواد الطالب
     loadStudentCourses();
   }
 
@@ -977,14 +1028,12 @@
 
     if (!cleanCode) return;
 
-    // ✅ نختار المادة حسب كلية الطالب (لو متوفرة)
     const course = findCourseByCodeAndCollege(cleanCode, currentStudent.college);
     if (course) {
       courseName.value = course.name || "";
       return;
     }
 
-    // fallback
     const any = (Array.isArray(allCourses) ? allCourses : []).find(c => String(c.code || "").trim().toUpperCase() === cleanCode);
     if (any) courseName.value = any.name || "";
   }
@@ -1022,7 +1071,6 @@
         return;
       }
 
-      // تحديث currentStudent من الرد (فيه الكلية)
       if (data.student) {
         currentStudent.id = String(data.student.id || sid).trim();
         currentStudent.full_name = String(data.student.full_name || "").trim();
@@ -1045,7 +1093,6 @@
         const name = escapeHtml(c.name || "");
         const col  = escapeHtml(c.college || "");
         const li = document.createElement("li");
-        // ✅ نعرض الكلية بين قوسين لو موجودة (تفيد عند تكرار الأكواد)
         li.innerHTML = `<span class="dot"></span><span>${code} - <strong>${name}</strong>${col ? ` <span style="color:#94a3b8">(${col})</span>` : ""}</span>`;
         listEl.appendChild(li);
       });
@@ -1076,9 +1123,15 @@
     raw.textContent = "";
 
     if (!sid || !cleanCode || !sem) {
+      playErrorSound();
       msg.textContent = "⚠ رقم القيد، رمز المادة، والفصل الدراسي مطلوبة";
       return;
     }
+
+    // ✅ صوت + رسالة التحقق (قبل الإرسال للسيرفر)
+    msg.style.color = "#9ca3af";
+    msg.textContent = "⏳ جاري التحقق من إضافة المادة...";
+    playCheckSound();
 
     // ✅ لازم تكون بيانات الطالب متحمّلة (عشان نعرف الكلية)
     if (!currentStudent.id || currentStudent.id !== sid) {
@@ -1086,6 +1139,8 @@
     }
 
     if (!currentStudent.id) {
+      playErrorSound();
+      msg.style.color = "red";
       msg.textContent = "❌ رقم القيد غير صحيح أو لم يتم جلب بيانات الطالب.";
       return;
     }
@@ -1093,6 +1148,8 @@
     if (!studentName.value) studentName.value = currentStudent.full_name || "";
 
     if (!Array.isArray(allCourses) || allCourses.length === 0) {
+      playErrorSound();
+      msg.style.color = "red";
       msg.textContent = "⚠ لم يتم تحميل قائمة المواد، حدّث الصفحة.";
       return;
     }
@@ -1101,23 +1158,24 @@
     const selectedCourse = findCourseByCodeAndCollege(cleanCode, currentStudent.college);
 
     if (!selectedCourse) {
+      playErrorSound();
+      msg.style.color = "red";
       msg.textContent = "⚠ رمز المادة غير موجود في قائمة المواد.";
       return;
     }
 
-    // لو الكود مكرر والطالب كليته فاضية -> نوقف ونوضح
     const sameCodeCount = allCourses.filter(c => String(c.code || "").trim().toUpperCase() === cleanCode).length;
     if (sameCodeCount > 1 && !currentStudent.college) {
+      playErrorSound();
+      msg.style.color = "red";
       msg.textContent = "⚠ هذا الكود مكرر بين كليات مختلفة، لكن كلية الطالب فارغة في Students. عدّل كلية الطالب في Students أولاً.";
       return;
     }
 
     if (!courseName.value) courseName.value = selectedCourse.name || "";
 
-    // ✅ هذه كلية المادة اللي حتنرسل للسيرفر (نفس كلية الطالب عادة)
     const courseCollege = String(selectedCourse.college || currentStudent.college || "").trim();
 
-    // ✅ نرسل course_college تلقائياً (بدون ما المستخدم يدخلها)
     const url = `${API_URL}?action=registerCourse`
       + `&sid=${encodeURIComponent(sid)}`
       + `&code=${encodeURIComponent(cleanCode)}`
@@ -1132,11 +1190,14 @@
 
       let data;
       try { data = JSON.parse(text); } catch (e) {
+        playErrorSound();
+        msg.style.color = "red";
         msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
         return;
       }
 
       if (data.status === "OK") {
+        playSuccessSound();
         msg.style.color = "green";
         msg.textContent = "✔ تم تسجيل المادة للطالب بنجاح";
         codeInput.value   = "";
@@ -1144,34 +1205,74 @@
         loadStudentCourses();
 
       } else if (data.status === "MISSING_FIELDS") {
+        playErrorSound();
+        msg.style.color = "red";
         msg.textContent = "⚠ بيانات ناقصة، تأكد من رقم القيد ورمز المادة.";
 
       } else if (data.status === "STUDENT_NOT_FOUND") {
+        playErrorSound();
+        msg.style.color = "red";
         msg.textContent = "❌ رقم القيد غير موجود في جدول الطلاب (Students).";
 
       } else if (data.status === "COURSE_NOT_FOUND" || data.status === "COURSE_NOT_FOUND_IN_COLLEGE") {
+        playErrorSound();
+        msg.style.color = "red";
         msg.textContent = "❌ رمز المادة غير موجود/غير مطابق لكلية الطالب في جدول المواد (Courses).";
 
       } else if (data.status === "ALREADY_REGISTERED") {
+        playErrorSound();
+        msg.style.color = "red";
         msg.textContent = "⚠ هذه المادة مسجلة لهذا الطالب من قبل في هذا الفصل.";
 
       } else if (data.status === "AMBIGUOUS_CODE") {
-        // لو السيرفر قال الكود مكرر ويحتاج تحديد كلية
+        playErrorSound();
+        msg.style.color = "red";
         msg.textContent = "⚠ الكود هذا مكرر بين كليات. (تأكد كلية الطالب في Students)";
 
       } else if (data.status === "PREREQ_REQUIRED" || data.status === "PREREQ_MISSING") {
-        const pc = data.prereq_code || "";
-        const pn = data.prereq_name || "";
-        msg.textContent = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مادة الأسبقية: ${pc} - ${pn}`;
+        playErrorSound();
+        msg.style.color = "red";
+
+        // ✅✅ عرض الأسبقيات كل مادة في سطر (الجديد)
+        const codesArr = Array.isArray(data.missing_prereq_codes) ? data.missing_prereq_codes : null;
+        const namesArr = Array.isArray(data.missing_prereq_names) ? data.missing_prereq_names : null;
+
+        if (codesArr && codesArr.length) {
+          const lines = codesArr.map((c, i) => {
+            const code = escapeHtml(String(c || "").trim());
+            const name = namesArr && namesArr[i] ? escapeHtml(String(namesArr[i]).trim()) : "";
+            return name ? `• ${code} - ${name}` : `• ${code}`;
+          }).filter(Boolean);
+
+          msg.innerHTML = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مواد الأسبقية:<br>${lines.join("<br>")}`;
+        } else {
+          // ✅ fallback (القديم) حتى لو prereq_code جاي "110/102"
+          const pc = String(data.prereq_code || "").trim();
+          const pn = String(data.prereq_name || "").trim();
+
+          const parts = pc ? pc.split("/").map(x => x.trim()).filter(Boolean) : [];
+          if (parts.length > 1) {
+            const lines = parts.map(p => `• ${escapeHtml(p)}`);
+            msg.innerHTML = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مواد الأسبقية:<br>${lines.join("<br>")}`;
+          } else {
+            msg.textContent = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مادة الأسبقية: ${pc} - ${pn}`;
+          }
+        }
 
       } else if (data.status === "SYSTEM_CLOSED") {
+        playErrorSound();
+        msg.style.color = "red";
         msg.textContent = "⛔ النظام مغلق حالياً، لا يمكن تسجيل مواد.";
       } else {
+        playErrorSound();
+        msg.style.color = "red";
         msg.textContent = "لم يتم التسجيل، تحقق من البيانات أو الكود.";
       }
 
     } catch (e) {
       console.error(e);
+      playErrorSound();
+      msg.style.color = "red";
       msg.textContent = "❌ خطأ في الاتصال برابط الـ API";
     }
   }
