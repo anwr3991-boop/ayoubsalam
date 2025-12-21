@@ -683,6 +683,13 @@
 
     .college-preview strong { color: #F4B547; }
     .college-preview small { color:#94a3b8; font-weight:700; }
+
+    /* ✅✅ (إضافة فقط) بطاقة التخصص - نفس التصميم */
+    .major-preview .dot-mini {
+      background: #22c55e;
+      box-shadow: 0 0 0 6px rgba(34,197,94,0.18);
+    }
+    .major-preview strong { color: #22c55e; }
   </style>
 </head>
 
@@ -756,6 +763,13 @@
     </div>
     <input type="hidden" id="course_college" value="">
 
+    <!-- ✅✅ (إضافة فقط) حقل التخصص: يعرض عمود F الجديد -->
+    <div id="courseMajorPreview" class="college-preview major-preview">
+      <span class="dot-mini"></span>
+      <span>اختر مادة لعرض <strong>التخصص</strong>… <small>(قبل التسجيل)</small></span>
+    </div>
+    <input type="hidden" id="course_major" value="">
+
     <div class="field">
       <label for="semester">الفصل الدراسي</label>
       <input type="text" id="semester" value="خريف 2026/2025" readonly>
@@ -804,7 +818,7 @@
 </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbzCAEfO2VTmoOfrCC82VCTAEc2D6i5-8FexwwHMSWkInrnzVOyGVT1UsNeMSJbWtilQFg/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbxgJYAi_UMas0LkSw8UIW1FDp-uyr9NTGKFf-df11lOc6xjZAFrYfX5VTUE4g-F_KbbcQ/exec";
 
   let allCourses = [];
   let allStudents = [];
@@ -970,6 +984,35 @@
     }
   }
 
+  /* ✅✅ (إضافة فقط) تحديث معاينة التخصص من عمود F (major) */
+  function updateCourseMajorPreviewByCode(cleanCode) {
+    const box = document.getElementById("courseMajorPreview");
+    const hidden = document.getElementById("course_major");
+    if (!box || !hidden) return;
+
+    if (!cleanCode) {
+      hidden.value = "";
+      box.innerHTML = `<span class="dot-mini"></span><span>اختر مادة لعرض <strong>التخصص</strong>… <small>(قبل التسجيل)</small></span>`;
+      return;
+    }
+
+    const preferred = findCourseByCodeAndCollege(cleanCode, currentStudent.college);
+    const any = preferred || (Array.isArray(allCourses) ? allCourses.find(c => String(c.code||"").trim().toUpperCase() === cleanCode) : null);
+
+    if (!any) {
+      hidden.value = "";
+      box.innerHTML = `<span class="dot-mini"></span><span>⚠ لا يمكن تحديد <strong>التخصص</strong> لأن رمز المادة غير موجود</span>`;
+      return;
+    }
+
+    const major = String(any.major || "").trim(); // ✅ هذا من عمود F الجديد
+    hidden.value = major;
+
+    box.innerHTML = major
+      ? `<span class="dot-mini"></span><span>التخصص: <strong>${escapeHtml(major)}</strong></span>`
+      : `<span class="dot-mini"></span><span>التخصص: <strong>غير محدد</strong> <small>(عمود F فارغ)</small></span>`;
+  }
+
   // ✅ تحميل قائمة المواد (كلها)
   async function loadCoursesList() {
     try {
@@ -985,6 +1028,7 @@
       const dl = document.getElementById("courseList");
       dl.innerHTML = "";
 
+      // ✅ القائمة: كود + اسم فقط (بدون تخصص)
       allCourses.forEach(c => {
         if (!c.code && !c.name) return;
         const opt = document.createElement("option");
@@ -1060,7 +1104,9 @@
       if (listEl) {
         listEl.innerHTML = `<li><span class="dot"></span>أدخل رقم القيد لعرض المواد المسجّلة.</li>`;
       }
-      updateCourseCollegePreviewByCode(normalizeCode(document.getElementById("code").value));
+      const cc = normalizeCode(document.getElementById("code").value);
+      updateCourseCollegePreviewByCode(cc);
+      updateCourseMajorPreviewByCode(cc);
       return;
     }
 
@@ -1076,7 +1122,9 @@
       if (listEl) {
         listEl.innerHTML = `<li><span class="dot"></span>رقم القيد غير موجود في قاعدة البيانات.</li>`;
       }
-      updateCourseCollegePreviewByCode(normalizeCode(document.getElementById("code").value));
+      const cc = normalizeCode(document.getElementById("code").value);
+      updateCourseCollegePreviewByCode(cc);
+      updateCourseMajorPreviewByCode(cc);
       return;
     }
 
@@ -1103,7 +1151,10 @@
 
     updateCourseNameFromInput();
     loadStudentCourses();
-    updateCourseCollegePreviewByCode(normalizeCode(document.getElementById("code").value));
+
+    const cc = normalizeCode(document.getElementById("code").value);
+    updateCourseCollegePreviewByCode(cc);
+    updateCourseMajorPreviewByCode(cc);
   }
 
   function updateCourseNameFromInput() {
@@ -1115,6 +1166,7 @@
 
     if (!cleanCode) {
       updateCourseCollegePreviewByCode("");
+      updateCourseMajorPreviewByCode("");
       return;
     }
 
@@ -1127,6 +1179,7 @@
     }
 
     updateCourseCollegePreviewByCode(cleanCode);
+    updateCourseMajorPreviewByCode(cleanCode);
   }
 
   async function loadStudentCourses() {
@@ -1250,6 +1303,7 @@
       msg.style.color = "red";
       msg.textContent = "⚠ رمز المادة غير موجود في قائمة المواد.";
       updateCourseCollegePreviewByCode(cleanCode);
+      updateCourseMajorPreviewByCode(cleanCode);
       return;
     }
 
@@ -1259,6 +1313,7 @@
       msg.style.color = "red";
       msg.textContent = "⚠ هذا الكود مكرر بين كليات مختلفة، لكن كلية الطالب فارغة في Students. عدّل كلية الطالب في Students أولاً.";
       updateCourseCollegePreviewByCode(cleanCode);
+      updateCourseMajorPreviewByCode(cleanCode);
       return;
     }
 
@@ -1266,13 +1321,20 @@
 
     const courseCollege = String(selectedCourse.college || currentStudent.college || "").trim();
     document.getElementById("course_college").value = courseCollege;
+    updateCourseCollegePreviewByCode(cleanCode);
+
+    // ✅ التخصص من عمود F (major)
+    const majorValue = String(selectedCourse.major || "").trim();
+    document.getElementById("course_major").value = majorValue;
+    updateCourseMajorPreviewByCode(cleanCode);
 
     const url = `${API_URL}?action=registerCourse`
       + `&sid=${encodeURIComponent(sid)}`
       + `&code=${encodeURIComponent(cleanCode)}`
       + `&semester=${encodeURIComponent(sem)}`
       + `&user=${encodeURIComponent(currentUser)}`
-      + `&course_college=${encodeURIComponent(courseCollege)}`;
+      + `&course_college=${encodeURIComponent(courseCollege)}`
+      + `&course_major=${encodeURIComponent(majorValue)}`;
 
     try {
       const res  = await fetch(url);
@@ -1294,6 +1356,7 @@
         codeInput.value   = "";
         courseName.value  = "";
         updateCourseCollegePreviewByCode("");
+        updateCourseMajorPreviewByCode("");
         loadStudentCourses();
 
       } else if (data.status === "MISSING_FIELDS") {
@@ -1382,6 +1445,7 @@
     codeInput.addEventListener("blur",   updateCourseNameFromInput);
 
     updateCourseCollegePreviewByCode("");
+    updateCourseMajorPreviewByCode("");
   });
 </script>
 
