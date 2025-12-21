@@ -650,6 +650,39 @@
     }
 
     .debug-label, #raw, .debug-bar { display: none !important; }
+
+    /* ✅✅ بطاقة عرض الكلية قبل التسجيل (حقل جديد) */
+    .college-preview {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.10), rgba(15,23,42,0.92));
+      box-shadow:
+        inset 0 0 0 1px rgba(15,23,42,0.9),
+        0 12px 20px rgba(15,23,42,0.75);
+      color: #e5e7eb;
+      font-weight: 800;
+      font-size: 0.86rem;
+      line-height: 1.8;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .college-preview .dot-mini {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #F4B547;
+      box-shadow: 0 0 0 6px rgba(244,181,71,0.18);
+      flex-shrink: 0;
+    }
+
+    .college-preview strong { color: #F4B547; }
+    .college-preview small { color:#94a3b8; font-weight:700; }
   </style>
 </head>
 
@@ -715,6 +748,13 @@
         <input type="text" id="courseName" placeholder="سيظهر تلقائياً بعد اختيار الرمز" readonly>
       </div>
     </div>
+
+    <!-- ✅✅ الحقل الجديد بعرض كامل (يمتد للنهاية مثل حقل اسم المادة) -->
+    <div id="courseCollegePreview" class="college-preview">
+      <span class="dot-mini"></span>
+      <span>اختر مادة لعرض <strong>الكلية</strong>… <small>(قبل التسجيل)</small></span>
+    </div>
+    <input type="hidden" id="course_college" value="">
 
     <div class="field">
       <label for="semester">الفصل الدراسي</label>
@@ -886,6 +926,50 @@
     return allCourses.find(c => String(c.code || "").trim().toUpperCase() === cc) || null;
   }
 
+  /* ✅✅ تحديث معاينة الكلية + تخزينها في hidden */
+  function updateCourseCollegePreviewByCode(cleanCode) {
+    const box = document.getElementById("courseCollegePreview");
+    const hidden = document.getElementById("course_college");
+    if (!box || !hidden) return;
+
+    if (!cleanCode) {
+      hidden.value = "";
+      box.innerHTML = `<span class="dot-mini"></span><span>اختر مادة لعرض <strong>الكلية</strong>… <small>(قبل التسجيل)</small></span>`;
+      return;
+    }
+
+    const preferred = findCourseByCodeAndCollege(cleanCode, currentStudent.college);
+    const any = preferred || (Array.isArray(allCourses) ? allCourses.find(c => String(c.code||"").trim().toUpperCase() === cleanCode) : null);
+
+    if (!any) {
+      hidden.value = "";
+      box.innerHTML = `<span class="dot-mini"></span><span>⚠ رمز المادة <strong>${escapeHtml(cleanCode)}</strong> غير موجود في القائمة</span>`;
+      return;
+    }
+
+    const col = String(any.college || "").trim();
+    const sameCode = allCourses.filter(c => String(c.code || "").trim().toUpperCase() === cleanCode);
+    const multi = sameCode.length > 1;
+
+    if (multi && !currentStudent.college) {
+      const cols = sameCode.map(x => String(x.college||"").trim()).filter(Boolean);
+      const uniqueCols = Array.from(new Set(cols));
+      hidden.value = "";
+      box.innerHTML =
+        `<span class="dot-mini"></span><span>⚠ الكود <strong>${escapeHtml(cleanCode)}</strong> موجود في أكثر من كلية: <strong>${escapeHtml(uniqueCols.join("، "))}</strong><br><small>لازم تتسجل كلية الطالب في Students باش نحدد الصحيح.</small></span>`;
+      return;
+    }
+
+    hidden.value = col;
+
+    if (multi && currentStudent.college) {
+      box.innerHTML =
+        `<span class="dot-mini"></span><span>الكلية: <strong>${escapeHtml(col || "غير محددة")}</strong> <small>• تم اختيارها حسب كلية الطالب</small></span>`;
+    } else {
+      box.innerHTML = `<span class="dot-mini"></span><span>الكلية: <strong>${escapeHtml(col || "غير محددة")}</strong></span>`;
+    }
+  }
+
   // ✅ تحميل قائمة المواد (كلها)
   async function loadCoursesList() {
     try {
@@ -976,6 +1060,7 @@
       if (listEl) {
         listEl.innerHTML = `<li><span class="dot"></span>أدخل رقم القيد لعرض المواد المسجّلة.</li>`;
       }
+      updateCourseCollegePreviewByCode(normalizeCode(document.getElementById("code").value));
       return;
     }
 
@@ -991,6 +1076,7 @@
       if (listEl) {
         listEl.innerHTML = `<li><span class="dot"></span>رقم القيد غير موجود في قاعدة البيانات.</li>`;
       }
+      updateCourseCollegePreviewByCode(normalizeCode(document.getElementById("code").value));
       return;
     }
 
@@ -1017,6 +1103,7 @@
 
     updateCourseNameFromInput();
     loadStudentCourses();
+    updateCourseCollegePreviewByCode(normalizeCode(document.getElementById("code").value));
   }
 
   function updateCourseNameFromInput() {
@@ -1026,16 +1113,20 @@
     const cleanCode = normalizeCode(codeInput.value);
     courseName.value = "";
 
-    if (!cleanCode) return;
+    if (!cleanCode) {
+      updateCourseCollegePreviewByCode("");
+      return;
+    }
 
     const course = findCourseByCodeAndCollege(cleanCode, currentStudent.college);
     if (course) {
       courseName.value = course.name || "";
-      return;
+    } else {
+      const any = (Array.isArray(allCourses) ? allCourses : []).find(c => String(c.code || "").trim().toUpperCase() === cleanCode);
+      if (any) courseName.value = any.name || "";
     }
 
-    const any = (Array.isArray(allCourses) ? allCourses : []).find(c => String(c.code || "").trim().toUpperCase() === cleanCode);
-    if (any) courseName.value = any.name || "";
+    updateCourseCollegePreviewByCode(cleanCode);
   }
 
   async function loadStudentCourses() {
@@ -1128,12 +1219,10 @@
       return;
     }
 
-    // ✅ صوت + رسالة التحقق (قبل الإرسال للسيرفر)
     msg.style.color = "#9ca3af";
     msg.textContent = "⏳ جاري التحقق من إضافة المادة...";
     playCheckSound();
 
-    // ✅ لازم تكون بيانات الطالب متحمّلة (عشان نعرف الكلية)
     if (!currentStudent.id || currentStudent.id !== sid) {
       await validateStudentFromInput();
     }
@@ -1154,13 +1243,13 @@
       return;
     }
 
-    // ✅ اختيار المادة الصحيحة حسب كلية الطالب
     const selectedCourse = findCourseByCodeAndCollege(cleanCode, currentStudent.college);
 
     if (!selectedCourse) {
       playErrorSound();
       msg.style.color = "red";
       msg.textContent = "⚠ رمز المادة غير موجود في قائمة المواد.";
+      updateCourseCollegePreviewByCode(cleanCode);
       return;
     }
 
@@ -1169,12 +1258,14 @@
       playErrorSound();
       msg.style.color = "red";
       msg.textContent = "⚠ هذا الكود مكرر بين كليات مختلفة، لكن كلية الطالب فارغة في Students. عدّل كلية الطالب في Students أولاً.";
+      updateCourseCollegePreviewByCode(cleanCode);
       return;
     }
 
     if (!courseName.value) courseName.value = selectedCourse.name || "";
 
     const courseCollege = String(selectedCourse.college || currentStudent.college || "").trim();
+    document.getElementById("course_college").value = courseCollege;
 
     const url = `${API_URL}?action=registerCourse`
       + `&sid=${encodeURIComponent(sid)}`
@@ -1202,6 +1293,7 @@
         msg.textContent = "✔ تم تسجيل المادة للطالب بنجاح";
         codeInput.value   = "";
         courseName.value  = "";
+        updateCourseCollegePreviewByCode("");
         loadStudentCourses();
 
       } else if (data.status === "MISSING_FIELDS") {
@@ -1233,7 +1325,6 @@
         playErrorSound();
         msg.style.color = "red";
 
-        // ✅✅ عرض الأسبقيات كل مادة في سطر (الجديد)
         const codesArr = Array.isArray(data.missing_prereq_codes) ? data.missing_prereq_codes : null;
         const namesArr = Array.isArray(data.missing_prereq_names) ? data.missing_prereq_names : null;
 
@@ -1246,7 +1337,6 @@
 
           msg.innerHTML = `❌ لا يمكن تسجيل هذه المادة قبل اجتياز مواد الأسبقية:<br>${lines.join("<br>")}`;
         } else {
-          // ✅ fallback (القديم) حتى لو prereq_code جاي "110/102"
           const pc = String(data.prereq_code || "").trim();
           const pn = String(data.prereq_name || "").trim();
 
@@ -1290,6 +1380,8 @@
     codeInput.addEventListener("input",  updateCourseNameFromInput);
     codeInput.addEventListener("change", updateCourseNameFromInput);
     codeInput.addEventListener("blur",   updateCourseNameFromInput);
+
+    updateCourseCollegePreviewByCode("");
   });
 </script>
 

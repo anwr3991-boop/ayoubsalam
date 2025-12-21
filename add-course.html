@@ -19,9 +19,7 @@
       --border: #d4d4d8;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -58,6 +56,7 @@
       justify-content: space-between;
       background: linear-gradient(135deg, #004b8f, #0073c9);
       color: #f9fafb;
+      position: relative;
     }
 
     .top-left {
@@ -98,6 +97,39 @@
       border: 1px solid rgba(248, 250, 252, 0.4);
     }
 
+    /* ===== وضع العرض فقط (مقفول) ===== */
+    .readonly .form-pane {
+      opacity: 0.55;
+      filter: grayscale(0.25);
+      pointer-events: none; /* يمنع أي تفاعل */
+    }
+
+    /* نخلّي الرسالة نفسها قابلة للظهور بوضوح */
+    .readonly-banner {
+      position: absolute;
+      top: 10px;
+      left: 14px;
+      z-index: 5;
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.25);
+      border: 1px solid rgba(248, 250, 252, 0.35);
+      color: #fff;
+      backdrop-filter: blur(6px);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .readonly-banner .dot2{
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #f59e0b;
+      box-shadow: 0 0 0 4px rgba(245,158,11,0.22);
+    }
+
     .form-pane {
       padding: 16px 18px 18px;
       border-left: 1px solid #edf2ff;
@@ -114,9 +146,7 @@
       gap: 6px;
     }
 
-    .form-title span.icon {
-      font-size: 1.4rem;
-    }
+    .form-title span.icon { font-size: 1.4rem; }
 
     .subtitle {
       margin: 0 0 12px;
@@ -143,8 +173,7 @@
       color: #374151;
     }
 
-    input,
-    select {
+    input, select {
       width: 100%;
       padding: 9px 10px;
       border-radius: 10px;
@@ -155,16 +184,11 @@
       font-family: "Cairo", sans-serif;
     }
 
-    input::placeholder {
-      color: #9ca3af;
-    }
+    input::placeholder { color: #9ca3af; }
 
-    select:invalid {
-      color: #9ca3af;
-    }
+    select:invalid { color: #9ca3af; }
 
-    input:focus,
-    select:focus {
+    input:focus, select:focus {
       border-color: #0ea5e9;
       box-shadow: 0 0 0 1px rgba(14,165,233,0.5);
       outline: none;
@@ -194,9 +218,7 @@
       gap: 6px;
     }
 
-    button span.btn-icon {
-      font-size: 1.1rem;
-    }
+    button span.btn-icon { font-size: 1.1rem; }
 
     button:hover {
       transform: translateY(-2px);
@@ -212,12 +234,6 @@
       margin-top: 8px;
       font-weight: bold;
       font-size: 0.9rem;
-    }
-
-    .debug-label {
-      margin-top: 8px;
-      font-size: 0.75rem;
-      color: #6b7280;
     }
 
     #raw {
@@ -347,59 +363,38 @@
     }
 
     @media (max-width: 800px) {
-      .shell {
-        grid-template-columns: 1fr;
-      }
-      .form-pane {
-        border-left: none;
-        border-top: 1px solid #edf2ff;
-      }
+      .shell { grid-template-columns: 1fr; }
+      .form-pane { border-left: none; border-top: 1px solid #edf2ff; }
     }
 
     @media (max-width: 550px) {
-      body {
-        padding: 14px 8px;
-      }
-
-      .shell {
-        border-radius: 18px;
-      }
-
+      body { padding: 14px 8px; }
+      .shell { border-radius: 18px; }
       .top-bar {
         padding: 10px 12px 6px;
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
       }
-
-      .form-pane {
-        padding: 14px 12px 14px;
+      .readonly-banner{
+        position: static;
+        margin-top: 6px;
+        background: rgba(15,23,42,0.22);
       }
-
-      .info-pane {
-        padding: 14px 12px 12px;
-      }
-
-      .row {
-        grid-template-columns: 1fr;
-      }
-
-      button {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
+      .form-pane { padding: 14px 12px 14px; }
+      .info-pane { padding: 14px 12px 12px; }
+      .row { grid-template-columns: 1fr; }
+      button { width: 100%; justify-content: center; }
+      .actions { flex-direction: column; align-items: stretch; }
     }
   </style>
 </head>
 
 <body>
 
-<div class="shell">
+<!-- أضفنا readonly على الغلاف -->
+<div class="shell readonly">
+
   <div class="top-bar">
     <div class="top-left">
       <div class="logo-circle">📘</div>
@@ -408,7 +403,14 @@
         <p>إضافة واعتماد مقررات الخطة الأكاديمية.</p>
       </div>
     </div>
+
     <div class="chip">جامعة السلام الدولية</div>
+
+    <!-- شريط يوضح أن الصفحة مقفولة -->
+    <div class="readonly-banner" title="تم تعطيل الإضافة مؤقتاً">
+      <span class="dot2"></span>
+      <span>عرض فقط — النظام مقفول</span>
+    </div>
   </div>
 
   <div class="form-pane">
@@ -418,22 +420,24 @@
     </h2>
     <p class="subtitle">
       قم بإدخال رمز المادة واسمها وتحديد الكلية بشكل صحيح ليتم استخدامها في تسجيل مواد الطلاب والتقارير.
+      <br>
+      <strong>ملاحظة:</strong> هذه الصفحة حالياً <u>للعرض فقط</u>.
     </p>
 
     <div class="row">
       <div class="field">
         <label for="code">رمز المادة</label>
-        <input type="text" id="code" placeholder="مثال: IT101">
+        <input type="text" id="code" placeholder="مثال: IT101" disabled>
       </div>
 
       <div class="field">
         <label for="name">اسم المادة</label>
-        <input type="text" id="name" placeholder="مثال: لغة عربية 1">
+        <input type="text" id="name" placeholder="مثال: لغة عربية 1" disabled>
       </div>
 
       <div class="field">
         <label for="college">الكلية</label>
-        <select id="college" required>
+        <select id="college" required disabled>
           <option value="" disabled selected hidden>اختر الكلية</option>
         </select>
       </div>
@@ -441,21 +445,23 @@
       <!-- اسبقية المادة (اختياري) -->
       <div class="field" style="grid-column:1 / -1;">
         <label for="prereq">رمز اسبقة المادة (إن وُجدت) اكتب رمز المادة فقط بدون اسم </label>
-        <input type="text" id="prereq" placeholder="مثال: 100 - مادة يجب تصفيتها قبل هذه المادة">
+        <input type="text" id="prereq" placeholder="مثال: 100 - مادة يجب تصفيتها قبل هذه المادة" disabled>
       </div>
     </div>
 
     <div class="actions">
-      <button onclick="saveCourse()">
-        <span class="btn-icon">💾</span>
-        <span>حفظ المادة</span>
+      <!-- الزر مقفول -->
+      <button type="button" disabled aria-disabled="true">
+        <span class="btn-icon">🔒</span>
+        <span>حفظ المادة (مقفول)</span>
       </button>
+
       <span class="hint">
         يفضّل اعتماد نمط ثابت لرموز المواد (مثل IT101، PHAR201)، مع ربط كل مادة بالكلية الصحيحة.
       </span>
     </div>
 
-    <p id="msg" class="msg"></p>
+    <p id="msg" class="msg" style="color:#b45309;">⚠ هذه الصفحة للعرض فقط — لا يمكن إضافة/تعديل أي بيانات.</p>
     <pre id="raw"></pre>
   </div>
 
@@ -486,125 +492,39 @@
 </div>
 
 <script>
-  // نفس رابط الـ API المستخدم في بقية الصفحات
+  // ✅ تم تعطيل أي اتصال أو إضافة (صفحة عرض فقط)
+
+  // نفس رابط الـ API المستخدم في بقية الصفحات (موجود للعرض فقط)
   const API_URL = "https://script.google.com/macros/s/AKfycbzCAEfO2VTmoOfrCC82VCTAEc2D6i5-8FexwwHMSWkInrnzVOyGVT1UsNeMSJbWtilQFg/exec";
-       
-  document.addEventListener('DOMContentLoaded', loadColleges);
+                   
+  document.addEventListener('DOMContentLoaded', () => {
+    // لا نحمل كليات ولا ننفذ طلبات
+    lockFormUI("⚠ هذه الصفحة للعرض فقط — النظام مقفول ولا يمكن إضافة أي مادة.");
+  });
 
-  async function loadColleges() {
-    const collegeSelect = document.getElementById('college');
+  function lockFormUI(message) {
+    // تعطيل كل عناصر الإدخال/الأزرار داخل الفورم
+    const scope = document.querySelector('.form-pane');
+    if (!scope) return;
+
+    scope.querySelectorAll('input, select, textarea, button').forEach(el => {
+      el.disabled = true;
+      el.setAttribute('aria-disabled', 'true');
+    });
+
     const msg = document.getElementById('msg');
-
-    try {
-      const url = `${API_URL}?action=getColleges`;
-      const res = await fetch(url);
-      const text = await res.text();
-      let data;
-
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.error("JSON error:", e, text);
-        msg.style.color = "red";
-        msg.textContent = "خطأ في قراءة بيانات الكليات من السيرفر.";
-        return;
-      }
-
-      // شكل الرد: { colleges: ["كلية 1", "كلية 2", ...] }
-      if (Array.isArray(data.colleges)) {
-        while (collegeSelect.options.length > 1) {
-          collegeSelect.remove(1);
-        }
-        data.colleges.forEach(col => {
-          const opt = document.createElement('option');
-          opt.value = col;
-          opt.textContent = col;
-          collegeSelect.appendChild(opt);
-        });
-      } else {
-        msg.style.color = "red";
-        msg.textContent = "تعذر تحميل قائمة الكليات، راجع getColleges في Code.gs";
-      }
-    } catch (err) {
-      console.error(err);
-      msg.style.color = "red";
-      msg.textContent = "❌ خطأ في الاتصال عند جلب الكليات.";
+    if (msg) {
+      msg.style.color = "#b45309";
+      msg.textContent = message || "⚠ هذه الصفحة للعرض فقط.";
     }
+
+    const raw = document.getElementById('raw');
+    if (raw) raw.textContent = "";
   }
 
-  async function saveCourse() {
-    const code    = document.getElementById('code').value.trim();
-    const name    = document.getElementById('name').value.trim();
-    const college = document.getElementById('college').value.trim();
-    const prereq  = document.getElementById('prereq').value.trim();
-
-    const msg  = document.getElementById('msg');
-    const raw  = document.getElementById('raw');
-
-    msg.textContent = "";
-    msg.style.color = "red";
-    raw.textContent = "";
-
-    if (!code || !name || !college) {
-      msg.textContent = "⚠ رمز المادة واسم المادة والكلية جميعها مطلوبة";
-      return;
-    }
-
-    const url =
-      `${API_URL}?action=addCourse` +
-      `&code=${encodeURIComponent(code)}` +
-      `&name=${encodeURIComponent(name)}` +
-      `&college=${encodeURIComponent(college)}` +
-      `&prereq=${encodeURIComponent(prereq)}`;
-
-    try {
-      const res  = await fetch(url);
-      const text = await res.text();
-      raw.textContent = text;
-
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
-        return;
-      }
-
-      if (data.status === "OK") {
-        msg.style.color = "green";
-        msg.textContent = "✔ تم حفظ المادة بنجاح";
-        document.getElementById('code').value = "";
-        document.getElementById('name').value = "";
-        document.getElementById('college').value = "";
-        document.getElementById('prereq').value = "";
-        // نعيد تحميل الكليات في حال أضفت كلية جديدة
-        loadColleges();
-      }
-      else if (data.status === "COURSE_EXISTS") {
-        msg.textContent = "⚠ رمز المادة مسجّل مسبقًا، جرّب رمز آخر.";
-      }
-      else if (data.status === "OK_WARN_PREREQ") {
-        msg.style.color = "#b45309";
-        msg.textContent = "تم حفظ المادة، لكن كود الاسبقية غير موجود ضمن قائمة المواد.";
-        document.getElementById('code').value = "";
-        document.getElementById('name').value = "";
-        document.getElementById('college').value = "";
-        document.getElementById('prereq').value = "";
-      }
-      else if (data.status === "MISSING_FIELDS") {
-        msg.textContent = "⚠ بيانات ناقصة، تأكد من رمز المادة واسمها والكلية.";
-      }
-      else if (data.error === "UNKNOWN_ACTION") {
-        msg.textContent = "السيرفر لا يتعرف على action=addCourse (مشكلة في رابط الـ API أو في doGet).";
-      }
-      else {
-        msg.textContent = "لم يتم الحفظ، تحقق من البيانات أو الكود. (راجع الرد في الصندوق الأسود)";
-      }
-    } catch (e) {
-      console.error(e);
-      msg.textContent = "❌ خطأ في الاتصال برابط الـ API";
-    }
-  }
+  // موجودة فقط حتى لو حد حاول يناديها من الكونسول
+  async function loadColleges() { return; }
+  async function saveCourse() { return; }
 </script>
 
 </body>
