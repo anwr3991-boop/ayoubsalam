@@ -16,7 +16,6 @@
       --muted: #6b7280;
       --border: #e5e7eb;
     }
-
     * { box-sizing: border-box; }
 
     body {
@@ -52,34 +51,17 @@
       gap: 8px;
     }
 
-    .top-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .top-left { display: flex; align-items: center; gap: 8px; }
 
     .logo-circle {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
+      width: 32px; height: 32px; border-radius: 999px;
       background: rgba(15,23,42,0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 1.3rem;
     }
 
-    .top-text h1 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 800;
-    }
-
-    .top-text p {
-      margin: 0;
-      font-size: 0.75rem;
-      opacity: 0.9;
-    }
+    .top-text h1 { margin: 0; font-size: 1.1rem; font-weight: 800; }
+    .top-text p { margin: 0; font-size: 0.75rem; opacity: 0.9; }
 
     .chip {
       font-size: 0.75rem;
@@ -89,7 +71,6 @@
       border: 1px solid rgba(248, 250, 252, 0.4);
     }
 
-    /* 🔹 شريط اختيار الفصل الدراسي */
     .semester-bar {
       padding: 6px 16px 4px;
       background: #f9fafb;
@@ -101,12 +82,9 @@
       font-size: 0.85rem;
     }
 
-    .sem-label {
-      color: #4b5563;
-      font-weight: 600;
-    }
+    .sem-label { color: #4b5563; font-weight: 600; }
 
-    .semester-select {
+    .semester-select, .college-select {
       padding: 5px 12px;
       border-radius: 999px;
       border: 1px solid #cbd5e1;
@@ -116,16 +94,13 @@
       min-width: 160px;
     }
 
-    .semester-select:focus {
+    .semester-select:focus, .college-select:focus {
       outline: none;
       border-color: #0ea5e9;
       box-shadow: 0 0 0 1px rgba(14,165,233,0.5);
     }
 
-    .sem-hint {
-      font-size: 0.78rem;
-      color: #9ca3af;
-    }
+    .sem-hint { font-size: 0.78rem; color: #9ca3af; }
 
     .content {
       padding: 14px 16px 16px;
@@ -161,22 +136,11 @@
       gap: 6px;
     }
 
-    .card-title span.icon {
-      font-size: 1.25rem;
-    }
+    .card-title span.icon { font-size: 1.25rem; }
 
-    .card-sub {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin: 0;
-    }
+    .card-sub { font-size: 0.8rem; color: var(--muted); margin: 0; }
 
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 6px;
-    }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 
     .btn {
       padding: 7px 14px;
@@ -193,7 +157,6 @@
       box-shadow: 0 8px 18px rgba(22,163,74,0.6);
       white-space: nowrap;
     }
-
     .btn:hover { transform: translateY(-1px); }
 
     .btn.secondary {
@@ -201,12 +164,7 @@
       box-shadow: 0 8px 18px rgba(14,165,233,0.6);
     }
 
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 4px 0 8px;
-    }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
 
     .filter-chip {
       padding: 5px 10px;
@@ -220,7 +178,6 @@
       gap: 4px;
       color: #374151;
     }
-
     .filter-chip span.icon { font-size: 1rem; }
 
     .filter-chip.active {
@@ -230,12 +187,7 @@
       box-shadow: 0 0 0 1px rgba(14,165,233,0.4);
     }
 
-    .field-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    .field-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
     input[type="text"] {
       flex: 1;
@@ -246,17 +198,13 @@
       font-size: 0.85rem;
       font-family: "Cairo", sans-serif;
     }
-
     input[type="text"]:focus {
       outline: none;
       border-color: #0ea5e9;
       box-shadow: 0 0 0 1px rgba(14,165,233,0.5);
     }
 
-    .msg {
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
+    .msg { font-size: 0.8rem; font-weight: 600; }
 
     .table-wrapper {
       border-radius: 12px;
@@ -282,14 +230,10 @@
       font-weight: 600;
     }
 
-    #summaryTable th:nth-child(1),
-    #summaryTable td:nth-child(1) { width: 15%; }
-    #summaryTable th:nth-child(2),
-    #summaryTable td:nth-child(2) { width: 40%; }
-    #summaryTable th:nth-child(3),
-    #summaryTable td:nth-child(3) { width: 25%; }
-    #summaryTable th:nth-child(4),
-    #summaryTable td:nth-child(4) { width: 20%; }
+    #summaryTable th:nth-child(1), #summaryTable td:nth-child(1) { width: 15%; }
+    #summaryTable th:nth-child(2), #summaryTable td:nth-child(2) { width: 40%; }
+    #summaryTable th:nth-child(3), #summaryTable td:nth-child(3) { width: 25%; }
+    #summaryTable th:nth-child(4), #summaryTable td:nth-child(4) { width: 20%; }
 
     th {
       background: #eff6ff;
@@ -312,10 +256,11 @@
       font-weight: 700;
     }
 
-    .low-enroll td {
-      background: #fef2f2 !important;
-      color: #991b1b !important;
-    }
+    .low-enroll td { background: #fef2f2 !important; color: #991b1b !important; }
+
+    /* ✅ صف قابل للنقر */
+    .clickable-row { cursor: pointer; }
+    .clickable-row:hover td { background: #e0f2fe !important; }
 
     #raw {
       margin-top: 4px;
@@ -331,107 +276,6 @@
       display: none;
     }
 
-    .group-title {
-      margin: 8px 0 4px;
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #0f172a;
-    }
-
-    #groupTable th,
-    #groupTable td {
-      text-align: right;
-      font-weight: 600;
-    }
-
-    #groupTable th:nth-child(1),
-    #groupTable td:nth-child(1) { width: 35%; }
-    #groupTable th:nth-child(2),
-    #groupTable td:nth-child(2) { width: 45%; }
-    #groupTable th:nth-child(3),
-    #groupTable td:nth-child(3) { width: 20%; }
-
-    @media print {
-      body {
-        background: #ffffff;
-        padding: 0;
-      }
-      .shell {
-        box-shadow: none;
-        border-radius: 0;
-        border: none;
-        max-width: 100%;
-      }
-      .content { grid-template-columns: 1fr; gap: 8px; }
-      .top-bar {
-        background: #ffffff !important;
-        color: #000000 !important;
-        border-bottom: 1px solid #000;
-      }
-      .top-text h1 { font-size: 1rem; }
-      .top-text p { display: none; }
-      .logo-circle,
-      .card-title .icon,
-      .semester-bar { display: none !important; }
-      .btn,
-      .chip,
-      .filter-bar,
-      #raw { display: none !important; }
-      .card {
-        background: #ffffff !important;
-        border-radius: 0;
-        border: none;
-        padding: 8px 0;
-      }
-      .table-wrapper {
-        border-radius: 0;
-        border: none;
-        max-height: none;
-      }
-      th {
-        background: #ffffff !important;
-        border-bottom: 1px solid #000;
-      }
-      tr:nth-child(even) td { background: #ffffff !important; }
-      .badge-small {
-        background: transparent;
-        color: #000;
-        border-radius: 0;
-        padding: 0;
-      }
-      body.print-summary .card-summary { display: block !important; }
-      body.print-summary .card-details { display: none !important; }
-      body.print-details .card-summary { display: none !important; }
-      body.print-details .card-details { display: block !important; }
-    }
-
-    @media (max-width: 900px) {
-      .content { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 550px) {
-      body { padding: 14px 8px; }
-      .shell { border-radius: 18px; }
-      .top-bar {
-        padding: 8px 12px 6px;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .content { padding: 12px 10px 14px; }
-      .field-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
-      .card-header {
-        flex-direction: column;
-        align-items: stretch;
-      }
-    }
-
     .spinner {
       display: inline-block;
       width: 14px;
@@ -441,15 +285,42 @@
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @media (max-width: 900px) { .content { grid-template-columns: 1fr; } }
+    @media (max-width: 550px) {
+      body { padding: 14px 8px; }
+      .shell { border-radius: 18px; }
+      .top-bar { padding: 8px 12px 6px; flex-direction: column; align-items: flex-start; }
+      .content { padding: 12px 10px 14px; }
+      .field-row { flex-direction: column; align-items: stretch; }
+      .btn { width: 100%; justify-content: center; }
+      .card-header { flex-direction: column; align-items: stretch; }
+      .semester-select, .college-select { width: 100%; min-width: 0; }
+    }
+
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .shell { box-shadow: none; border-radius: 0; border: none; max-width: 100%; }
+      .content { grid-template-columns: 1fr; gap: 8px; }
+      .top-bar { background: #ffffff !important; color: #000000 !important; border-bottom: 1px solid #000; }
+      .top-text p { display: none; }
+      .logo-circle, .card-title .icon, .semester-bar { display: none !important; }
+      .btn, .chip, .filter-bar, #raw { display: none !important; }
+      .card { background: #ffffff !important; border-radius: 0; border: none; padding: 8px 0; }
+      .table-wrapper { border-radius: 0; border: none; max-height: none; }
+      th { background: #ffffff !important; border-bottom: 1px solid #000; }
+      tr:nth-child(even) td { background: #ffffff !important; }
+      .badge-small { background: transparent; color: #000; border-radius: 0; padding: 0; }
+      body.print-summary .card-summary { display: block !important; }
+      body.print-summary .card-details { display: none !important; }
+      body.print-details .card-summary { display: none !important; }
+      body.print-details .card-details { display: block !important; }
     }
   </style>
 </head>
 
 <body>
-
 <div class="shell">
   <div class="top-bar">
     <div class="top-left">
@@ -462,25 +333,21 @@
     <div class="chip">نظام إدارة الجامعة</div>
   </div>
 
-  <!-- 🔹 اختيار الفصل الدراسي (يؤثر على التقريرين) -->
   <div class="semester-bar">
     <span class="sem-label">الفصل الدراسي:</span>
-    <select id="semesterSelect" class="semester-select" onchange="onSemesterChange()">
-      <option value="">كل الفصول</option>
+    <select id="semesterSelect" class="semester-select">
+      <option value="">اختر الفصل أولاً...</option>
     </select>
-    <span class="sem-hint">اختر الفصل ثم اضغط "تحديث الملخص".</span>
+    <span class="sem-hint">✅ اختر الفصل ثم اضغط "تحديث الملخص" لتخفيف الضغط وتسريع التحميل.</span>
   </div>
 
   <div class="content">
-    <!-- الكرت الأيمن: ملخص المواد -->
+    <!-- ملخص -->
     <div class="card card-summary">
       <div class="card-header">
         <div>
-          <div class="card-title">
-            <span class="icon">📚</span>
-            <span>تقرير عام لكل مادة</span>
-          </div>
-          <p class="card-sub">عرض جميع المواد مع الكلية وعدد الطلاب المسجَّلين في كل مادة.</p>
+          <div class="card-title"><span class="icon">📚</span><span>تقرير عام لكل مادة</span></div>
+          <p class="card-sub">عرض المواد مع الكلية وعدد الطلاب المسجَّلين في كل مادة.</p>
         </div>
       </div>
 
@@ -489,42 +356,33 @@
         <button class="btn secondary" onclick="printSummary()">🖨️ طباعة ملخص PDF</button>
       </div>
 
-      <!-- فلترة بالكليات -->
       <div class="filter-bar" id="filterBar">
         <button class="filter-chip active" data-college="ALL" onclick="filterByCollege('ALL', this)">
           <span class="icon">🌐</span><span>كل الكليات</span>
         </button>
-
         <button class="filter-chip" data-college="إقتصاد" onclick="filterByCollege('إقتصاد', this)">
           <span class="icon">💼</span><span>الاقتصاد</span>
         </button>
-
         <button class="filter-chip" data-college="قانون" onclick="filterByCollege('قانون', this)">
           <span class="icon">⚖️</span><span>القانون</span>
         </button>
-
-        <button class="filter-chip" data-college="صيدلة قديمة" onclick="filterByCollege('صيدلة قديمة', this)">
+        <button class="filter-chip" data-college="الصيدلة" onclick="filterByCollege('الصيدلة', this)">
           <span class="icon">💊</span><span>الصيدلة</span>
         </button>
-
         <button class="filter-chip" data-college="صيدلة جديدة" onclick="filterByCollege('صيدلة جديدة', this)">
           <span class="icon">💊</span><span>صيدلة جديدة</span>
         </button>
-
         <button class="filter-chip" data-college="الحاسوب" onclick="filterByCollege('الحاسوب', this)">
           <span class="icon">💻</span><span>كلية الحاسوب</span>
         </button>
-
         <button class="filter-chip" data-college="تقنية طبية" onclick="filterByCollege('تقنية طبية', this)">
           <span class="icon">🧪</span><span>كلية التقنية الطبية</span>
         </button>
-
         <button class="filter-chip" data-college="الهندسة" onclick="filterByCollege('الهندسة', this)">
           <span class="icon">🏗️</span><span>كلية الهندسة</span>
         </button>
       </div>
 
-      <!-- جدول الملخص -->
       <div class="table-wrapper" id="summaryTableWrap">
         <table id="summaryTable">
           <thead>
@@ -540,32 +398,14 @@
       </div>
 
       <div id="summaryMsg" class="msg"></div>
-
-      <!-- تجميع المواد المتشابهة -->
-      <h4 class="group-title">تجميع المواد المتشابهة (نفس الاسم – أكواد مختلفة)</h4>
-      <div class="table-wrapper" id="groupTableWrap">
-        <table id="groupTable">
-          <thead>
-            <tr>
-              <th>اسم المادة (مجموعة)</th>
-              <th>الأكواد مع الأعداد</th>
-              <th>الكلية</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
     </div>
 
-    <!-- الكرت الأيسر: تفاصيل مادة -->
+    <!-- تفاصيل -->
     <div class="card card-details">
       <div class="card-header">
         <div>
-          <div class="card-title">
-            <span class="icon">🔎</span>
-            <span>تقرير تفصيلي لمادة</span>
-          </div>
-          <p class="card-sub">اختر الفصل من الأعلى، ثم أدخل رمز المادة.</p>
+          <div class="card-title"><span class="icon">🔎</span><span>تقرير تفصيلي لمادة</span></div>
+          <p class="card-sub">✅ إذا الكود مكرر بين كليات: اختر الكلية أو اضغط على صف من الملخص.</p>
         </div>
       </div>
 
@@ -574,7 +414,10 @@
       </div>
 
       <div class="field-row">
-        <input type="text" id="detailCode" placeholder="رمز المادة (مثال: IT101)">
+        <input type="text" id="detailCode" placeholder="رمز المادة (مثال: 101)">
+        <select id="detailCollege" class="college-select" title="اختر الكلية (لو الكود مكرر)">
+          <option value="">الكلية: (تلقائي/اختياري)</option>
+        </select>
         <button class="btn" onclick="loadDetails()">عرض التفاصيل</button>
       </div>
 
@@ -601,25 +444,22 @@
 
 <script>
   const API_URL =
-    "https://script.google.com/macros/s/AKfycbxgJYAi_UMas0LkSw8UIW1FDp-uyr9NTGKFf-df11lOc6xjZAFrYfX5VTUE4g-F_KbbcQ/exec";
+    "https://script.google.com/macros/s/AKfycbxBv9r6idtpUbTiutFFo2cGrXxUUK-Np-vs2hvrLOfrPxx85QoSh6JeBYrNfFtUH-3BYg/exec";
 
   let allSummaryData = [];
   let SELECTED_SEMESTER = "";
-  let ALL_SEMESTERS = [];
+  let ACTIVE_COLLEGE_FILTER = "ALL";
 
-  // جلب قائمة الفصول من السكربت
   async function loadSemesters() {
     const select = document.getElementById("semesterSelect");
     if (!select) return;
 
-    select.innerHTML = '<option value="">كل الفصول</option>';
+    select.innerHTML = '<option value="">اختر الفصل أولاً...</option>';
 
     try {
       const res = await fetch(`${API_URL}?action=getSemesters`);
       const data = await res.json();
-
       const list = (data.semesters || []).filter(Boolean);
-      ALL_SEMESTERS = list;
 
       list.forEach(sem => {
         const opt = document.createElement("option");
@@ -632,22 +472,11 @@
     }
   }
 
-  // تغيير الفصل من القائمة
-  function onSemesterChange() {
+  function getSelectedSemester() {
     const select = document.getElementById("semesterSelect");
-    SELECTED_SEMESTER = select ? select.value : "";
-
-    if (allSummaryData.length > 0) {
-      loadSummary();
-    }
-
-    const codeVal = document.getElementById("detailCode").value.trim();
-    if (codeVal) {
-      loadDetails();
-    }
+    return select ? select.value : "";
   }
 
-  // رسم جدول الملخص
   function renderSummaryTable(list) {
     const tbody = document.querySelector("#summaryTable tbody");
     tbody.innerHTML = "";
@@ -655,8 +484,11 @@
     list.forEach((item) => {
       const tr = document.createElement("tr");
       const total = parseInt(item.total, 10) || 0;
-
       if (total < 3) tr.classList.add("low-enroll");
+
+      // ✅ نخلي الصف clickable
+      tr.classList.add("clickable-row");
+      tr.title = "اضغط لعرض تفاصيل هذه المادة";
 
       tr.innerHTML = `
         <td>${item.code || ""}</td>
@@ -664,67 +496,66 @@
         <td>${item.college || ""}</td>
         <td><span class="badge-small">${total}</span></td>
       `;
-      tbody.appendChild(tr);
-    });
-  }
 
-  // جدول تجميع المواد المتشابهة (نفس الاسم – أكواد مختلفة)
-  function buildGroupedTable() {
-    const tbody = document.querySelector("#groupTable tbody");
-    tbody.innerHTML = "";
+      tr.addEventListener("click", () => {
+        // ✅ لما يضغط على صف: نعبي الكود + الكلية ونجيب التفاصيل مباشرة
+        document.getElementById("detailCode").value = (item.code || "").trim();
+        setDetailCollegeOptions([(item.college || "").trim()]);
+        document.getElementById("detailCollege").value = (item.college || "").trim();
+        loadDetails();
+      });
 
-    if (!allSummaryData || allSummaryData.length === 0) return;
-
-    const groups = {};
-
-    allSummaryData.forEach(item => {
-      const name = (item.name || "").trim();
-      if (!name) return;
-      if (!groups[name]) groups[name] = [];
-      groups[name].push(item);
-    });
-
-    Object.keys(groups).forEach(name => {
-      const arr = groups[name];
-      if (arr.length < 2) return;
-
-      const codesWithCounts = arr
-        .map(i => `${i.code || ""} (${parseInt(i.total,10) || 0})`)
-        .join(" ، ");
-
-      const colleges = Array.from(
-        new Set(arr.map(i => (i.college || "").trim()).filter(Boolean))
-      ).join(" / ");
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${name}</td>
-        <td>${codesWithCounts}</td>
-        <td>${colleges}</td>
-      `;
       tbody.appendChild(tr);
     });
 
     if (!tbody.children.length) {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="3" style="text-align:center; color:#6b7280; font-weight:600;">
-        لا توجد مواد متشابهة (بنفس الاسم) حالياً.
-      </td>`;
+      tr.innerHTML = `<td colspan="4" style="text-align:center; color:#6b7280; font-weight:700;">لا توجد بيانات للعرض.</td>`;
       tbody.appendChild(tr);
     }
   }
 
-  // تحميل ملخص المواد – مع إخفاء المواد اللي مافيهاش طلاب
+  function setDetailCollegeOptions(colleges) {
+    const sel = document.getElementById("detailCollege");
+    const current = sel.value || "";
+    sel.innerHTML = '<option value="">الكلية: (تلقائي/اختياري)</option>';
+
+    (colleges || [])
+      .map(s => (s || "").trim())
+      .filter(Boolean)
+      .forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c;
+        opt.textContent = c;
+        sel.appendChild(opt);
+      });
+
+    // حاول نرجّع نفس الاختيار إذا موجود
+    if (current && colleges.includes(current)) sel.value = current;
+  }
+
   async function loadSummary() {
     const msg = document.getElementById("summaryMsg");
     msg.style.color = "#6b7280";
+
+    SELECTED_SEMESTER = getSelectedSemester();
+
+    if (!SELECTED_SEMESTER) {
+      msg.style.color = "#b45309";
+      msg.textContent = "⚠ اختر الفصل الدراسي أولاً ثم اضغط تحديث الملخص.";
+      allSummaryData = [];
+      renderSummaryTable([]);
+      return;
+    }
+
     msg.innerHTML = `<span class="spinner"></span> جاري تحميل الملخص...`;
 
-    const url = `${API_URL}?action=courseSummary&semester=${encodeURIComponent(SELECTED_SEMESTER || "")}`;
+    const url = `${API_URL}?action=courseSummary&semester=${encodeURIComponent(SELECTED_SEMESTER)}`;
 
     try {
       const res = await fetch(url);
       const text = await res.text();
+
       let data;
       try { data = JSON.parse(text); } catch (e) {
         msg.style.color = "red";
@@ -738,12 +569,10 @@
         return;
       }
 
-      // ✅ التقارير: نخفي اللي total=0
-      const nonEmpty = data.summary.filter(item => (parseInt(item.total, 10) || 0) > 0);
+      allSummaryData = data.summary;
 
-      allSummaryData = nonEmpty;
-      renderSummaryTable(allSummaryData);
-      buildGroupedTable();
+      // ✅ طبّق فلتر الكلية الحالي
+      applyCollegeFilter();
 
       msg.style.color = "green";
       msg.textContent = "✔ تم تحميل الملخص بنجاح";
@@ -754,25 +583,30 @@
     }
   }
 
-  // فلترة حسب الكلية
-  function filterByCollege(collegeName, btnElement) {
-    const chips = document.querySelectorAll(".filter-chip");
-    chips.forEach(ch => ch.classList.remove("active"));
-    if (btnElement) btnElement.classList.add("active");
-
-    if (collegeName === "ALL") {
+  function applyCollegeFilter() {
+    if (ACTIVE_COLLEGE_FILTER === "ALL") {
       renderSummaryTable(allSummaryData);
     } else {
       const filtered = allSummaryData.filter(item =>
-        (item.college || "").trim() === collegeName
+        (item.college || "").trim() === ACTIVE_COLLEGE_FILTER
       );
       renderSummaryTable(filtered);
     }
   }
 
-  // ✅✅ تفاصيل مادة – التعديل هنا فقط: بدل reportByCourse إلى courseDetails
+  function filterByCollege(collegeName, btnElement) {
+    ACTIVE_COLLEGE_FILTER = collegeName;
+
+    const chips = document.querySelectorAll(".filter-chip");
+    chips.forEach(ch => ch.classList.remove("active"));
+    if (btnElement) btnElement.classList.add("active");
+
+    applyCollegeFilter();
+  }
+
   async function loadDetails() {
     const code = document.getElementById("detailCode").value.trim();
+    const college = (document.getElementById("detailCollege").value || "").trim();
     const header = document.getElementById("detailsHeader");
     const msg = document.getElementById("detailsMsg");
     const tbody = document.querySelector("#detailsTable tbody");
@@ -783,6 +617,14 @@
     raw.textContent = "";
     tbody.innerHTML = "";
 
+    SELECTED_SEMESTER = getSelectedSemester();
+
+    if (!SELECTED_SEMESTER) {
+      msg.style.color = "#b45309";
+      msg.textContent = "⚠ اختر الفصل الدراسي أولاً.";
+      return;
+    }
+
     if (!code) {
       msg.style.color = "red";
       msg.textContent = "⚠ الرجاء إدخال رمز المادة أولاً";
@@ -792,11 +634,8 @@
     msg.style.color = "#0ea5e9";
     msg.innerHTML = `<span class="spinner"></span> جاري جلب البيانات...`;
 
-    // ✅ هنا التعديل
-    let url = `${API_URL}?action=courseDetails&code=${encodeURIComponent(code)}`;
-    if (SELECTED_SEMESTER) {
-      url += `&semester=${encodeURIComponent(SELECTED_SEMESTER)}`;
-    }
+    let url = `${API_URL}?action=courseDetails&code=${encodeURIComponent(code)}&semester=${encodeURIComponent(SELECTED_SEMESTER)}`;
+    if (college) url += `&college=${encodeURIComponent(college)}`;
 
     try {
       const res = await fetch(url);
@@ -810,16 +649,33 @@
         return;
       }
 
+      // ✅ إذا الكود مكرر ولم يتم تحديد كلية
+      if (data.status === "AMBIGUOUS_CODE" && Array.isArray(data.options)) {
+        const opts = data.options.map(o => (o.college || "").trim()).filter(Boolean);
+        setDetailCollegeOptions(opts);
+
+        msg.style.color = "#b45309";
+        msg.textContent = "⚠ هذا الكود موجود في أكثر من كلية. اختر الكلية ثم اضغط عرض التفاصيل.";
+        header.innerHTML = `<span class="badge-small">${data.code || code}</span> &nbsp; | &nbsp; <span>اختر الكلية</span>`;
+        return;
+      }
+
       if (data.error === "COURSE_NOT_FOUND" || data.error === "NO_CODE") {
         msg.style.color = "red";
         msg.textContent = "المادة غير موجودة، تأكد من رمز المادة.";
         return;
       }
 
+      // ✅ لو رجع كلية محددة نخليها في dropdown
+      if (data.college) setDetailCollegeOptions([String(data.college || "").trim()]);
+      if (data.college) document.getElementById("detailCollege").value = String(data.college || "").trim();
+
       header.innerHTML = `
         <span>مادة: <strong>${data.course_name || data.name || ""}</strong></span>
         &nbsp; | &nbsp;
         <span class="badge-small">${data.code || code}</span>
+        &nbsp; | &nbsp;
+        <span class="badge-small">${data.college || college || ""}</span>
         ${data.semester ? `&nbsp; | &nbsp;<span>${data.semester}</span>` : ""}
       `;
 
@@ -852,23 +708,23 @@
     document.body.classList.add("print-summary");
     document.body.classList.remove("print-details");
     window.print();
-    setTimeout(() => {
-      document.body.classList.remove("print-summary");
-    }, 500);
+    setTimeout(() => document.body.classList.remove("print-summary"), 500);
   }
 
   function printDetails() {
     document.body.classList.add("print-details");
     document.body.classList.remove("print-summary");
     window.print();
-    setTimeout(() => {
-      document.body.classList.remove("print-details");
-    }, 500);
+    setTimeout(() => document.body.classList.remove("print-details"), 500);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     loadSemesters();
-    loadSummary();
+
+    // ✅ ما عادش نحمل summary تلقائي لتخفيف الضغط
+    const msg = document.getElementById("summaryMsg");
+    msg.style.color = "#6b7280";
+    msg.textContent = "اختر الفصل الدراسي ثم اضغط تحديث الملخص.";
   });
 </script>
 
