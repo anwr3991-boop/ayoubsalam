@@ -1,159 +1,317 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>دخول الموظفين - جامعة السلام الدولية</title>
+  <meta charset="UTF-8" />
+  <title>دخول الموظفين - جامعة السلام الدولية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="long.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="long.css">
 </head>
+
 <body>
+  <div class="bg">
+    <div class="mesh"></div>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="grain"></div>
 
-<div class="hero">
-    <div class="hero-overlay"></div>
-
-    <div class="hero-shape hero-shape-1"></div>
-    <div class="hero-shape hero-shape-2"></div>
-
-    <header class="hero-header">
-        <div class="hero-uni">
-            <img src="aiu-logo.png" alt="شعار جامعة السلام الدولية" class="hero-logo">
-            <div class="hero-uni-text">
-                <div class="uni-name">جامعة السلام الدولية</div>
-                <div class="uni-sub">منظومة شؤون الطلبة والامتحانات</div>
-            </div>
+    <header class="top">
+      <div class="brand">
+        <div class="logoWrap">
+          <img src="aiu-logo.png" alt="شعار جامعة السلام الدولية" class="logo" />
+          <span class="ring"></span>
         </div>
+
+        <div class="brandText">
+          <div class="uni">جامعة السلام الدولية</div>
+          <div class="sub">منظومة شؤون الطلبة والامتحانات</div>
+        </div>
+      </div>
+
+      <div class="statusPill">
+        <span class="dot"></span>
+        <span>بوابة الموظفين</span>
+      </div>
     </header>
 
-    <main class="hero-main">
+    <main class="wrap">
+      <section class="intro">
+        <div class="kicker">AIU • Smart Portal</div>
+        <h1>لوحة دخول الموظفين</h1>
+        <p>
+          الرجاء استخدام حسابك الرسمي للدخول إلى نظام
+        </p>
 
-        <section class="hero-intro">
-            <h1>لوحة دخول الموظفين</h1>
-            <p>
-                الرجاء استخدام حسابك الرسمي للدخول إلى نظام
-                <strong>التسجيل، الجداول، والنتائج</strong>.
-            </p>
-            <ul>
-                <li>صلاحيات حسب نوع المستخدم</li>
-                <li>تسجيل ومراجعة بيانات الطلبة</li>
-                <li>إدارة المواد والفصول الدراسية</li>
-            </ul>
-        </section>
-
-        <section class="login-card">
-            <h2>دخول الموظفين</h2>
-
-            <label class="field-label" for="user">اسم المستخدم</label>
-            <div class="field-wrapper">
-                <input type="text" id="user" placeholder="أدخل اسم المستخدم">
+        <div class="features">
+          <div class="feat">
+            <span class="ic">🛡️</span>
+            <div>
+              <div class="t">صلاحيات ذكية</div>
+              <div class="d">حسب نوع المستخدم والدور</div>
             </div>
+          </div>
 
-            <label class="field-label" for="pass">كلمة المرور</label>
-            <div class="field-wrapper">
-                <input type="password" id="pass" placeholder="أدخل كلمة المرور">
+          <div class="feat">
+            <span class="ic">📚</span>
+            <div>
+              <div class="t">إدارة أكاديمية</div>
+              <div class="d">مواد • فصول • تقارير</div>
             </div>
+          </div>
 
-            <button class="login-btn" onclick="doLogin()">
-                دخول إلى النظام
-            </button>
-
-            <div id="msg" class="msg"></div>
-
-            <div class="login-footer-note">
-                هذا النظام مخصص للموظفين المخولين فقط.
+          <div class="feat">
+            <span class="ic">⚡</span>
+            <div>
+              <div class="t">أداء سريع</div>
+              <div class="d">تجربة دخول سلسة</div>
             </div>
-        </section>
+          </div>
+        </div>
 
+        <div class="miniNote">
+          <span class="shield">🔒</span>
+          هذا النظام مخصص للموظفين المخولين فقط.
+        </div>
+      </section>
+
+      <section class="card" id="card">
+        <div class="cardHead">
+          <div class="cardTitle">
+            <span class="badge">🔐</span>
+            <div>
+              <h2>دخول الموظفين</h2>
+              <p>أدخل البيانات ثم اضغط دخول</p>
+            </div>
+          </div>
+
+          <button class="soundBtn" id="soundBtn" type="button" title="تشغيل/إيقاف الأصوات">
+            🔊
+          </button>
+        </div>
+
+        <div class="form">
+          <label class="lbl" for="user">اسم المستخدم</label>
+          <div class="field">
+            <span class="fieldIc">👤</span>
+            <input type="text" id="user" placeholder="أدخل اسم المستخدم" autocomplete="username" />
+          </div>
+
+          <label class="lbl" for="pass">كلمة المرور</label>
+          <div class="field">
+            <span class="fieldIc">🔑</span>
+            <input type="password" id="pass" placeholder="أدخل كلمة المرور" autocomplete="current-password" />
+            <button class="eye" id="eyeBtn" type="button" aria-label="إظهار/إخفاء كلمة المرور">👁️</button>
+          </div>
+
+          <button class="btn" id="loginBtn" type="button" onclick="doLogin()">
+            <span class="btnIc" id="btnIc">➡️</span>
+            <span id="btnText">دخول إلى النظام</span>
+            <span class="spin" id="spin" aria-hidden="true"></span>
+          </button>
+
+          <div id="msg" class="msg" role="status" aria-live="polite"></div>
+
+          <div class="footerNote">
+            © جامعة السلام الدولية — وحدة نظم المعلومات — <span>م.أيوب الحوات</span>
+          </div>
+        </div>
+      </section>
     </main>
-
-    <footer class="hero-footer">
-        <span>© جامعة السلام الدولية</span>
-        <span class="dot"></span>
-        <span>وحدة نظم المعلومات</span>
-        <span class="dot"></span>
-        <span>م.أيوب الحوات</span>
-    </footer>
-
-</div>
+  </div>
 
 <script>
-    // 🔗 رابط الويب آب الأخير (نفس اللي في باقي الصفحات)
-    const API_URL = "https://script.google.com/macros/s/AKfycbxBv9r6idtpUbTiutFFo2cGrXxUUK-Np-vs2hvrLOfrPxx85QoSh6JeBYrNfFtUH-3BYg/exec";
+  // 🔗 رابط الويب آب
+  const API_URL = "https://script.google.com/macros/s/AKfycbwm9HtJcqNBq0eQ7fbJFaV_lrEx9EIMfsQTfhDYS7-GUc0X5LCmAZH3-UAE7myBqTVJOA/exec";
 
-    async function doLogin() {
-        const u   = document.getElementById('user').value.trim();
-        const p   = document.getElementById('pass').value.trim();
-        const msg = document.getElementById('msg');
+  // =============================
+  // ✅ نظام الأصوات (بدون ملفات)
+  // =============================
+  let audioEnabled = true;
+  let AC = null;
 
-        // تصفير الرسالة كل مرة
-        msg.textContent = "";
-        msg.classList.remove("msg-ok", "msg-error", "msg-info");
-
-        if (!u || !p) {
-            msg.textContent = "الرجاء إدخال اسم المستخدم وكلمة المرور";
-            msg.classList.add("msg-error");
-            return;
-        }
-
-        // 🔍 نعرض للمستخدم أننا قاعدين نحاول نسجل دخوله
-        msg.textContent = "⏳ جاري التحقق من بيانات الدخول...";
-        msg.classList.add("msg-info");
-
-        const url = `${API_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`;
-
-        try {
-            const res  = await fetch(url);
-            const text = await res.text();   // ناخد الرد نصي أولاً
-            console.log("RAW LOGIN RESPONSE:", text);
-
-            let data;
-            try {
-                data = JSON.parse(text);
-            } catch (e) {
-                msg.textContent = "خطأ في قراءة رد السيرفر (الرد ليس JSON).";
-                msg.classList.remove("msg-info");
-                msg.classList.add("msg-error");
-                return;
-            }
-
-            console.log("Login API Response Parsed:", data);
-
-            msg.classList.remove("msg-info");
-
-            if (data.status === "OK") {
-                // ✔ حفظ المستخدم والدور في localStorage بمفاتيح موحدة للنظام
-                const username = data.username || u;
-                const role     = data.role || "";
-
-                // مفاتيح عامة تستخدمها باقي الصفحات
-                localStorage.setItem("USERNAME", username);
-                localStorage.setItem("ROLE", role);
-
-                // نخلي مفاتيحك القديمة شغالة لو تبي تستخدمها مستقبلاً
-                localStorage.setItem("aiu_user", username);
-                localStorage.setItem("aiu_role", role);
-
-                msg.textContent = "✔ تم تسجيل الدخول بنجاح، جاري التحويل...";
-                msg.classList.add("msg-ok");
-
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 800);
-
-            } else {
-                // لو رجع شيء غير OK، نعرضه عالواجهة عشان نفهم
-                msg.textContent = data.message || "❌ بيانات الدخول غير صحيحة أو الدور غير مضبوط.";
-                msg.classList.add("msg-error");
-            }
-
-        } catch (err) {
-            console.error("LOGIN ERROR:", err);
-            msg.textContent = "🔌 خطأ في الاتصال — تأكد من الإنترنت أو رابط الـ API أو النشر.";
-            msg.classList.remove("msg-info");
-            msg.classList.add("msg-error");
-        }
+  function ensureAudio() {
+    if (!audioEnabled) return null;
+    if (!AC) {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      AC = new Ctx();
     }
+    // بعض المتصفحات تحتاج resume بعد gesture
+    if (AC.state === "suspended") AC.resume().catch(()=>{});
+    return AC;
+  }
+
+  function playTone({ type="sine", f=440, t=0.12, vol=0.18, attack=0.005, release=0.06, bendTo=null } = {}) {
+    const ac = ensureAudio();
+    if (!ac) return;
+
+    const o = ac.createOscillator();
+    const g = ac.createGain();
+
+    o.type = type;
+    o.frequency.setValueAtTime(f, ac.currentTime);
+
+    if (bendTo) {
+      o.frequency.exponentialRampToValueAtTime(bendTo, ac.currentTime + t);
+    }
+
+    g.gain.setValueAtTime(0.0001, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(vol, ac.currentTime + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + t + release);
+
+    o.connect(g);
+    g.connect(ac.destination);
+
+    o.start();
+    o.stop(ac.currentTime + t + release + 0.02);
+  }
+
+  function soundClick() {
+    // نقرة ناعمة + لمعة
+    playTone({ type:"triangle", f:720, t:0.06, vol:0.12, bendTo:520 });
+  }
+
+  function soundError() {
+    // خطأ: نغمة منخفضة + drop
+    playTone({ type:"sawtooth", f:220, t:0.12, vol:0.20, bendTo:140 });
+    setTimeout(()=>playTone({ type:"square", f:180, t:0.10, vol:0.14, bendTo:110 }), 80);
+  }
+
+  function soundSuccess() {
+    // نجاح: ثلاث نغمات سريعة (chime)
+    playTone({ type:"sine", f:523.25, t:0.10, vol:0.16 }); // C5
+    setTimeout(()=>playTone({ type:"sine", f:659.25, t:0.10, vol:0.16 }), 90); // E5
+    setTimeout(()=>playTone({ type:"sine", f:783.99, t:0.14, vol:0.18 }), 180); // G5
+  }
+
+  // زر الأصوات
+  const soundBtn = document.getElementById("soundBtn");
+  soundBtn.addEventListener("click", () => {
+    audioEnabled = !audioEnabled;
+    soundBtn.textContent = audioEnabled ? "🔊" : "🔇";
+    soundBtn.classList.toggle("muted", !audioEnabled);
+    // تهيئة
+    if (audioEnabled) { ensureAudio(); soundClick(); }
+  });
+
+  // تهيئة Audio عند أول تفاعل (حل مشاكل autoplay)
+  document.addEventListener("pointerdown", () => { ensureAudio(); }, { once: true });
+
+  // إظهار/إخفاء كلمة المرور
+  const eyeBtn = document.getElementById("eyeBtn");
+  eyeBtn.addEventListener("click", () => {
+    const pass = document.getElementById("pass");
+    const isPass = pass.type === "password";
+    pass.type = isPass ? "text" : "password";
+    eyeBtn.textContent = isPass ? "🙈" : "👁️";
+    soundClick();
+  });
+
+  // Enter للتسجيل
+  ["user","pass"].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") doLogin();
+    });
+  });
+
+  function setLoading(isLoading) {
+    const btn = document.getElementById("loginBtn");
+    const spin = document.getElementById("spin");
+    const btnIc = document.getElementById("btnIc");
+    const btnText = document.getElementById("btnText");
+
+    btn.disabled = isLoading;
+    btn.classList.toggle("loading", isLoading);
+    spin.style.display = isLoading ? "inline-block" : "none";
+    btnIc.textContent = isLoading ? "⏳" : "➡️";
+    btnText.textContent = isLoading ? "جاري التحقق..." : "دخول إلى النظام";
+  }
+
+  function setMsg(text, type) {
+    const msg = document.getElementById("msg");
+    msg.textContent = text || "";
+    msg.className = "msg";
+    if (type) msg.classList.add("msg-" + type);
+  }
+
+  function punchCard(kind) {
+    const card = document.getElementById("card");
+    card.classList.remove("shake","success");
+    // إعادة تشغيل الأنيميشن
+    void card.offsetWidth;
+    card.classList.add(kind);
+    setTimeout(()=>card.classList.remove(kind), 650);
+  }
+
+  async function doLogin() {
+    const u = document.getElementById("user").value.trim();
+    const p = document.getElementById("pass").value.trim();
+
+    setMsg("", "");
+    // ✅ صوت عند النقر
+    soundClick();
+
+    if (!u || !p) {
+      setMsg("الرجاء إدخال اسم المستخدم وكلمة المرور", "error");
+      punchCard("shake");
+      soundError();
+      return;
+    }
+
+    setLoading(true);
+    setMsg("⏳ جاري التحقق من بيانات الدخول...", "info");
+
+    const url = `${API_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`;
+
+    try {
+      const res  = await fetch(url);
+      const text = await res.text();
+
+      let data;
+      try { data = JSON.parse(text); }
+      catch (e) {
+        setLoading(false);
+        setMsg("خطأ في قراءة رد السيرفر (الرد ليس JSON).", "error");
+        punchCard("shake");
+        soundError();
+        return;
+      }
+
+      if (data.status === "OK") {
+        const username = data.username || u;
+        const role     = data.role || "";
+
+        localStorage.setItem("USERNAME", username);
+        localStorage.setItem("ROLE", role);
+        localStorage.setItem("aiu_user", username);
+        localStorage.setItem("aiu_role", role);
+
+        setMsg("✔ تم تسجيل الدخول بنجاح، جاري التحويل...", "ok");
+        punchCard("success");
+        soundSuccess();
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 850);
+
+      } else {
+        setLoading(false);
+        setMsg(data.message || "❌ بيانات الدخول غير صحيحة.", "error");
+        punchCard("shake");
+        soundError();
+      }
+
+    } catch (err) {
+      console.error("LOGIN ERROR:", err);
+      setLoading(false);
+      setMsg("🔌 خطأ في الاتصال — تأكد من الإنترنت أو رابط الـ API أو النشر.", "error");
+      punchCard("shake");
+      soundError();
+    }
+  }
 </script>
 </body>
 </html>
