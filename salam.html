@@ -4,83 +4,567 @@
     <meta charset="UTF-8">
     <title>جامعة السلام الدولية - نظام إدارة الجامعة</title>
 
-    <!-- مهم جداً للهواتف -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
 
-    <!-- ملف التنسيق الرئيسي -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <link rel="stylesheet" href="salam.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold-light: #fcd34d;
+            --gold-main: #fbbf24;
+            --gold-dark: #b45309;
+            --gold-glow: rgba(251, 191, 36, 0.35);
+            --bg-dark: #090b0f;
+            --card-bg: rgba(17, 22, 37, 0.85);
+            --text-gold: #f59e0b;
+        }
+
+        body {
+            background-color: var(--bg-dark) !important;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            background: radial-gradient(circle at 50% 50%, #111625 0%, #050608 100%) !important;
+            padding: 15px !important;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-card {
+            background: linear-gradient(145deg, rgba(20, 27, 45, 0.9), rgba(9, 11, 15, 0.95)) !important;
+            border: 2px solid var(--gold-main) !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 25px var(--gold-glow) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .side-card {
+            background: linear-gradient(145deg, rgba(15, 20, 35, 0.9), rgba(7, 8, 12, 0.95)) !important;
+            border: 1px solid rgba(251, 191, 36, 0.25) !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .title {
+            color: #ffffff !important;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            font-weight: 800 !important;
+        }
+
+        .badge {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-main)) !important;
+            color: #000000 !important;
+            font-weight: 800 !important;
+            box-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        .chip {
+            background: rgba(251, 191, 36, 0.08) !important;
+            color: var(--gold-light) !important;
+            border: 1px solid rgba(251, 191, 36, 0.3) !important;
+            font-weight: 600;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column; 
+            gap: 14px;
+            margin-top: 2rem;
+            width: 100%;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%; 
+            box-sizing: border-box;
+            font-size: 1.05rem;
+            cursor: pointer;
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(251, 191, 36, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+        }
+        .btn.primary:hover {
+            border-color: var(--gold-main) !important;
+            box-shadow: 0 0 20px rgba(29, 78, 216, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn.ghost {
+            background: rgba(255, 255, 255, 0.02) !important;
+            color: #ffffff !important;
+            border: 1.5px solid var(--gold-main) !important;
+        }
+        .btn.ghost:hover {
+            background: rgba(251, 191, 36, 0.1) !important;
+            box-shadow: 0 0 15px var(--gold-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn.schedules {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+            color: #000000 !important;
+            box-shadow: 0 4px 20px var(--gold-glow) !important;
+            border: 1px solid #fef08a !important;
+        }
+        .btn.schedules:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(245, 158, 11, 0.6) !important;
+            background: linear-gradient(135deg, #fbbf24, #b45309) !important;
+        }
+
+        .stat .num {
+            color: var(--gold-main) !important;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+            font-weight: 800;
+        }
+        .stat-icon-gold { color: var(--gold-main); font-size: 1.3rem; }
+
+        .blob1 { background: rgba(29, 78, 216, 0.25) !important; filter: blur(60px); }
+        .blob2 { background: rgba(180, 83, 9, 0.15) !important; filter: blur(60px); }
+
+        /* ===== الهيكلية الجديدة والاحترافية للجدول المطور ===== */
+        .schedule-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal-content-royal {
+            background: linear-gradient(145deg, #0e1322, #060912);
+            border: 2px solid var(--gold-main);
+            padding: 24px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 1050px;
+            text-align: right;
+            color: #fff;
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.25);
+            position: relative;
+            max-height: 92vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 32px;
+            cursor: pointer;
+            color: var(--gold-main);
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: #fff; }
+
+        .filter-area select {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0 25px 0;
+            border-radius: 10px;
+            background: #151d30;
+            color: #fff;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            font-family: 'Cairo', sans-serif;
+            outline: none;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        /* حاوية أيام الأسبوع الاحترافية */
+        .weekly-grid-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .day-row {
+            background: rgba(21, 29, 48, 0.4);
+            border: 1px solid rgba(251, 191, 36, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .day-header-title {
+            background: linear-gradient(135deg, var(--gold-dark), #e67e22);
+            color: #000;
+            font-weight: 900;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .lectures-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        /* كارت المحاضرة الأكاديمي المطور */
+        .lecture-card {
+            background: #111726;
+            border-right: 4px solid var(--gold-main);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .lecture-card:hover {
+            transform: translateY(-2px);
+            border-right-color: #fff;
+        }
+
+        .lecture-time {
+            font-size: 0.85rem;
+            color: var(--gold-light);
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            direction: ltr;
+            justify-content: flex-end;
+        }
+
+        .lecture-subject {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 4px 0;
+            line-height: 1.4;
+        }
+
+        .lecture-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 8px;
+        }
+
+        .lecture-room {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--gold-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .lecture-semester {
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #cbd5e1;
+        }
+
+        @media (max-width: 768px) {
+            .day-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .day-header-title {
+                padding: 8px;
+            }
+            .buttons { flex-direction: column; }
+        }
+    </style>
 </head>
 <body>
 
 <div class="hero">
-    <!-- عناصر خلفية متحركة -->
     <div class="blob blob1"></div>
     <div class="blob blob2"></div>
     <div class="blob blob3"></div>
-
-    <!-- طبقة تغطية خفيفة -->
     <div class="overlay"></div>
 
-    <!-- محتوى الصفحة -->
     <div class="container">
-
-        <!-- جزء النص والأزرار (نظام إدارة الجامعة) -->
         <div class="info-card">
             <p class="badge">جامعة السلام الدولية</p>
-            <h1 class="title">
-                نظام إدارة الجامعة
-            </h1>
-            <p class="sub">
-                بوابة موحدة للموظفين والطلاب لإدارة الخدمات الأكاديمية والطلابية بكل سهولة واحترافية.
+            <h1 class="title">نظام إدارة الجامعة</h1>
+            <p class="sub" style="color: #e2e8f0 !important;">
+              بوابة موحدة للموظفين والطلاب لإدارة الخدمات الأكاديمية والطلابية بكل سهولة واحترافية تصميم وتنفيذ م.أيوب الحوات.
             </p>
 
             <div class="details">
                 <div class="chip">خريف 2025 / 2026</div>
-                <!-- <div class="chip">بوابة الأكاديمية</div> -->
-                <div class="chip">تصميم وتنفيذ: م. أيوب الحوات</div>
+                <div class="chip"><i class="fa-solid fa-code"></i> م. أيوب الحوات</div>
             </div>
 
             <div class="buttons">
-                <!-- ✅ رجعناها مباشرة بدون قفل -->
                 <a href="login.html" class="btn primary" target="_blank">
-                    🔐 دخول الموظفين
+                    <i class="fa-solid fa-user-shield"></i> دخول الموظفين
                 </a>
                 <a href="enquiry.html" class="btn ghost" target="_blank">
-                    📘 استعلام الطالب
+                    <i class="fa-solid fa-graduation-cap"></i> استعلام الطالب
                 </a>
+                <button class="btn schedules" onclick="openStudentScheduleModal()">
+                    <i class="fa-solid fa-calendar-alt"></i> جداول المحاضرات والامتحانات
+                </button>
             </div>
         </div>
 
-        <!-- جزء كرت الجامعة (بوابة السلام الذكية) -->
         <div class="side-card">
-            <div class="logo-wrap">
+            <div class="logo-wrap" style="background: rgba(255,255,255,0.03); border-radius: 50%; padding: 12px; border: 1px solid rgba(251,191,36,0.25);">
                 <img src="aiu-logo.png" class="logo" alt="شعار الجامعة">
             </div>
-            <h2 class="side-title">بوابة السلام الذكية</h2>
-            <p class="side-text">
-                نظام إلكتروني يربط بين مكتب الدراسة والامتحانات وشؤون الطلبة ومنسقي الكليات وأعضاء هيئة التدريس،
-                لتقديم تجربة جامعية حديثة ومتطورة.
+            <h2 class="side-title" style="color: #ffffff !important;">بوابة السلام الذكية</h2>
+            <p class="side-text" style="color: #94a3b8 !important;">
+                نظام إلكتروني يربط بين مكتب الدراسة والامتحانات وشؤون الطلبة ومنسقي الكليات وأعضاء هيئة التدريس، لتقديم تجربة جامعية حديثة ومتطورة.
             </p>
 
             <div class="stats">
                 <div class="stat">
                     <span class="num">+20</span>
-                    <span class="label">برنامج أكاديمي</span>
+                    <span class="label" style="color: #94a3b8;">برنامج أكاديمي</span>
                 </div>
                 <div class="stat">
                     <span class="num">24/24</span>
-                    <span class="label">إتاحة النظام</span>
+                    <span class="label" style="color: #94a3b8;">إتاحة النظام</span>
                 </div>
                 <div class="stat">
-                    <span class="num">🔒</span>
-                    <span class="label">دخول آمن</span>
+                    <span class="num"><i class="fa-solid fa-shield-cat stat-icon-gold"></i></span>
+                    <span class="label" style="color: #94a3b8;">دخول آمن</span>
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
 
+<!-- النافذة المنبثقة للجدول المطور بتصميم الـ Weekly Timeline -->
+<div id="studentScheduleModal" class="schedule-modal">
+    <div class="modal-content-royal">
+        <span class="close-btn" onclick="closeStudentScheduleModal()">&times;</span>
+        <h2>📅 لوحة الخط الزمني للجداول الدراسية المعتمدة</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin: 0;">اختر الكلية لعرض جدول المحاضرات الأسبوعي الموزع تلقائياً وحسب التوقيت الحقيقي.</p>
+        
+        <div class="filter-area">
+            <select id="studentCollegeFilter" onchange="loadSchedulesForStudent()">
+                <option value="">🔄 جاري تحميل الكليات المعتمدة تلقائياً...</option>
+            </select>
+        </div>
+
+        <!-- الحاوية الأساسية للجدول الأسبوعي الذكي -->
+        <div id="weeklyGridContainer" class="weekly-grid-container">
+            <p style="text-align:center; color: #64748b; padding: 40px; font-weight: bold;">الرجاء تحديد الكلية من الأعلى لبناء وعرض لوحة الجدول الدراسي...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwgmunZv-wU-kBJqP6cbVk-A1sqoWd9TYqesW7FS0CWz5XRejQ23hOJ0QqpTwpjI0X8kQ/exec";
+const DAYS_ORDER = ["السبت", "الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس"];
+
+function openStudentScheduleModal() {
+    document.getElementById("studentScheduleModal").style.display = "flex";
+}
+
+function closeStudentScheduleModal() {
+    document.getElementById("studentScheduleModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById("studentScheduleModal");
+    if (event.target == modal) { modal.style.display = "none"; }
+}
+
+function parseCleanTime(timeValue) {
+    if (!timeValue) return "";
+    let str = String(timeValue).trim();
+    if (str.includes("T")) {
+        let timePart = str.split("T")[1];
+        if (timePart) {
+            let parts = timePart.split(":");
+            return `${parts[0]}:${parts[1]}`;
+        }
+    }
+    if (str.includes("GMT") || str.includes("1899")) {
+        let match = str.match(/(\d{2}):(\d{2}):\d{2}/);
+        if (match) return `${match[1]}:${match[2]}`;
+    }
+    let directMatch = str.match(/(\d{1,2}):(\d{2})/);
+    if (directMatch) {
+        return `${directMatch[1].padStart(2, '0')}:${directMatch[2]}`;
+    }
+    return str;
+}
+
+function detectCollegeFromRow(rowItem) {
+    if (!rowItem) return "عام";
+    if (typeof rowItem === 'object' && !Array.isArray(rowItem)) {
+        if (rowItem.college) return String(rowItem.college).trim();
+        if (rowItem.collegeName) return String(rowItem.collegeName).trim();
+    }
+    if (Array.isArray(rowItem)) { return String(rowItem[8] || "عام").trim(); }
+    return "عام";
+}
+
+async function loadCollegesDynamic() {
+    const colSelect = document.getElementById("studentCollegeFilter");
+    try {
+        const res = await fetch(`${API_URL}?action=getCollegesAndCourses&_t=${Date.now()}`);
+        const data = await res.json();
+        const colleges = (data && data.colleges) ? data.colleges : [];
+        
+        if (!colleges || colleges.length === 0) {
+            colSelect.innerHTML = '<option value="">⚠️ لا توجد كليات مسجلة حالياً في الشيت</option>';
+            return;
+        }
+        
+        let htmlOptions = '<option value="">-- اضغط هنا واختر الكلية لبناء جدولها الأسبوعي فوراً --</option>';
+        colleges.forEach(col => {
+            let cleanCol = String(col).trim();
+            htmlOptions += `<option value="${cleanCol}">${cleanCol}</option>`;
+        });
+        colSelect.innerHTML = htmlOptions;
+    } catch (err) {
+        console.error(err);
+        colSelect.innerHTML = '<option value="">❌ فشل جلب الكليات المعتمدة</option>';
+    }
+}
+
+async function loadSchedulesForStudent() {
+    const selectedCollege = document.getElementById("studentCollegeFilter").value;
+    const container = document.getElementById("weeklyGridContainer");
+    
+    if (!selectedCollege) {
+        container.innerHTML = `<p style="text-align:center; color: #64748b; padding: 40px; font-weight: bold;">الرجاء تحديد الكلية من الأعلى لبناء وعرض لوحة الجدول الدراسي...</p>`;
+        return;
+    }
+    
+    container.innerHTML = `<p style="text-align:center; color: var(--gold-main); padding: 40px; font-weight: bold;">🔄 جاري مصفوفة وجدولة البيانات طبقا لأيام الأسبوع...</p>`;
+    
+    try {
+        const res = await fetch(`${API_URL}?action=readSchedules&_t=${Date.now()}`);
+        const rawData = await res.json();
+        const allSchedules = Array.isArray(rawData) ? rawData : (rawData.data || rawData.schedules || []);
+        
+        const filtered = allSchedules.filter(s => {
+            let actualCollege = detectCollegeFromRow(s);
+            return actualCollege.trim().toLowerCase() === selectedCollege.trim().toLowerCase();
+        });
+        
+        if (filtered.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color: #f59e0b; padding: 40px; font-weight: bold;">⚠️ لم يتم إدراج أو اعتماد أي مواعيد دراسية لهذه الكلية بعد من قبل المنسق.</p>`;
+            return;
+        }
+
+        // تجميع وتصنيف البيانات حسب أيام الأسبوع المحددة
+        let indexedByDay = { "السبت":[], "الأحد":[], "الإثنين":[], "الثلاثاء":[], "الأربعاء":[], "الخميس":[] };
+        
+        filtered.forEach(s => {
+            let cCode = '', cName = '', day = 'السبت', rawStart = '', rawEnd = '', room = '', semester = '', instructor = '';
+            
+            if (Array.isArray(s)) {
+                cCode = s[0] || ''; cName = s[1] || ''; day = s[2] || 'السبت';
+                rawStart = s[3] || ''; rawEnd = s[4] || ''; room = s[5] || '';
+                semester = s[7] || ''; instructor = s[10] || 'عضو هيئة تدريس';
+            } else {
+                cCode = s.courseCode || ''; cName = s.courseName || ''; day = s.day || 'السبت';
+                rawStart = s.startTime || ''; rawEnd = s.endTime || ''; room = s.room || '';
+                semester = s.semester || ''; instructor = s.instructor || s.teacher || 'عضو هيئة تدريس';
+            }
+            
+            let cleanDay = day.trim();
+            if (indexedByDay[cleanDay]) {
+                indexedByDay[cleanDay].push({ cCode, cName, rawStart, rawEnd, room, semester, instructor });
+            }
+        });
+
+        container.innerHTML = ""; // مسح الحاوية للبدء بالرسم الاحترافي
+
+        // بناء صفوف الأيام بالترتيب الأكاديمي الصحيح
+        DAYS_ORDER.forEach(dayName => {
+            const lectures = indexedByDay[dayName];
+            if (lectures.length === 0) return; // عدم عرض اليوم إذا كان فارغاً من المحاضرات
+
+            // ترتيب محاضرات نفس اليوم تصاعدياً بناءً على وقت البداية
+            lectures.sort((a, b) => String(a.rawStart).localeCompare(String(b.rawStart)));
+
+            const dayRow = document.createElement("div");
+            dayRow.className = "day-row";
+
+            let lecturesHtml = "";
+            lectures.forEach(lec => {
+                const start = parseCleanTime(lec.rawStart);
+                const end = parseCleanTime(lec.rawEnd);
+                
+                lecturesHtml += `
+                    <div class="lecture-card">
+                        <div class="lecture-time">
+                            <span>${start} - ${end}</span> <i class="fa-regular fa-clock"></i>
+                        </div>
+                        <div class="lecture-subject">${lec.cName}</div>
+                        <div class="lecture-semester"><i class="fa-solid fa-graduation-cap"></i> ${lec.cCode} | ${lec.semester}</div>
+                        <div class="lecture-meta">
+                            <span style="font-weight:500;"><i class="fa-solid fa-user-tie"></i> ${lec.instructor}</span>
+                            <span class="lecture-room"><i class="fa-solid fa-door-open"></i> ${lec.room || '---'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            dayRow.innerHTML = `
+                <div class="day-header-title">
+                    <i class="fa-solid fa-calendar-day"></i>
+                    <span>${dayName}</span>
+                </div>
+                <div class="lectures-timeline">
+                    ${lecturesHtml}
+                </div>
+            `;
+            container.appendChild(dayRow);
+        });
+
+    } catch (e) {
+        console.error(e);
+        container.innerHTML = `<p style="text-align:center; color: #ef4444; padding: 40px; font-weight: bold;">❌ فشل جلب وعرض لوحة الجداول حالياً، يرجى إعادة المحاولة.</p>`;
+    }
+}
+
+window.onload = async function() {
+    await loadCollegesDynamic();
+};
+</script>
 </body>
 </html>

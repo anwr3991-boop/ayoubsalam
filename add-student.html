@@ -2,10 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>إضافة طالب - جامعة السلام الدولية</title>
+  <title>إدارة الطلاب - جامعة السلام الدولية</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- خط كايرو -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
 
   <style>
@@ -124,6 +123,71 @@
       color: #64748b;
     }
 
+    .main-navigation-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+      background: #f1f5f9;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .nav-btn {
+      padding: 14px 10px;
+      border-radius: 8px;
+      font-family: "Cairo", sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+      transition: all 0.25s ease;
+      text-align: center;
+      box-shadow: none;
+    }
+
+    .nav-btn.active-tab {
+      background: #003F7C;
+      color: #fff;
+      border-color: #003F7C;
+      box-shadow: 0 6px 15px rgba(0, 63, 124, 0.2);
+    }
+
+    .nav-btn.secondary-tab {
+      background: #fff;
+      color: #0f172a;
+      border-color: #cbd5e1;
+    }
+
+    .nav-btn.secondary-tab:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    .edit-redirect-box {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .edit-redirect-box p {
+      color: #334155;
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+
+    .btn-redirect {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white;
+      box-shadow: 0 8px 20px rgba(3, 105, 161, 0.3);
+    }
+    .btn-redirect:hover {
+      background: linear-gradient(135deg, #38bdf8, #0369a1);
+      box-shadow: 0 10px 25px rgba(3, 105, 161, 0.4);
+    }
+
     .row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -154,6 +218,14 @@
       border-color: #003F7C;
       box-shadow: 0 0 7px rgba(0,63,124,0.4);
       outline: none;
+    }
+
+    input[readonly] {
+      background-color: #f1f5f9;
+      color: #64748b;
+      border-color: #e2e8f0;
+      cursor: not-allowed;
+      font-weight: bold;
     }
 
     select:invalid {
@@ -194,7 +266,6 @@
       min-height: 1.2rem;
     }
 
-    /* مؤثر "جاري حفظ بيانات الطالب..." */
     .loading {
       display: none;
       margin-top: 6px;
@@ -207,15 +278,8 @@
       display: block;
     }
 
-    /* إخفاء صندوق الرد الخام حتى ما يطلع الشريط الأسود */
     #raw {
       display: none;
-    }
-
-    .debug-label {
-      margin-top: 6px;
-      font-size: 0.75rem;
-      color: #64748b;
     }
 
     .side-card {
@@ -315,23 +379,11 @@
     }
 
     @media (max-width: 520px) {
-      .hero {
-        padding: 20px 10px;
-      }
-
-      .form-card {
-        padding: 18px 14px 18px;
-      }
-
-      .row {
-        grid-template-columns: 1fr;
-      }
-
-      button {
-        width: 100%;
-        justify-content: center;
-        text-align: center;
-      }
+      .hero { padding: 20px 10px; }
+      .form-card { padding: 18px 14px 18px; }
+      .row { grid-template-columns: 1fr; }
+      button, .nav-btn { width: 100%; justify-content: center; text-align: center; }
+      .main-navigation-buttons { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -346,60 +398,85 @@
 
   <div class="shell">
 
-    <!-- الكرت الجانبي -->
     <div class="side-card">
       <div class="logo-wrap">
         <img src="aiu-logo.png" alt="شعار جامعة السلام الدولية">
       </div>
       <div class="side-title">نظام إدارة الجامعة - بوابة التسجيل</div>
       <div class="side-text">
-        من خلال هذه الواجهة يمكنك تسجيل الطلاب الجدد وربطهم بالكلية والتخصص
-        ضمن منظومة جامعة السلام الذكية.
+        من خلال هذه الواجهة يمكنك تسجيل الطلاب الجدد وربطهم بالكلية والتخصص ضمن منظومة جامعة السلام الذكية.
       </div>
 
       <div class="bullets">
         <span><span class="dot"></span>تخزين آمن داخل قاعدة البيانات</span>
         <span><span class="dot"></span>تكامل مباشر مع استعلام الطالب</span>
         <span><span class="dot"></span>تصميم متجاوب مع الجوال والكمبيوتر</span>
+        <span><span class="dot"></span>تصميم وتنفيذ م.أيوب الحوات</span>
       </div>
     </div>
 
-    <!-- كرت الفورم -->
     <div class="form-card">
-      <h2>إضافة طالب</h2>
-      <p class="subtitle">أدخل بيانات الطالب بدقة، ثم اضغط حفظ ليتم إرسالها مباشرة إلى قاعدة البيانات.</p>
-
-      <div class="row">
-        <div>
-          <label for="sid">رقم القيد</label>
-          <input type="number" id="sid" placeholder="مثال: 20251234">
-        </div>
-        <div>
-          <label for="sname">اسم الطالب</label>
-          <input type="text" id="sname" placeholder="الاسم الثلاثي">
-        </div>
+      
+      <div class="main-navigation-buttons">
+        <button class="nav-btn active-tab" onclick="toggleView('add-view', this)">➕ إضافة طالب جديد</button>
+        <button class="nav-btn secondary-tab" onclick="toggleView('edit-view', this)">📝 تعديل بيانات الطلبه</button>
       </div>
 
-      <div class="row">
-        <div>
-          <label for="college">الكلية</label>
-          <!-- تتعبّى من جدول Courses عبر getColleges -->
-          <select id="college" required>
-            <option value="" disabled selected hidden>اختر الكلية</option>
-          </select>
+      <div id="addViewSection">
+        <h2>إضافة طالب</h2>
+        <p class="subtitle">أدخل بيانات الطالب بدقة، ثم اضغط حفظ ليتم إرسالها مباشرة إلى قاعدة البيانات.</p>
+
+        <div class="row">
+          <div>
+            <label for="sid">رقم القيد</label>
+            <input type="number" id="sid" placeholder="مثال: 20251234">
+          </div>
+          <div>
+            <label for="sname">اسم الطالب</label>
+            <input type="text" id="sname" placeholder="الاسم الثلاثي">
+          </div>
         </div>
-        <div>
-          <label for="dep">التخصص</label>
-          <input type="text" id="dep" placeholder="مثال: الصيدلة السريرية">
+
+        <div class="row">
+          <div>
+            <label for="college">الكلية</label>
+            <select id="college" required>
+              <option value="" disabled selected hidden>اختر الكلية</option>
+            </select>
+          </div>
+          <div>
+            <label for="dep">التخصص</label>
+            <input type="text" id="dep" placeholder="مثال: الصيدلة السريرية">
+          </div>
         </div>
+
+        <div class="row">
+          <div>
+            <label for="status">حالة الطالب</label>
+            <input type="text" id="status" value="نظامي" readonly>
+          </div>
+          <div>
+            <label for="semester">الفصل الدراسي الحالي</label>
+            <input type="text" id="semester" value="ربيع 2026" readonly>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button onclick="saveStudent()">حفظ الطالب</button>
+        </div>
+        
+        <div id="loading" class="loading">⏳ جاري حفظ بيانات الطالب...</div>
       </div>
 
-      <div class="actions">
-        <button onclick="saveStudent()">حفظ الطالب</button>
+      <div id="editViewSection" style="display: none;">
+        <h2>تعديل بيانات الطلبة</h2>
+      
+        <div class="edit-redirect-box">
+          <a href="edit-student.html" style="text-decoration: none;">
+            <button class="btn-redirect" type="button">🔄 فتح صفحة تعديل بيانات الطلبه</button>
+          </a>
+        </div>
       </div>
-
-      <!-- حالة الانتظار -->
-      <div id="loading" class="loading">⏳ جاري حفظ بيانات الطالب...</div>
 
       <p id="msg" class="msg"></p>
       <pre id="raw"></pre>
@@ -409,11 +486,33 @@
 </div>
 
 <script>
-  // نفس رابط الـ API الرئيسي (نفسه في بقية الصفحات)
-  const API_URL = "https://script.google.com/macros/s/AKfycbwm9HtJcqNBq0eQ7fbJFaV_lrEx9EIMfsQTfhDYS7-GUc0X5LCmAZH3-UAE7myBqTVJOA/exec";
-
-  // عند فتح الصفحة نحمّل الكليات من جدول Courses
+  const API_URL = "https://script.google.com/macros/s/AKfycbwgmunZv-wU-kBJqP6cbVk-A1sqoWd9TYqesW7FS0CWz5XRejQ23hOJ0QqpTwpjI0X8kQ/exec";
+                     
   document.addEventListener("DOMContentLoaded", loadColleges);
+
+  function toggleView(viewName, element) {
+    const addSection = document.getElementById("addViewSection");
+    const editSection = document.getElementById("editViewSection");
+    const buttons = document.querySelectorAll(".nav-btn");
+    
+    document.getElementById("msg").textContent = "";
+
+    buttons.forEach(btn => {
+      btn.classList.remove("active-tab");
+      btn.classList.add("secondary-tab");
+    });
+
+    element.classList.remove("secondary-tab");
+    element.classList.add("active-tab");
+
+    if (viewName === "add-view") {
+      addSection.style.display = "block";
+      editSection.style.display = "none";
+    } else {
+      addSection.style.display = "none";
+      editSection.style.display = "block";
+    }
+  }
 
   async function loadColleges() {
     const select = document.getElementById("college");
@@ -432,7 +531,6 @@
         return;
       }
 
-      // نتوقع: { colleges: ["كلية الصيدلة", "كلية الحاسوب", ...] }
       if (Array.isArray(data.colleges)) {
         while (select.options.length > 1) {
           select.remove(1);
@@ -455,13 +553,15 @@
   }
 
   async function saveStudent() {
-    const id      = document.getElementById('sid').value.trim();
-    const name    = document.getElementById('sname').value.trim();
-    const college = document.getElementById('college').value.trim();
-    const dep     = document.getElementById('dep').value.trim();
-    const msg     = document.getElementById('msg');
-    const raw     = document.getElementById('raw');
-    const loading = document.getElementById('loading');
+    const id       = document.getElementById('sid').value.trim();
+    const name     = document.getElementById('sname').value.trim();
+    const college  = document.getElementById('college').value.trim();
+    const dep      = document.getElementById('dep').value.trim();
+    const status   = document.getElementById('status').value.trim(); 
+    const semester = document.getElementById('semester').value.trim(); 
+    const msg      = document.getElementById('msg');
+    const raw      = document.getElementById('raw');
+    const loading  = document.getElementById('loading');
 
     msg.textContent = "";
     raw.textContent = "";
@@ -473,18 +573,17 @@
       return;
     }
 
-    const url =
-      `${API_URL}?action=addStudent` +
-      `&id=${encodeURIComponent(id)}` +
-      `&name=${encodeURIComponent(name)}` +
-      `&college=${encodeURIComponent(college)}` +
-      `&dep=${encodeURIComponent(dep)}`;
+    let currentUser = localStorage.getItem("username") || localStorage.getItem("user") || sessionStorage.getItem("username") || "مستخدم غير معروف";
 
     try {
-      // إظهار حالة الانتظار
       loading.classList.add("show");
 
-      const res  = await fetch(url);
+      const fetchUrl = `${API_URL}?action=addStudent`;
+
+      // الرابط يرسل قيمة الفصل الدراسي إلى متغير semester_val المباشر والمطابق للـ سكريبت
+      const fullUrl = `${fetchUrl}&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&college=${encodeURIComponent(college)}&dep=${encodeURIComponent(dep)}&status=${encodeURIComponent(status)}&user=${encodeURIComponent(currentUser)}&semester_val=${encodeURIComponent(semester)}`;
+
+      const res  = await fetch(fullUrl);
       const text = await res.text();
       raw.textContent = text;
 
@@ -494,7 +593,7 @@
       } catch (e) {
         loading.classList.remove("show");
         msg.style.color = "red";
-        msg.textContent = "الرد من السيرفر ليس JSON، راجع Code.gs أو النشر.";
+        msg.textContent = "الرد من السيرفر ليس JSON، راجع البنية الخلفية.";
         return;
       }
 
@@ -502,18 +601,13 @@
 
       if (data.status === "OK") {
         msg.style.color = "green";
-        msg.textContent = "✔ تم حفظ الطالب بنجاح";
+        msg.textContent = "✔ تم حفظ الطالب بنجاح وتوثيق الحساب الفعلي";
         document.getElementById('sid').value     = "";
         document.getElementById('sname').value   = "";
         document.getElementById('college').value = "";
         document.getElementById('dep').value     = "";
       }
-      // الحالات المحتملة لوجود الطالب مسبقاً
-      else if (
-        data.status === "STUDENT_EXISTS" ||
-        data.status === "STUDENT_EXISIS" ||
-        data.status === "EXISTS"
-      ) {
+      else if (data.status === "STUDENT_EXISTS" || data.status === "STUDENT_EXISIS" || data.status === "EXISTS") {
         msg.style.color = "red";
         msg.textContent = "⚠ رقم القيد هذا مسجّل مسبقًا.";
       }

@@ -5,7 +5,7 @@
   <title>استعلام رقم القيد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=300;500;700;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -448,8 +448,8 @@
       background: radial-gradient(circle at 0 0, rgba(34,197,94,0.2), rgba(15,23,42,0.99));
       border: 1px solid rgba(34,197,94,0.5);
       box-shadow:
-        0 10px 22px rgba(15,23,42,0.95),
-        0 0 0 1px rgba(15,23,42,1);
+        0 10px 22px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(15, 23, 42, 1);
     }
 
     .money p {
@@ -462,6 +462,18 @@
 
     .money strong { font-weight: 800; color: #bbf7d0; }
 
+    .lock-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      background: radial-gradient(circle at 0 0, rgba(239, 68, 68, 0.15), rgba(15, 23, 42, 0.98));
+      border: 1px dashed var(--danger);
+      text-align: center;
+      color: #fca5a5;
+      font-size: 0.85rem;
+      animation: fadeUp 0.35s ease-out;
+    }
+
     .courses-title {
       font-size: 0.88rem;
       margin-top: 12px;
@@ -472,16 +484,16 @@
 
     .course {
       margin-top: 10px;
-      padding: 10px 12px;
+      padding: 12px 14px;
       border-radius: 16px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(244, 181, 71, 0.45);
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
+      gap: 8px;
       animation: fadeUp 0.35s ease-out;
       backdrop-filter: blur(10px);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
     }
 
     .course:hover {
@@ -489,6 +501,12 @@
       transition: 0.25s;
       box-shadow: 0 12px 24px rgba(244, 181, 71, 0.55);
       border-color: var(--gold);
+    }
+
+    .course-main-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .course-icon { font-size: 1.3rem; color: var(--gold); }
@@ -504,6 +522,35 @@
     }
 
     .course .name { font-size: 0.9rem; color: #f9fafb; font-weight: 600; }
+
+    /* التعديل الجديد: عرض التفاصيل في سطر واحد مرن ومتجاوب */
+    .course-meta-details {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px rgba(255, 255, 255, 0.08) solid;
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      white-space: nowrap;
+    }
+
+    .meta-item span.label { color: #94a3b8; }
+    .meta-item span.val { font-weight: 600; color: #f8fafc; }
 
     @keyframes fadeUp {
       0%   { opacity: 0; transform: translateY(6px); }
@@ -531,14 +578,14 @@
     .semester-pill-btn {
       padding: 7px 18px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.85);
-      background: radial-gradient(circle at top, rgba(15,23,42,1), rgba(15,23,42,0.96));
+      border: 1px solid rgba(148, 163, 184, 0.85);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
       color: #e5e7eb;
       font-size: 0.9rem;
       font-weight: 700;
       box-shadow:
-        0 8px 20px rgba(15,23,42,0.9),
-        0 0 0 1px rgba(15,23,42,1);
+        0 8px 20px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 1);
       min-width: 170px;
       justify-content: space-between;
     }
@@ -547,10 +594,10 @@
       position: absolute;
       top: 120%;
       min-width: 160px;
-      background: rgba(15,23,42,0.98);
+      background: rgba(15, 23, 42, 0.98);
       border-radius: 14px;
-      border: 1px solid rgba(148,163,184,0.8);
-      box-shadow: 0 16px 32px rgba(15,23,42,0.95);
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.95);
       padding: 4px;
       display: none;
       z-index: 20;
@@ -566,7 +613,7 @@
       cursor: pointer;
       white-space: nowrap;
     }
-    .semester-option:hover { background: rgba(55,65,81,0.85); }
+    .semester-option:hover { background: rgba(55, 65, 81, 0.85); }
 
     .print-header { display: none; }
 
@@ -584,6 +631,8 @@
       body::before, body::after, .orb { display: none !important; }
       .wrapper { max-width: 100%; padding: 0; }
       .page-header { max-width: 100%; margin-bottom: 10px; }
+      .course-meta-details { flex-direction: column; align-items: flex-start; }
+      .meta-item { width: 100%; }
     }
 
     @media (max-width: 460px) {
@@ -591,22 +640,16 @@
       button { width: 100%; }
     }
 
-    /* احترام تقليل الحركة */
     @media (prefers-reduced-motion: reduce){
       * { animation: none !important; transition: none !important; }
     }
 
-    /* =========================================
-       ✅ طباعة مرتبة كتقرير (هذا فقط للطباعة)
-       ========================================= */
     @media print {
       @page { size: A4; margin: 12mm; }
-
       body{
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-
       html, body{ height: auto !important; }
       body{
         background: #fff !important;
@@ -616,16 +659,7 @@
         padding: 0 !important;
         margin: 0 !important;
       }
-
-      body::before, body::after,
-      .orb, .card-glow-line,
-      .note,
-      .actions-row,
-      .input-label,
-      #sid{
-        display: none !important;
-      }
-
+      body::before, body::after, .orb, .card-glow-line, .note, .actions-row, .input-label, #sid{ display: none !important; }
       .print-header{
         display: flex !important;
         justify-content: space-between !important;
@@ -638,137 +672,31 @@
         font-size: 12px !important;
         font-weight: 700 !important;
       }
-
-      .page-header{
-        background: transparent !important;
-        border: 0 !important;
-        box-shadow: none !important;
-        backdrop-filter: none !important;
-        padding: 0 !important;
-        margin: 0 0 8px 0 !important;
-        color: #000 !important;
-      }
+      .page-header{ background: transparent !important; border: 0 !important; box-shadow: none !important; backdrop-filter: none !important; padding: 0 !important; margin: 0 0 8px 0 !important; color: #000 !important; }
       .page-header::after{ display:none !important; }
-
-      .page-texts .uni-name,
-      .page-texts .uni-sub,
-      .page-pill{
-        color:#000 !important;
-        border-color:#000 !important;
-        background: transparent !important;
-        box-shadow:none !important;
-      }
-
-      .wrapper{
-        max-width: none !important;
-        width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-
-      .card{
-        background: #fff !important;
-        color: #000 !important;
-        border: 0 !important;
-        box-shadow: none !important;
-        backdrop-filter: none !important;
-        padding: 0 !important;
-        border-radius: 0 !important;
-        overflow: visible !important;
-      }
-
-      .logo-box{
-        width: 52px !important;
-        height: 52px !important;
-        margin: 0 auto 6px !important;
-        box-shadow: none !important;
-        border: 1px solid #000 !important;
-        background: #fff !important;
-        animation: none !important;
-      }
-
-      h2{
-        color:#000 !important;
-        margin: 0 0 4px 0 !important;
-        font-size: 16px !important;
-      }
-      .subtitle{
-        color:#000 !important;
-        margin: 0 0 10px 0 !important;
-        font-size: 12px !important;
-      }
-
-      .student-id-print{
-        display: block !important;
-        color:#000 !important;
-        font-size: 13px !important;
-        margin: 6px 0 10px !important;
-      }
-
-      .result{
-        color:#000 !important;
-        border-top: 0 !important;
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-      }
-
-      .money{
-        background: #fff !important;
-        border: 1px solid #000 !important;
-        box-shadow: none !important;
-        margin: 8px 0 10px !important;
-        padding: 8px 10px !important;
-      }
-      .money p{
-        font-size: 12px !important;
-        margin: 4px 0 !important;
-        color:#000 !important;
-      }
+      .page-texts .uni-name, .page-texts .uni-sub, .page-pill{ color:#000 !important; border-color:#000 !important; background: transparent !important; box-shadow:none !important; }
+      .wrapper{ max-width: none !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .card{ background: #fff !important; color: #000 !important; border: 0 !important; box-shadow: none !important; backdrop-filter: none !important; padding: 0 !important; border-radius: 0 !important; overflow: visible !important; }
+      .logo-box{ width: 52px !important; height: 52px !important; margin: 0 auto 6px !important; box-shadow: none !important; border: 1px solid #000 !important; background: #fff !important; animation: none !important; }
+      h2{ color:#000 !important; margin: 0 0 4px 0 !important; font-size: 16px !important; }
+      .subtitle{ color:#000 !important; margin: 0 0 10px 0 !important; font-size: 12px !important; }
+      .student-id-print{ display: block !important; color:#000 !important; font-size: 13px !important; margin: 6px 0 10px !important; }
+      .result{ color:#000 !important; border-top: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+      .money{ background: #fff !important; border: 1px solid #000 !important; box-shadow: none !important; margin: 8px 0 10px !important; padding: 8px 10px !important; }
+      .money p{ font-size: 12px !important; margin: 4px 0 !important; color:#000 !important; }
       .money strong{ color:#000 !important; }
-
       .semester-filter{ display:none !important; }
-
-      .courses-title{
-        color:#000 !important;
-        margin: 10px 0 6px !important;
-        font-size: 13px !important;
-        font-weight: 800 !important;
-        text-align: right !important;
-      }
-
+      .courses-title{ color:#000 !important; margin: 10px 0 6px !important; font-size: 13px !important; font-weight: 800 !important; text-align: right !important; }
       #coursesContainer{ margin-top: 4px !important; }
-
-      .course{
-        background: #fff !important;
-        border: 1px solid #000 !important;
-        box-shadow: none !important;
-        backdrop-filter: none !important;
-        border-radius: 8px !important;
-        padding: 6px 10px !important;
-        margin: 6px 0 !important;
-        gap: 10px !important;
-        page-break-inside: avoid !important;
-      }
+      .course{ background: #fff !important; border: 1px solid #000 !important; box-shadow: none !important; backdrop-filter: none !important; border-radius: 8px !important; padding: 6px 10px !important; margin: 6px 0 !important; gap: 4px !important; page-break-inside: avoid !important; }
       .course-icon{ display:none !important; }
-
-      .course .code{
-        background: transparent !important;
-        border: 0 !important;
-        color:#000 !important;
-        padding: 0 !important;
-        font-size: 12px !important;
-        font-weight: 800 !important;
-        min-width: 70px;
-      }
-      .course .name{
-        color:#000 !important;
-        font-size: 12px !important;
-        font-weight: 700 !important;
-      }
-
-      .page-header, .money, #coursesContainer, .course{
-        page-break-inside: avoid !important;
-      }
+      .course .code{ background: transparent !important; border: 0 !important; color:#000 !important; padding: 0 !important; font-size: 12px !important; font-weight: 800 !important; min-width: 70px; }
+      .course .name{ color:#000 !important; font-size: 12px !important; font-weight: 700 !important; }
+      .course-meta-details { border-top: 1px solid #000 !important; color: #000 !important; margin-top: 2px !important; padding-top: 4px !important; font-size: 11px !important; flex-direction: row !important; }
+      .meta-item { background: transparent !important; border: 0 !important; padding: 0 !important; }
+      .meta-item span.label { color: #555 !important; }
+      .meta-item span.val { color: #000 !important; font-weight: bold !important; }
+      .page-header, .money, #coursesContainer, .course{ page-break-inside: avoid !important; }
     }
   </style>
 </head>
@@ -793,7 +721,6 @@
           <div class="uni-sub">بوابة استعلام المواد للطلبة</div>
         </div>
       </div>
-
       <div class="page-header-right">
         <div class="page-pill">م. أيوب الحوات</div>
       </div>
@@ -804,7 +731,6 @@
 
     <div class="card">
       <div class="card-glow-line"></div>
-
       <div class="logo-box">
         <img src="aiu-logo.png" alt="شعار الجامعة">
       </div>
@@ -840,14 +766,8 @@
   </div>
 
 <script>
-  /* =================================================
-     ✅ أصوات زي ما تبي:
-     1) صوت الضغط على استعلام (قوي)
-     2) صوت خطأ قوي لو القيد غلط/مش موجود/النظام مقفول/مش مدخل رقم
-     3) صوت نجاح قوي بعد ظهور المواد
-     ================================================= */
-
   let _audioCtx = null;
+  let IS_LATEST_SEMESTER_LOCKED = false; 
 
   function getAudioCtx() {
     if (_audioCtx) return _audioCtx;
@@ -865,131 +785,61 @@
     document.removeEventListener("keydown", unlockAudioOnce);
   }
 
-  // ✅ صوت (ضغط استعلام) قوي
   async function playLookupChime() {
-    const ctx = getAudioCtx();
-    if (!ctx) return;
+    const ctx = getAudioCtx(); if (!ctx) return;
     try { if (ctx.state === "suspended") await ctx.resume(); } catch (e) { return; }
-
     const now = ctx.currentTime;
-
     const comp = ctx.createDynamicsCompressor();
-    comp.threshold.setValueAtTime(-18, now);
-    comp.knee.setValueAtTime(18, now);
-    comp.ratio.setValueAtTime(8, now);
-    comp.attack.setValueAtTime(0.003, now);
-    comp.release.setValueAtTime(0.18, now);
-
+    comp.threshold.setValueAtTime(-18, now); comp.knee.setValueAtTime(18, now); comp.ratio.setValueAtTime(8, now);
+    comp.attack.setValueAtTime(0.003, now); comp.release.setValueAtTime(0.18, now);
     const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.13, now + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-
-    comp.connect(gain);
-    gain.connect(ctx.destination);
-
-    const oscA = ctx.createOscillator();
-    oscA.type = "sine";
-    oscA.frequency.setValueAtTime(659.25, now);
-    oscA.connect(comp);
-    oscA.start(now);
-    oscA.stop(now + 0.10);
-
-    const oscB = ctx.createOscillator();
-    oscB.type = "triangle";
-    oscB.frequency.setValueAtTime(880.00, now + 0.11);
-    oscB.connect(comp);
-    oscB.start(now + 0.11);
-    oscB.stop(now + 0.22);
+    gain.gain.setValueAtTime(0.0001, now); gain.gain.exponentialRampToValueAtTime(0.13, now + 0.02); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+    comp.connect(gain); gain.connect(ctx.destination);
+    const oscA = ctx.createOscillator(); oscA.type = "sine"; oscA.frequency.setValueAtTime(659.25, now);
+    oscA.connect(comp); oscA.start(now); oscA.stop(now + 0.10);
+    const oscB = ctx.createOscillator(); oscB.type = "triangle"; oscB.frequency.setValueAtTime(880.00, now + 0.11);
+    oscB.connect(comp); oscB.start(now + 0.11); oscB.stop(now + 0.22);
   }
 
-  // ✅ صوت خطأ قوي (قيد غلط/مش موجود/الخ)
   async function playErrorChime() {
-    const ctx = getAudioCtx();
-    if (!ctx) return;
+    const ctx = getAudioCtx(); if (!ctx) return;
     try { if (ctx.state === "suspended") await ctx.resume(); } catch (e) { return; }
-
     const now = ctx.currentTime;
-
     const comp = ctx.createDynamicsCompressor();
-    comp.threshold.setValueAtTime(-16, now);
-    comp.knee.setValueAtTime(16, now);
-    comp.ratio.setValueAtTime(10, now);
-    comp.attack.setValueAtTime(0.002, now);
-    comp.release.setValueAtTime(0.22, now);
-
+    comp.threshold.setValueAtTime(-16, now); comp.knee.setValueAtTime(16, now); comp.ratio.setValueAtTime(10, now);
+    comp.attack.setValueAtTime(0.002, now); comp.release.setValueAtTime(0.22, now);
     const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
-
-    comp.connect(gain);
-    gain.connect(ctx.destination);
-
-    const o1 = ctx.createOscillator();
-    o1.type = "sawtooth";
-    o1.frequency.setValueAtTime(196.0, now);       // G3
-    o1.frequency.linearRampToValueAtTime(146.83, now + 0.14); // D3
-    o1.connect(comp);
-    o1.start(now);
-    o1.stop(now + 0.18);
-
-    const o2 = ctx.createOscillator();
-    o2.type = "square";
-    o2.frequency.setValueAtTime(110.0, now + 0.18); // A2
-    o2.connect(comp);
-    o2.start(now + 0.18);
-    o2.stop(now + 0.38);
+    gain.gain.setValueAtTime(0.0001, now); gain.gain.exponentialRampToValueAtTime(0.22, now + 0.01); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+    comp.connect(gain); gain.connect(ctx.destination);
+    const o1 = ctx.createOscillator(); o1.type = "sawtooth"; o1.frequency.setValueAtTime(196.0, now); o1.frequency.linearRampToValueAtTime(146.83, now + 0.14);
+    o1.connect(comp); o1.start(now); o1.stop(now + 0.18);
+    const o2 = ctx.createOscillator(); o2.type = "square"; o2.frequency.setValueAtTime(110.0, now + 0.18);
+    o2.connect(comp); o2.start(now + 0.18); o2.stop(now + 0.38);
   }
 
-  // ✅ صوت نجاح قوي بعد ظهور المواد
   async function playSuccessChime() {
-    const ctx = getAudioCtx();
-    if (!ctx) return;
+    const ctx = getAudioCtx(); if (!ctx) return;
     try { if (ctx.state === "suspended") await ctx.resume(); } catch (e) { return; }
-
     const now = ctx.currentTime;
-
     const comp = ctx.createDynamicsCompressor();
-    comp.threshold.setValueAtTime(-18, now);
-    comp.knee.setValueAtTime(18, now);
-    comp.ratio.setValueAtTime(8, now);
-    comp.attack.setValueAtTime(0.003, now);
-    comp.release.setValueAtTime(0.18, now);
-
+    comp.threshold.setValueAtTime(-18, now); comp.knee.setValueAtTime(18, now); comp.ratio.setValueAtTime(8, now);
+    comp.attack.setValueAtTime(0.003, now); comp.release.setValueAtTime(0.18, now);
     const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.03);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.62);
-
-    comp.connect(gain);
-    gain.connect(ctx.destination);
-
-    const osc1 = ctx.createOscillator();
-    osc1.type = "sine";
-    osc1.frequency.setValueAtTime(523.25, now);
-
-    const osc2 = ctx.createOscillator();
-    osc2.type = "triangle";
-    osc2.frequency.setValueAtTime(659.25, now + 0.18);
-
-    const osc3 = ctx.createOscillator();
-    osc3.type = "sine";
-    osc3.frequency.setValueAtTime(783.99, now + 0.36);
-
-    osc1.connect(comp);
-    osc2.connect(comp);
-    osc3.connect(comp);
-
-    osc1.start(now);           osc1.stop(now + 0.25);
-    osc2.start(now + 0.18);    osc2.stop(now + 0.43);
-    osc3.start(now + 0.36);    osc3.stop(now + 0.62);
+    gain.gain.setValueAtTime(0.0001, now); gain.gain.exponentialRampToValueAtTime(0.12, now + 0.03); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.62);
+    comp.connect(gain); gain.connect(ctx.destination);
+    const osc1 = ctx.createOscillator(); osc1.type = "sine"; osc1.frequency.setValueAtTime(523.25, now);
+    const osc2 = ctx.createOscillator(); osc2.type = "triangle"; osc2.frequency.setValueAtTime(659.25, now + 0.18);
+    const osc3 = ctx.createOscillator(); osc3.type = "sine"; osc3.frequency.setValueAtTime(783.99, now + 0.36);
+    osc1.connect(comp); osc2.connect(comp); osc3.connect(comp);
+    osc1.start(now); osc1.stop(now + 0.25);
+    osc2.start(now + 0.18); osc2.stop(now + 0.43);
+    osc3.start(now + 0.36); osc3.stop(now + 0.62);
   }
 
-  // 🔹 متغيرات عامة لتخزين كل المواد والفصول
   let ALL_COURSES = [];
   let ALL_SEMESTERS = [];
   let SELECTED_SEMESTER = null;
+  let LATEST_SEMESTER = null;
 
   async function lookup() {
     let id     = document.getElementById("sid").value;
@@ -997,7 +847,6 @@
     let status = document.getElementById("status");
     let box    = document.getElementById("result");
 
-    // ✅ صوت الضغط
     playLookupChime();
 
     error.textContent = "";
@@ -1006,6 +855,9 @@
     ALL_COURSES = [];
     ALL_SEMESTERS = [];
     SELECTED_SEMESTER = null;
+    LATEST_SEMESTER = null;
+    
+    IS_LATEST_SEMESTER_LOCKED = false;
 
     if (!id || (id + "").trim() === "") {
       error.textContent = "الرجاء إدخال رقم القيد";
@@ -1014,26 +866,26 @@
     }
 
     status.textContent = "⏳ جاري جلب البيانات...";
-
-    let api = "https://script.google.com/macros/s/AKfycbwm9HtJcqNBq0eQ7fbJFaV_lrEx9EIMfsQTfhDYS7-GUc0X5LCmAZH3-UAE7myBqTVJOA/exec";
+              
+    let api = "https://script.google.com/macros/s/AKfycbwgmunZv-wU-kBJqP6cbVk-A1sqoWd9TYqesW7FS0CWz5XRejQ23hOJ0QqpTwpjI0X8kQ/exec";
     let url = api + "?action=getStudent&id=" + encodeURIComponent(id) + "&t=" + Date.now();
 
     try {
       let res  = await fetch(url, { cache: "no-store" });
       let data = await res.json();
-      status.textContent = "";
 
-      if ((data.status || "").toString().trim().toUpperCase() === "CLOSED") {
-        error.textContent = data.message || "النظام متوقف مؤقتاً من قبل إدارة الجامعة. يرجى المحاولة لاحقاً.";
-        box.innerHTML = "";
-        playErrorChime();
-        return;
-      }
+      status.textContent = "";
 
       if (data.error === "STUDENT_NOT_FOUND") {
         error.textContent = "رقم القيد غير موجود. يرجى مراجعة مكتب الدراسة والامتحانات.";
         playErrorChime();
         return;
+      }
+
+      if (data.is_renewed === false || data.student?.is_renewed === false) {
+        IS_LATEST_SEMESTER_LOCKED = true;
+      } else {
+        IS_LATEST_SEMESTER_LOCKED = false;
       }
 
       let paid       = (data.paid !== undefined && data.paid !== "") ? data.paid : 0;
@@ -1050,14 +902,15 @@
       )];
 
       if (ALL_SEMESTERS.length > 0) {
-        SELECTED_SEMESTER = ALL_SEMESTERS[ALL_SEMESTERS.length - 1];
+        LATEST_SEMESTER = ALL_SEMESTERS[ALL_SEMESTERS.length - 1]; 
+        SELECTED_SEMESTER = LATEST_SEMESTER; 
       } else {
         SELECTED_SEMESTER = null;
       }
 
       let html = `
         <div style="text-align:center; margin-bottom:10px;">
-          <h3 style="font-size:1.15rem; margin:6px 0;">👨‍🎓 ${data.full_name}</h3>
+          <h3 style="font-size:1.15rem; margin:6px 0;">👨‍🎓 ${data.full_name || "-"}</h3>
 
           <div style="margin:4px 0; font-size:0.9rem;">
             <span style="color:#F4B547; font-weight:700;">🏛️ الكلية:</span>
@@ -1106,7 +959,6 @@
 
       box.innerHTML = html;
 
-      // ✅ صوت نجاح قوي بعد ما تظهر البيانات
       setTimeout(() => { playSuccessChime(); }, 120);
 
       setupSemesterDropdown();
@@ -1122,7 +974,6 @@
   function setupSemesterDropdown() {
     const dropdown = document.getElementById("semesterDropdown");
     if (!dropdown) return;
-
     dropdown.innerHTML = "";
 
     ALL_SEMESTERS.forEach(sem => {
@@ -1161,9 +1012,32 @@
     dropdown.classList.toggle("open");
   }
 
+  // دالة ذكية لتنظيف صياغة الوقت الطويل المستخرج من الإكسل
+  function formatExcelTime(timeStr, fallbackDay = "") {
+    if (!timeStr) return "غير محدد";
+    let s = String(timeStr).trim();
+    
+    // إذا كان يحتوي على توقيت نظام GMT الطويل، نقوم بقص الساعة والدقائق فقط
+    if (s.includes("GMT") || s.includes("11:30:00") || s.includes("10:10:00") || s.includes("10:30:00")) {
+      let match = s.match(/(\d{2}):(\d{2})/);
+      if (match) {
+        return match[0]; // يرجع فقط 10:30 أو 11:30 مثلاً
+      }
+    }
+    return s;
+  }
+
   function renderCourses() {
     const container = document.getElementById("coursesContainer");
     if (!container) return;
+
+    if (SELECTED_SEMESTER && SELECTED_SEMESTER === LATEST_SEMESTER && IS_LATEST_SEMESTER_LOCKED) {
+      container.innerHTML = `
+        <div class="lock-box">
+          🔒 مواد هذا الفصل الدراسي محجوبة مؤقتاً لأسباب مالية. يرجى مراجعة الشؤون المالية بالجامعة لتسوية الوضع وتفعيل الحساب.
+        </div>`;
+      return;
+    }
 
     let list = ALL_COURSES;
 
@@ -1174,21 +1048,60 @@
       });
     }
 
+    if (!SELECTED_SEMESTER && IS_LATEST_SEMESTER_LOCKED) {
+      list = ALL_COURSES.filter(c => {
+        const sem = (c.semester || c.sem || c.semester_name || "").trim();
+        return sem !== LATEST_SEMESTER;
+      });
+    }
+
     if (!list || list.length === 0) {
-      container.innerHTML = `<div class="empty-msg">لا توجد مواد مسجلة لهذا الطالب في هذا الفصل.</div>`;
+      container.innerHTML = `<div class="empty-msg">لا توجد مواد مسجلة قابلة للعرض حالياً.</div>`;
       return;
     }
 
     let html = "";
     list.forEach(c => {
+      let day = (c.day || c.day_name || c.dayName || "").trim();
+      let start = (c.startTime || c.start_time || c.start || "").trim();
+      let end = (c.endTime || c.end_time || c.end || "").trim();
+      
+      // تنظيف الأوقات لتظهر طبيعية مثل الإكسل
+      let cleanStart = formatExcelTime(start);
+      let cleanEnd = formatExcelTime(end);
+
+      let timeStr = "غير محدد";
+      if (day || cleanStart !== "غير محدد") {
+        timeStr = `${day} من ${cleanStart} إلى ${cleanEnd}`.trim();
+        // إزالة الزوائد المكررة إن وجدت
+        timeStr = timeStr.replace("غير محدد", "").trim();
+      }
+
+      let roomStr = c.room || c.room_name || c.roomName || c.hall || c.lecture_hall || "غير محدد";
+      let instStr = c.instructor || c.instructor_name || c.instructorName || c.teacher || c.professor || "غير محدد";
+
       html += `
         <div class="course">
-          <span class="course-icon">📘</span>
-          <span class="code">${c.code}</span>
-          <span class="name">${c.name}</span>
+          <div class="course-main-info">
+            <span class="course-icon">📘</span>
+            <span class="code">${c.code || ''}</span>
+            <span class="name">${c.name || ''}</span>
+          </div>
+          <div class="course-meta-details">
+            <div class="meta-item"><span class="label">⏰ الموعد:</span><span class="val">${timeStr}</span></div>
+            <div class="meta-item"><span class="label">🚪 القاعة:</span><span class="val">${roomStr}</span></div>
+            <div class="meta-item"><span class="label">👤 الأستاذ:</span><span class="val">${instStr}</span></div>
+          </div>
         </div>
       `;
     });
+
+    if (!SELECTED_SEMESTER && IS_LATEST_SEMESTER_LOCKED) {
+      html += `
+        <div class="lock-box" style="margin-top:15px;">
+          ⚠ تم إخفاء مواد الفصل الحالي (${LATEST_SEMESTER}) فقط بسبب عدم استكمال الإجراءات المالية.
+        </div>`;
+    }
 
     container.innerHTML = html;
   }
@@ -1196,7 +1109,6 @@
   function printPdf() {
     const error  = document.getElementById("error");
     const result = document.getElementById("result");
-
     error.textContent = "";
 
     if (!result.innerHTML.trim()) {
@@ -1213,11 +1125,9 @@
     const dateBox = document.querySelector(".print-header .date");
     if (dateBox) dateBox.textContent = "التاريخ: " + dt;
 
-    // ✅ تفعيل الصوت أول تفاعل (مرة واحدة)
     document.addEventListener("pointerdown", unlockAudioOnce);
     document.addEventListener("keydown", unlockAudioOnce);
 
-    // ✅ فتح مباشر على الاستعلام
     const sid = document.getElementById("sid");
     if (sid) sid.focus();
   });

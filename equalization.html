@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>منظومة معادلة ومقاصة المواد - جامعة السلام الدولية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* الألوان الملكية الفاخرة المعتمدة */
+    :root {
+      --primary: #0f2042;
+      --primary-dark: #070f21;
+      --accent: #1e40af;
+      --gold: #d4af37;
+      --gold-dark: #aa841a;
+      --gold-light: #f3e5ab;
+      --bg: #050811;
+      --muted: #94a3b8;
+      --card-bg: rgba(7, 15, 33, 0.95);
+      --border-soft: rgba(212, 175, 55, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", sans-serif;
+      direction: rtl;
+      overflow-x: hidden;
+      background: radial-gradient(circle at top left, #0b1528 0, #040712 40%, #000 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px 10px;
+    }
+
+    .header-bar {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto 15px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top left, rgba(11, 21, 40, 0.98), rgba(4, 7, 18, 0.92));
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      backdrop-filter: blur(18px);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header-logo {
+      width: 46px; height: 46px; border-radius: 999px;
+      border: 1.5px solid var(--gold); background: #000;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .header-text-main { display: flex; flex-direction: column; }
+    .header-text-main .uni-name { font-size: 1.1rem; font-weight: 800; color: #fff; }
+    .header-text-main .uni-sub { font-size: 0.78rem; color: var(--gold-light); }
+    .header-tag { font-size: 0.75rem; padding: 6px 16px; border-radius: 999px; background: rgba(0,0,0,0.4); border: 1px solid var(--gold); color: var(--gold-light); font-weight: bold; }
+
+    .shell {
+      width: 100%;
+      max-width: 1000px;
+      background: radial-gradient(circle at top left, rgba(11, 21, 40, 0.98), rgba(4, 7, 18, 0.88));
+      border-radius: 24px;
+      border: 1px solid var(--border-soft);
+      overflow: hidden;
+      box-shadow: 0 24px 70px rgba(4, 7, 18, 0.85);
+      backdrop-filter: blur(22px);
+    }
+
+    .top-bar {
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #070f21, #0f2042);
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .top-title h1 { margin: 0; font-size: 1.3rem; font-weight: 900; color: #fff; }
+    .top-title p { margin: 0; font-size: 0.8rem; color: var(--gold-light); }
+
+    .main-content {
+      padding: 24px;
+    }
+
+    .section-box {
+      background: rgba(7, 15, 33, 0.5);
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .box-title {
+      margin: 0 0 16px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 0.85rem; color: var(--gold-light); font-weight: bold; }
+    input, select {
+      width: 100%; padding: 11px 14px; border-radius: 12px;
+      border: 1px solid rgba(212, 175, 55, 0.25); background: #070f21;
+      font-size: 0.92rem; color: #fff; font-family: "Cairo", sans-serif;
+      transition: 0.25s ease;
+    }
+    input:focus, select:focus {
+      border-color: var(--gold); outline: none; background: #0b1528;
+    }
+    input[readonly] { background: #040712; border-style: dashed; color: #94a3b8; }
+
+    .table-container {
+      margin-top: 16px; overflow-x: auto; border-radius: 12px;
+      border: 1px solid rgba(212, 175, 55, 0.15);
+    }
+    table {
+      width: 100%; border-collapse: collapse; text-align: right; font-size: 0.9rem;
+    }
+    th {
+      background: #0f2042; color: var(--gold-light); padding: 12px; font-weight: 700;
+      border-bottom: 2px solid var(--border-soft);
+    }
+    td {
+      padding: 12px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); background: rgba(4, 7, 18, 0.4);
+    }
+    tr:hover td { background: rgba(15, 32, 66, 0.3); }
+
+    .btn-delete {
+      padding: 4px 12px; background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: bold;
+    }
+    .btn-delete:hover { filter: brightness(1.2); }
+
+    .actions-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 20px; flex-wrap: wrap;
+    }
+
+    button.primary-btn {
+      padding: 12px 28px; border-radius: 999px; border: none;
+      background: linear-gradient(135deg, #d4af37, #aa841a); color: #000;
+      font-size: 0.95rem; font-weight: 900; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+    button.primary-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    
+    button.secondary-btn {
+      padding: 10px 24px; border-radius: 999px; border: 1px solid var(--border-soft);
+      background: transparent; color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer;
+    }
+    button.secondary-btn:hover { background: rgba(212, 175, 55, 0.1); }
+
+    .msg-status {
+      margin-top: 15px; font-weight: bold; font-size: 0.92rem; color: var(--gold);
+    }
+
+    @media (max-width: 600px) {
+      .row { grid-template-columns: 1fr; }
+      .header-bar { border-radius: 16px; padding: 10px; }
+      .header-tag { display: none; }
+      .actions-bar { flex-direction: column; align-items: stretch; }
+      button.primary-btn, button.secondary-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-bar">
+    <div class="header-left">
+      <div class="header-logo">
+        <img src="aiu-logo.png" alt="شعار الجامعة">
+      </div>
+      <div class="header-text-main">
+        <div class="uni-name">جامعة السلام الدولية</div>
+        <div class="uni-sub">بوابة إدارةالمعادلات الأكاديمية</div>
+      </div>
+    </div>
+    <div class="header-tag">وحدة المنظومة الإلكترونية م.أيوب الحوات</div>
+  </div>
+
+  <div class="shell">
+    <div class="top-bar">
+      <div class="top-title">
+        <h1>⚖️ إدارة معادلة المواد للطلاب</h1>
+        <p>إدخال ومراجعة المقاصة المعتمدة للطلبة المنقولين والجدد للفصل الحالي.</p>
+      </div>
+      <button class="secondary-btn" onclick="window.location.href='dashboard.html'" style="font-size: 0.8rem; padding: 6px 16px;">عودة للرئيسية</button>
+    </div>
+
+    <div class="main-content">
+      
+      <div class="section-box">
+        <div class="box-title">👤 بيانات الطالب </div>
+        <div class="row">
+          <div class="field">
+            <label for="studentId">رقم القيد</label>
+            <input list="studentsDatalist" type="text" id="studentId" placeholder="اضغط واكتب رقم القيد..." oninput="handleStudentSelection()">
+            <datalist id="studentsDatalist"></datalist>
+          </div>
+          <div class="field">
+            <label for="studentName">اسم الطالب الحالي</label>
+            <input type="text" id="studentName" placeholder="يظهر تلقائياً" readonly>
+          </div>
+          <div class="field">
+            <label for="studentCollege">الكلية / التخصص</label>
+            <input type="text" id="studentCollege" placeholder="تظهر تلقائياً" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <div class="box-title">📚 إضافة مادة لقائمة المعادلة</div>
+        <div class="row">
+          <div class="field">
+            <label for="courseCode">رمز المادة المراد معادلتها</label>
+            <input list="coursesDatalist" type="text" id="courseCode" placeholder="اضغط واكتب رمز المادة..." oninput="handleCourseSelection()">
+            <datalist id="coursesDatalist"></datalist>
+          </div>
+          <div class="field">
+            <label for="courseName">اسم المادة المعاينة</label>
+            <input type="text" id="courseName" placeholder="يظهر تلقائياً" readonly>
+          </div>
+          <div class="field" style="justify-content: flex-end;">
+            <button class="secondary-btn" onclick="addCourseToTable()" style="border-color: #22c55e; color: #22c55e;">+ إدراج بالجدول</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <div class="box-title">📋 قائمة المواد المجهزة للاعتماد النهائي</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 80px;">#</th>
+                <th>رمز المادة</th>
+                <th>اسم المادة المعاينة بالمنظومة</th>
+                <th style="width: 100px; text-align: center;">إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="equalizationTableBody">
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--muted); padding: 20px;">قم باختيار الطالب والمواد لبناء جدول المعادلة...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="actions-bar">
+        <button class="primary-btn" onclick="submitEqualizationGrid()">
+          <span>⚡</span> اعتماد وحفظ جدول المعادلة بالكامل فوراً
+        </button>
+        <button class="secondary-btn" onclick="clearGrid()">تفريغ الجدول الحالي</button>
+      </div>
+
+      <div class="msg-status" id="statusMessage">جاهز بانتظار إدخال البيانات...</div>
+
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwgmunZv-wU-kBJqP6cbVk-A1sqoWd9TYqesW7FS0CWz5XRejQ23hOJ0QqpTwpjI0X8kQ/exec";
+    
+    // سحب بيانات المنسق أو المستخدم المسجل لتوثيقه في السيرفر
+    const user = localStorage.getItem("aiu_user") || localStorage.getItem("user"); 
+    const role = (localStorage.getItem("aiu_role") || localStorage.getItem("user_role") || "user1").toLowerCase(); 
+
+    // جدار حماية لضمان وجود مستخدم مسجل
+    if (!user) {
+        window.location.href = "login.html";
+    }
+
+    let allStudents = [];
+    let allCourses = [];
+    let selectedCoursesGrid = [];
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      document.getElementById("statusMessage").innerText = "جاري الاتصال بالسيرفر وتغذية القوائم المنسدلة...";
+      await fetchInitData();
+    });
+
+    async function fetchInitData() {
+      try {
+        const res = await fetch(`${API_URL}?action=getRegistrationFormInitData`);
+        const data = await res.json();
+        if (data.status === "OK") {
+          allStudents = data.students || [];
+          allCourses = data.courses || [];
+          
+          const sList = document.getElementById("studentsDatalist");
+          sList.innerHTML = "";
+          allStudents.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.id;
+            opt.text = `${s.name} - ${s.college}`;
+            sList.appendChild(opt);
+          });
+
+          const cList = document.getElementById("coursesDatalist");
+          cList.innerHTML = "";
+          allCourses.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c.code;
+            opt.text = `${c.code} - ${c.name}`;
+            cList.appendChild(opt);
+          });
+
+          document.getElementById("statusMessage").innerText = `✅ تم تحميل البيانات. المستخدم الحالي: ${user}`;
+          document.getElementById("statusMessage").style.color = "#22c55e";
+        } else {
+          document.getElementById("statusMessage").innerText = "❌ فشل في جلب القوائم من قاعدة البيانات السحابية.";
+          document.getElementById("statusMessage").style.color = "#ef4444";
+        }
+      } catch (e) {
+        document.getElementById("statusMessage").innerText = "❌ فشل الاتصال بقاعدة البيانات السحابية.";
+        document.getElementById("statusMessage").style.color = "#ef4444";
+      }
+    }
+
+    function handleStudentSelection() {
+      const inputVal = document.getElementById("studentId").value.trim();
+      const student = allStudents.find(s => String(s.id).trim() === inputVal);
+
+      if (student) {
+        document.getElementById("studentName").value = student.name;
+        document.getElementById("studentCollege").value = student.college || "غير محدد";
+        document.getElementById("statusMessage").innerText = `🎯 تم قراءة ملف الطالب: ${student.name}`;
+        document.getElementById("statusMessage").style.color = "#22c55e";
+      } else {
+        document.getElementById("studentName").value = "";
+        document.getElementById("studentCollege").value = "";
+      }
+    }
+
+    function handleCourseSelection() {
+      const codeVal = document.getElementById("courseCode").value.trim().toUpperCase();
+      const course = allCourses.find(c => c.code.toUpperCase() === codeVal);
+
+      if (course) {
+        document.getElementById("courseName").value = course.name;
+      } else {
+        document.getElementById("courseName").value = "";
+      }
+    }
+
+    function addCourseToTable() {
+      const code = document.getElementById("courseCode").value.trim().toUpperCase();
+      const name = document.getElementById("courseName").value.trim();
+
+      if (!code || !name) {
+        alert("الرجاء اختيار مادة صالحة من القائمة أولاً لإدراجها.");
+        return;
+      }
+
+      if (selectedCoursesGrid.includes(code)) {
+        alert("هذه المادة مضافة بالفعل داخل جدول المقاصة الحالي.");
+        return;
+      }
+
+      selectedCoursesGrid.push(code);
+      renderTable();
+
+      document.getElementById("courseCode").value = "";
+      document.getElementById("courseName").value = "";
+    }
+
+    function removeCourseFromGrid(index) {
+      selectedCoursesGrid.splice(index, 1);
+      renderTable();
+    }
+
+    function clearGrid() {
+      selectedCoursesGrid = [];
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById("equalizationTableBody");
+      tbody.innerHTML = "";
+
+      if (selectedCoursesGrid.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; color: var(--muted); padding: 20px;">قم باختيار الطالب والمواد لبناء جدول المقاصة...</td>
+          </tr>`;
+        return;
+      }
+
+      selectedCoursesGrid.forEach((code, index) => {
+        const courseObj = allCourses.find(c => c.code.toUpperCase() === code);
+        const name = courseObj ? courseObj.name : "مادة غير معرفة";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td><strong>${code}</strong></td>
+          <td>${name}</td>
+          <td style="text-align: center;">
+            <button class="btn-delete" onclick="removeCourseFromGrid(${index})">حذف</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function submitEqualizationGrid() {
+      const sid = document.getElementById("studentId").value.trim();
+      if (!sid) {
+        alert("الرجاء إدخال أو اختيار رقم قيد الطالب المستهدف أولاً.");
+        return;
+      }
+
+      if (selectedCoursesGrid.length === 0) {
+        alert("جدول المقاصة فارغ! قم بإدراج مادة واحدة على الأقل بالجدول قبل الحفظ.");
+        return;
+      }
+
+      // تجهيز الحزمة وإرسال اسم المنسق (user) الفعلي
+      const payload = {
+        action: "saveEqualizedCourses",
+        student_id: sid,
+        course_codes: selectedCoursesGrid,
+        user_role: role,
+        user: user 
+      };
+
+      document.getElementById("statusMessage").innerText = "جاري إرسال واعتماد جدول المقاصة كاملاً وحفظ البيانات...";
+      document.getElementById("statusMessage").style.color = "var(--gold)";
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.status === "OK" || data.code === 200) {
+          document.getElementById("statusMessage").innerText = `✅ تم الحفظ والتوثيق باسم (${user}) لعدد (${selectedCoursesGrid.length}) مواد بنجاح.`;
+          document.getElementById("statusMessage").style.color = "#22c55e";
+          clearGrid();
+        } else {
+          alert("فشل في حفظ المقاصة الجماعية: " + (data.message || data.error));
+          document.getElementById("statusMessage").innerText = `❌ خطأ: ${data.message || data.error}`;
+          document.getElementById("statusMessage").style.color = "#ef4444";
+        }
+      } catch (e) {
+        alert("خطأ أثناء الاتصال بالسيرفر، تأكد من تحديث دالة saveEqualizedCourses داخل ملف الـ Script.");
+        document.getElementById("statusMessage").innerText = "❌ فشل الاتصال بالشبكة البرمجية.";
+        document.getElementById("statusMessage").style.color = "#ef4444";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة وتعديل بيانات الطلاب - جامعة السلام الدولية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-slate: #020617;
+            --card-bg: rgba(11, 18, 32, 0.8);
+            --primary: #0ea5e9;
+            --primary-dark: #2563eb;
+            --good: #10b981;
+            --bad: #ef4444;
+            --gold: #f4b547;
+            --text: #e5e7eb;
+            --muted: #a7b0c0;
+            --border-soft: rgba(255, 255, 255, 0.06);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: "Cairo", sans-serif; 
+        }
+
+        body {
+            background: radial-gradient(circle at top, #0b1120 0%, #020617 55%, #000 100%);
+            color: var(--text); 
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        h1 { 
+            color: #ffffff; 
+            font-size: 1.8rem; 
+            font-weight: 700;
+            margin-bottom: 6px; 
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .main-wrapper {
+            width: 100%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 1fr 380px; 
+            gap: 24px;
+            margin-top: 10px;
+        }
+
+        .table-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px; 
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-box {
+            width: 100%; 
+            padding: 14px; 
+            border-radius: 12px;
+            border: 1px solid var(--border-soft);
+            background: rgba(3, 7, 18, 0.6); 
+            color: #fff; 
+            font-size: 0.95rem;
+            margin-bottom: 20px; 
+            text-align: right;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .search-box:focus { 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+        }
+
+        .table-container { 
+            overflow-x: auto; 
+            max-height: 600px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            text-align: right; 
+            font-size: 0.95rem; 
+        }
+
+        th, td { 
+            padding: 14px 16px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04); 
+        }
+
+        th { 
+            background-color: #0f172a; 
+            color: var(--primary); 
+            position: sticky; 
+            top: 0; 
+            z-index: 5; 
+            font-weight: 600;
+        }
+
+        tr:hover { 
+            background-color: rgba(255, 255, 255, 0.02); 
+        }
+        
+        .btn {
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            border: none; 
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.2s; 
+            font-size: 0.85rem;
+        }
+        .btn-edit { 
+            background: rgba(14, 165, 233, 0.15); 
+            color: var(--primary); 
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+        .btn-edit:hover { 
+            background: var(--primary); 
+            color: #020617; 
+        }
+
+        .form-section {
+            background: var(--card-bg);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+            border-radius: 20px; 
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            align-self: flex-start;
+            position: sticky; 
+            top: 20px; 
+        }
+
+        h2 { 
+            font-size: 1.25rem; 
+            color: var(--primary);
+            margin-bottom: 20px; 
+            border-bottom: 1px solid rgba(14, 165, 233, 0.15); 
+            padding-bottom: 10px; 
+            text-align: center;
+        }
+        
+        .form-group { margin-bottom: 16px; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 6px; 
+            color: var(--muted); 
+            font-size: 0.85rem; 
+            font-weight: 600;
+        }
+        .form-group input, .form-group select {
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 10px;
+            background: rgba(3, 7, 18, 0.6); 
+            color: #fff;
+            border: 1px solid var(--border-soft); 
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus { 
+            border-color: var(--primary); 
+        }
+        .form-group input:disabled, .form-group select:disabled { 
+            background: rgba(255,255,255,0.02); 
+            color: #64748b; 
+            cursor: not-allowed; 
+            border-color: rgba(255,255,255,0.03);
+        }
+
+        .readonly-log {
+            background: rgba(244, 181, 71, 0.03) !important;
+            border: 1px dashed rgba(244, 181, 71, 0.2) !important;
+            color: var(--gold) !important;
+            font-weight: 600;
+        }
+
+        .btn-save { 
+            width: 100%; 
+            padding: 14px; 
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); 
+            color: white; 
+            font-size: 1rem; 
+            font-weight: 700;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+            transition: all 0.2s;
+        }
+        .btn-save:hover { 
+            transform: translateY(-1px);
+            filter: brightness(1.1); 
+        }
+        .btn-save:disabled { 
+            background: #334155 !important; 
+            color: #64748b; 
+            cursor: not-allowed; 
+            box-shadow: none;
+            transform: none;
+        }
+
+        .message { 
+            padding: 12px; 
+            border-radius: 10px; 
+            text-align: center; 
+            margin-top: 15px; 
+            display: none; 
+            font-weight: 600; 
+            font-size: 0.88rem; 
+        }
+        .success { background: rgba(16, 185, 129, 0.1); color: var(--good); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .error { background: rgba(239, 68, 68, 0.1); color: var(--bad); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .loading { color: var(--primary); text-align: center; font-weight: bold; padding: 20px; }
+
+        .btn-back { 
+            display: block; 
+            text-align: center; 
+            margin: 30px 0 10px 0; 
+            color: var(--muted); 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+            transition: color 0.2s;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 1024px) {
+            body { padding: 12px; }
+            .main-wrapper { grid-template-columns: 1fr; }
+            .form-section { position: static; width: 100%; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>قاعدة بيانات ومستندات الطلاب الحية</h1>
+        <p class="subtitle">جامعة السلام الدولية-سرت عرض تلقائي وتعديل فوري وسريع ومحمي</p>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="table-section">
+            <input type="text" id="searchBox" class="search-box" placeholder="🔍 ابحث هنا باسم الطالب أو رقم القيد للعرض  فوراً..." oninput="filterTable()">
+            <div class="table-container">
+                <div id="loadingText" class="loading">⏳ جاري جلب ملفات الطلاب ...</div>
+                <table id="studentsTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>رقم القيد</th>
+                            <th>الاسم بالكامل</th>
+                            <th>الحالة</th>
+                            <th>التعديل</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>📝 لوحة التعديل السريع</h2>
+            <div id="editForm">
+                <div class="form-group">
+                    <label style="color: var(--gold);">👤 آخر موظف عدّل بيانات للطالب</label>
+                    <input type="text" id="lastModifier" readonly class="readonly-log" placeholder="لا يوجد تعديل سابق">
+                </div>
+                <div class="form-group">
+                    <label style="color: var(--gold);">📅 تاريخ ووقت التعديل</label>
+                    <input type="text" id="lastModificationDate" readonly class="readonly-log" placeholder="-- / -- / ----">
+                </div>
+                
+                <hr style="border: 0; border-top: 1px solid var(--border-soft); margin: 15px 0;">
+
+                <div class="form-group">
+                    <label>رقم القيد</label>
+                    <input type="text" id="studentId" disabled>
+                </div>
+                <div class="form-group">
+                    <label>اسم الطالب بالكامل</label>
+                    <input type="text" id="studentName" disabled>
+                </div>
+                <div class="form-group">
+                    <label>الكلية</label>
+                    <input type="text" id="studentCollege" disabled>
+                </div>
+                <div class="form-group">
+                    <label>التخصص / القسم</label>
+                    <input type="text" id="studentDep" disabled>
+                </div>
+                <div class="form-group">
+                    <label>حالة الطالب الحالية</label>
+                    <select id="studentStatus" disabled>
+                        <option value="نظامي">نظامي</option>
+                        <option value="خريج">خريج</option>
+                        <option value="موقف">موقف</option>
+                        <option value="منقطع">منقطع</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-save" id="saveBtn" onclick="updateStudent()" disabled>اعتماد وتحديث بيانات الطالب 💾</button>
+            </div>
+            <div id="msgBox" class="message"></div>
+        </div>
+    </div>
+
+    <a href="dashboard.html" class="btn-back">🡪 العودة للوحة التحكم الرئيسية</a>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgmunZv-wU-kBJqP6cbVk-A1sqoWd9TYqesW7FS0CWz5XRejQ23hOJ0QqpTwpjI0X8kQ/exec";
+    let allStudents = [];
+    let originalSelectedId = ""; 
+
+    window.onload = function() { loadAllStudents(); };
+
+    async function loadAllStudents() {
+        try {
+            const response = await fetch(`${SCRIPT_URL}?action=studentsSummary`);
+            const data = await response.json();
+            if (!data.students || data.students.length === 0) return;
+            allStudents = data.students;
+            renderTable(allStudents);
+        } catch (error) { console.error(error); }
+    }
+
+    function renderTable(studentsList) {
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = "";
+        studentsList.forEach(student => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><b>${student.id}</b></td>
+                <td>${student.full_name}</td>
+                <td><span style="color:var(--primary)">${student.stud_status || 'نظامي'}</span></td>
+                <td><button class="btn btn-edit" onclick="selectStudent('${student.id}')">تعديل 📝</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        document.getElementById("loadingText").style.display = "none";
+        document.getElementById("studentsTable").style.display = "table";
+    }
+
+    // 🔥 التحديث الحاسم للاتصال المباشر مع الـ API المحدث للـ الموظف والوقت
+    async function selectStudent(id) {
+        showMsg("جاري سحب ملف الطالب...", "success");
+        originalSelectedId = id; 
+        
+        try {
+            const response = await fetch(`${SCRIPT_URL}?action=getStudent&id=${encodeURIComponent(id)}`);
+            const data = await response.json();
+
+            // تعبئة البيانات الأساسية للطالب المحدّث
+            document.getElementById("studentId").value = data.id || "";
+            document.getElementById("studentName").value = data.full_name || "";
+            document.getElementById("studentCollege").value = data.college || "";
+            document.getElementById("studentDep").value = data.department || "";
+            document.getElementById("studentStatus").value = (data.stud_status || "نظامي").trim();
+
+            // 🎯 الربط الفعلي والمباشر مع المتغيرات الجديدة الصريحة القادمة من السيرفر
+            document.getElementById("lastModifier").value = data.server_modifier || "لم يتم تعديله سابقاً";
+            document.getElementById("lastModificationDate").value = data.server_date || "غير متوفر";
+
+            // تفعيل حقول الإدخال
+            document.getElementById("studentId").disabled = false;
+            document.getElementById("studentName").disabled = false;
+            document.getElementById("studentCollege").disabled = false;
+            document.getElementById("studentDep").disabled = false;
+            document.getElementById("studentStatus").disabled = false;
+            document.getElementById("saveBtn").disabled = false;
+            
+            showMsg("📋 تم تحميل بيانات الطالب بنجاح.", "success");
+
+        } catch (error) { showMsg("❌ خطأ أثناء الاتصال بالسيرفر", "error"); }
+    }
+
+    async function updateStudent() {
+        const saveBtn = document.getElementById("saveBtn");
+        saveBtn.disabled = true; // لمنع النقر المزدوج أثناء الإرسال
+        
+        const payload = {
+            token: "AIU_SECURE_2026",
+            action: "updateStudentData",
+            oldId: originalSelectedId, 
+            id: document.getElementById("studentId").value.trim(),                 
+            name: document.getElementById("studentName").value.trim(),
+            college: document.getElementById("studentCollege").value.trim(),
+            dep: document.getElementById("studentDep").value.trim(),
+            status: document.getElementById("studentStatus").value,
+            // جلب اسم المستخدم من الـ localStorage بشكل ديناميكي
+            user: localStorage.getItem("username") || "مستخدم"
+        };
+        
+        try {
+            const response = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+            showMsg("🎉 تم التحديث الحقيقي بنجاح فوري!", "success");
+            setTimeout(() => { loadAllStudents(); resetForm(); }, 1500);
+        } catch (error) { 
+            showMsg("❌ فشل في تحديث البيانات", "error");
+            saveBtn.disabled = false; 
+        }
+    }
+
+    function filterTable() {
+        const query = document.getElementById("searchBox").value.toLowerCase();
+        renderTable(allStudents.filter(s => s.id.toString().includes(query) || s.full_name.toLowerCase().includes(query)));
+    }
+
+    function showMsg(t, type) { const b = document.getElementById("msgBox"); b.innerText = t; b.className = `message ${type}`; b.style.display = "block"; }
+
+    function resetForm() {
+        document.getElementById("studentId").value = "";
+        document.getElementById("studentName").value = "";
+        document.getElementById("studentCollege").value = "";
+        document.getElementById("studentDep").value = "";
+        document.getElementById("lastModifier").value = "";
+        document.getElementById("lastModificationDate").value = "";
+        document.getElementById("studentId").disabled = true;
+        document.getElementById("studentName").disabled = true;
+        document.getElementById("studentCollege").disabled = true;
+        document.getElementById("studentDep").disabled = true;
+        document.getElementById("studentStatus").disabled = true;
+        document.getElementById("saveBtn").disabled = true;
+        originalSelectedId = "";
+    }
+</script>
+</body>
+</html>

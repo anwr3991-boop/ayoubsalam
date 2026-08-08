@@ -3,315 +3,400 @@
 <head>
   <meta charset="UTF-8" />
   <title>دخول الموظفين - جامعة السلام الدولية</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- قفل قطعي لمنع الارتجاج الجانبي للهواتف -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="long.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* نظام الألوان الملكي الموحد: أسود ملكي غامق وتوهج الذهب النقي */
+    :root {
+      --bg-dark: #07090e;
+      --card-bg: linear-gradient(145deg, rgba(15, 22, 38, 0.95), rgba(7, 9, 14, 0.98));
+      --primary: #fbbf24;       /* ذهبي رئيسي */
+      --primary-dark: #b45309;  /* ذهبي غامق */
+      --good: #10b981;
+      --bad: #ef4444;
+      --gold-light: #fcd34d;
+      --gold-glow: rgba(251, 191, 36, 0.25);
+      --text: #ffffff;
+      --muted: #94a3b8;
+      --border-gold: rgba(251, 191, 36, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* الخلفية الشعاعية الملكية المطابقة للوحة التحكم */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, #111625 0%, #07090e 70%, #000000 100%) !important;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .bg {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      max-width: 450px;
+      padding: 20px;
+    }
+
+    /* كرت زجاجي ملكي محاط بإطار ذهبي مضيء */
+    .card {
+      background: var(--card-bg) !important;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid var(--border-gold) !important;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 30px var(--gold-glow) !important;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    /* الهيدر والشعار */
+    .top {
+      margin-bottom: 30px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logoWrap {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      border-radius: 50%; /* شكل دائري فخم */
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    .logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brandText {
+      margin-top: 4px;
+    }
+
+    .uni {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    }
+
+    .sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* حبة بيل البوابة بالذهب الملكي */
+    .statusPill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(251, 191, 36, 0.08);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      color: var(--gold-light);
+      font-weight: 700;
+      margin-top: 16px;
+      box-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--primary);
+    }
+
+    /* الفورم وحقول الإدخال */
+    .wrap {
+      text-align: right;
+    }
+
+    .box {
+      margin-bottom: 20px;
+    }
+
+    .box label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+      padding-right: 2px;
+    }
+
+    /* حقول المدخلات المحسنة بالكامل */
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(3, 7, 18, 0.6);
+      border: 1px solid rgba(251, 191, 36, 0.15);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 0.98rem;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.25s ease;
+      text-align: right;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary) !important;
+      background: #030712;
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    /* زر الإرسال الذهبي الفخم والمطابق لهوية النظام */
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+      border: 1px solid #fef08a !important;
+      border-radius: 12px;
+      color: #000000 !important; /* نص أسود فخم فوق الذهب */
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 12px;
+      box-shadow: 0 6px 20px var(--gold-glow) !important;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5) !important;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    /* رسائل التنبيه */
+    .msg {
+      min-height: 24px;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .msg.info { color: var(--gold-light); text-shadow: 0 0 8px var(--gold-glow); }
+    .msg.error { color: var(--bad); }
+    .msg.ok { color: var(--good); }
+
+    /* أنيميشن الاهتزاز الأصلي */
+    @keyframes headShake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+      100% { transform: translateX(0); }
+    }
+
+    .card.shake {
+      animation: headShake 0.4s ease-in-out;
+    }
+
+    /* استجابة الهواتف الفخمة */
+    @media (max-width: 480px) {
+      .card {
+        padding: 35px 22px;
+        border-radius: 20px;
+      }
+      .uni { font-size: 1.35rem; }
+    }
+  </style>
 </head>
 
 <body>
+
   <div class="bg">
-    <div class="mesh"></div>
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-    <div class="blob b3"></div>
-    <div class="grain"></div>
-
-    <header class="top">
-      <div class="brand">
-        <div class="logoWrap">
-          <img src="aiu-logo.png" alt="شعار جامعة السلام الدولية" class="logo" />
-          <span class="ring"></span>
+    <div class="card" id="mainCard">
+      
+      <header class="top">
+        <div class="brand">
+          <div class="logoWrap">
+            <img src="aiu-logo.png" alt="شعار جامعة السلام الدولية" class="logo" />
+          </div>
+          <div class="brandText">
+            <div class="uni">جامعة السلام الدولية</div>
+            <div class="sub">منظومة شؤون الطلبة والامتحانات</div>
+          </div>
         </div>
-
-        <div class="brandText">
-          <div class="uni">جامعة السلام الدولية</div>
-          <div class="sub">منظومة شؤون الطلبة والامتحانات</div>
+        <div class="statusPill">
+          <span class="dot"></span>
+          <span>بوابة الموظفين الآمنة</span>
         </div>
+      </header>
+
+      <div class="wrap">
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          
+          <div class="box">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" id="username" class="form-control" placeholder="أدخل اسم المستخدم" required autocomplete="username" />
+          </div>
+
+          <div class="box">
+            <label for="password">كلمة المرور</label>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password" />
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn-submit">تسجيل الدخول للنظام</button>
+        </form>
       </div>
 
-      <div class="statusPill">
-        <span class="dot"></span>
-        <span>بوابة الموظفين</span>
-      </div>
-    </header>
+      <div id="msgBox" class="msg"></div>
 
-    <main class="wrap">
-      <section class="intro">
-        <div class="kicker">AIU • Smart Portal</div>
-        <h1>لوحة دخول الموظفين</h1>
-        <p>
-          الرجاء استخدام حسابك الرسمي للدخول إلى نظام
-        </p>
-
-        <div class="features">
-          <div class="feat">
-            <span class="ic">🛡️</span>
-            <div>
-              <div class="t">صلاحيات ذكية</div>
-              <div class="d">حسب نوع المستخدم والدور</div>
-            </div>
-          </div>
-
-          <div class="feat">
-            <span class="ic">📚</span>
-            <div>
-              <div class="t">إدارة أكاديمية</div>
-              <div class="d">مواد • فصول • تقارير</div>
-            </div>
-          </div>
-
-          <div class="feat">
-            <span class="ic">⚡</span>
-            <div>
-              <div class="t">أداء سريع</div>
-              <div class="d">تجربة دخول سلسة</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="miniNote">
-          <span class="shield">🔒</span>
-          هذا النظام مخصص للموظفين المخولين فقط.
-        </div>
-      </section>
-
-      <section class="card" id="card">
-        <div class="cardHead">
-          <div class="cardTitle">
-            <span class="badge">🔐</span>
-            <div>
-              <h2>دخول الموظفين</h2>
-              <p>أدخل البيانات ثم اضغط دخول</p>
-            </div>
-          </div>
-
-          <button class="soundBtn" id="soundBtn" type="button" title="تشغيل/إيقاف الأصوات">
-            🔊
-          </button>
-        </div>
-
-        <div class="form">
-          <label class="lbl" for="user">اسم المستخدم</label>
-          <div class="field">
-            <span class="fieldIc">👤</span>
-            <input type="text" id="user" placeholder="أدخل اسم المستخدم" autocomplete="username" />
-          </div>
-
-          <label class="lbl" for="pass">كلمة المرور</label>
-          <div class="field">
-            <span class="fieldIc">🔑</span>
-            <input type="password" id="pass" placeholder="أدخل كلمة المرور" autocomplete="current-password" />
-            <button class="eye" id="eyeBtn" type="button" aria-label="إظهار/إخفاء كلمة المرور">👁️</button>
-          </div>
-
-          <button class="btn" id="loginBtn" type="button" onclick="doLogin()">
-            <span class="btnIc" id="btnIc">➡️</span>
-            <span id="btnText">دخول إلى النظام</span>
-            <span class="spin" id="spin" aria-hidden="true"></span>
-          </button>
-
-          <div id="msg" class="msg" role="status" aria-live="polite"></div>
-
-          <div class="footerNote">
-            © جامعة السلام الدولية — وحدة نظم المعلومات — <span>م.أيوب الحوات</span>
-          </div>
-        </div>
-      </section>
-    </main>
+    </div>
   </div>
 
-<script>
-  // 🔗 رابط الويب آب
-  const API_URL = "https://script.google.com/macros/s/AKfycbwm9HtJcqNBq0eQ7fbJFaV_lrEx9EIMfsQTfhDYS7-GUc0X5LCmAZH3-UAE7myBqTVJOA/exec";
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwgmunZv-wU-kBJqP6cbVk-A1sqoWd9TYqesW7FS0CWz5XRejQ23hOJ0QqpTwpjI0X8kQ/exec";
 
-  // =============================
-  // ✅ نظام الأصوات (بدون ملفات)
-  // =============================
-  let audioEnabled = true;
-  let AC = null;
-
-  function ensureAudio() {
-    if (!audioEnabled) return null;
-    if (!AC) {
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (!Ctx) return null;
-      AC = new Ctx();
-    }
-    // بعض المتصفحات تحتاج resume بعد gesture
-    if (AC.state === "suspended") AC.resume().catch(()=>{});
-    return AC;
-  }
-
-  function playTone({ type="sine", f=440, t=0.12, vol=0.18, attack=0.005, release=0.06, bendTo=null } = {}) {
-    const ac = ensureAudio();
-    if (!ac) return;
-
-    const o = ac.createOscillator();
-    const g = ac.createGain();
-
-    o.type = type;
-    o.frequency.setValueAtTime(f, ac.currentTime);
-
-    if (bendTo) {
-      o.frequency.exponentialRampToValueAtTime(bendTo, ac.currentTime + t);
+    function soundSuccess() {
+      const audio = new Audio("https://www.soundjay.com/buttons/sounds/button-09.mp3");
+      audio.play().catch(()=>{});
     }
 
-    g.gain.setValueAtTime(0.0001, ac.currentTime);
-    g.gain.exponentialRampToValueAtTime(vol, ac.currentTime + attack);
-    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + t + release);
-
-    o.connect(g);
-    g.connect(ac.destination);
-
-    o.start();
-    o.stop(ac.currentTime + t + release + 0.02);
-  }
-
-  function soundClick() {
-    // نقرة ناعمة + لمعة
-    playTone({ type:"triangle", f:720, t:0.06, vol:0.12, bendTo:520 });
-  }
-
-  function soundError() {
-    // خطأ: نغمة منخفضة + drop
-    playTone({ type:"sawtooth", f:220, t:0.12, vol:0.20, bendTo:140 });
-    setTimeout(()=>playTone({ type:"square", f:180, t:0.10, vol:0.14, bendTo:110 }), 80);
-  }
-
-  function soundSuccess() {
-    // نجاح: ثلاث نغمات سريعة (chime)
-    playTone({ type:"sine", f:523.25, t:0.10, vol:0.16 }); // C5
-    setTimeout(()=>playTone({ type:"sine", f:659.25, t:0.10, vol:0.16 }), 90); // E5
-    setTimeout(()=>playTone({ type:"sine", f:783.99, t:0.14, vol:0.18 }), 180); // G5
-  }
-
-  // زر الأصوات
-  const soundBtn = document.getElementById("soundBtn");
-  soundBtn.addEventListener("click", () => {
-    audioEnabled = !audioEnabled;
-    soundBtn.textContent = audioEnabled ? "🔊" : "🔇";
-    soundBtn.classList.toggle("muted", !audioEnabled);
-    // تهيئة
-    if (audioEnabled) { ensureAudio(); soundClick(); }
-  });
-
-  // تهيئة Audio عند أول تفاعل (حل مشاكل autoplay)
-  document.addEventListener("pointerdown", () => { ensureAudio(); }, { once: true });
-
-  // إظهار/إخفاء كلمة المرور
-  const eyeBtn = document.getElementById("eyeBtn");
-  eyeBtn.addEventListener("click", () => {
-    const pass = document.getElementById("pass");
-    const isPass = pass.type === "password";
-    pass.type = isPass ? "text" : "password";
-    eyeBtn.textContent = isPass ? "🙈" : "👁️";
-    soundClick();
-  });
-
-  // Enter للتسجيل
-  ["user","pass"].forEach(id => {
-    const el = document.getElementById(id);
-    el.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") doLogin();
-    });
-  });
-
-  function setLoading(isLoading) {
-    const btn = document.getElementById("loginBtn");
-    const spin = document.getElementById("spin");
-    const btnIc = document.getElementById("btnIc");
-    const btnText = document.getElementById("btnText");
-
-    btn.disabled = isLoading;
-    btn.classList.toggle("loading", isLoading);
-    spin.style.display = isLoading ? "inline-block" : "none";
-    btnIc.textContent = isLoading ? "⏳" : "➡️";
-    btnText.textContent = isLoading ? "جاري التحقق..." : "دخول إلى النظام";
-  }
-
-  function setMsg(text, type) {
-    const msg = document.getElementById("msg");
-    msg.textContent = text || "";
-    msg.className = "msg";
-    if (type) msg.classList.add("msg-" + type);
-  }
-
-  function punchCard(kind) {
-    const card = document.getElementById("card");
-    card.classList.remove("shake","success");
-    // إعادة تشغيل الأنيميشن
-    void card.offsetWidth;
-    card.classList.add(kind);
-    setTimeout(()=>card.classList.remove(kind), 650);
-  }
-
-  async function doLogin() {
-    const u = document.getElementById("user").value.trim();
-    const p = document.getElementById("pass").value.trim();
-
-    setMsg("", "");
-    // ✅ صوت عند النقر
-    soundClick();
-
-    if (!u || !p) {
-      setMsg("الرجاء إدخال اسم المستخدم وكلمة المرور", "error");
-      punchCard("shake");
-      soundError();
-      return;
+    function soundError() {
+      const audio = new Audio("https://www.soundjay.com/buttons/sounds/button-10.mp3");
+      audio.play().catch(()=>{});
     }
 
-    setLoading(true);
-    setMsg("⏳ جاري التحقق من بيانات الدخول...", "info");
+    function setMsg(text, type) {
+      const msgBox = document.getElementById("msgBox");
+      msgBox.className = "msg " + type;
+      msgBox.textContent = text;
+    }
 
-    const url = `${API_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`;
+    function setLoading(isLoading) {
+      const btn = document.getElementById("submitBtn");
+      if (isLoading) {
+        btn.disabled = true;
+        btn.style.opacity = "0.7";
+      } else {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+    }
 
-    try {
-      const res  = await fetch(url);
-      const text = await res.text();
+    function punchCard(className) {
+      const card = document.getElementById("mainCard");
+      card.classList.remove("shake", "success");
+      void card.offsetWidth; // Trigger reflow
+      card.classList.add(className);
+    }
 
-      let data;
-      try { data = JSON.parse(text); }
-      catch (e) {
-        setLoading(false);
-        setMsg("خطأ في قراءة رد السيرفر (الرد ليس JSON).", "error");
+    async function handleLogin(e) {
+      e.preventDefault();
+
+      const u = document.getElementById("username").value.trim();
+      const p = document.getElementById("password").value.trim();
+
+      if (!u || !p) {
+        setMsg("❌ الرجاء ملء الحقول المطلوبة.", "error");
         punchCard("shake");
         soundError();
         return;
       }
 
-      if (data.status === "OK") {
-        const username = data.username || u;
-        const role     = data.role || "";
+      setLoading(true);
+      setMsg("⏳ جاري التحقق من بيانات الدخول...", "info");
 
-        localStorage.setItem("USERNAME", username);
-        localStorage.setItem("ROLE", role);
-        localStorage.setItem("aiu_user", username);
-        localStorage.setItem("aiu_role", role);
+      const url = `${API_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`;
 
-        setMsg("✔ تم تسجيل الدخول بنجاح، جاري التحويل...", "ok");
-        punchCard("success");
-        soundSuccess();
+      try {
+        const res  = await fetch(url);
+        const text = await res.text();
 
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 850);
+        let data;
+        try { 
+          data = JSON.parse(text); 
+        } catch (e) {
+          setLoading(false);
+          setMsg("خطأ في قراءة رد السيرفر (الرد ليس JSON).", "error");
+          punchCard("shake");
+          soundError();
+          return;
+        }
 
-      } else {
+        if (data.status === "OK") {
+          const username = data.username || u;
+          const role     = data.role || "";
+
+          // 💾 تخزين الاسم بجميع المفاتيح المتوقعة لضمان التوافق التام مع بقية الصفحات
+          localStorage.setItem("USERNAME", username);
+          localStorage.setItem("username", username);
+          localStorage.setItem("user", username);
+          localStorage.setItem("ROLE", role);
+          localStorage.setItem("aiu_user", username);
+          localStorage.setItem("aiu_role", role);
+
+          sessionStorage.setItem("username", username);
+
+          setMsg("✔ تم تسجيل الدخول بنجاح، جاري التحويل...", "ok");
+          punchCard("success");
+          soundSuccess();
+
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 850);
+
+        } else {
+          setLoading(false);
+          setMsg(data.message || "❌ بيانات الدخول غير صحيحة.", "error");
+          punchCard("shake");
+          soundError();
+        }
+
+      } catch (error) {
         setLoading(false);
-        setMsg(data.message || "❌ بيانات الدخول غير صحيحة.", "error");
+        setMsg("❌ خطأ في الاتصال بالسيرفر، تحقق من الشبكة.", "error");
         punchCard("shake");
         soundError();
       }
-
-    } catch (err) {
-      console.error("LOGIN ERROR:", err);
-      setLoading(false);
-      setMsg("🔌 خطأ في الاتصال — تأكد من الإنترنت أو رابط الـ API أو النشر.", "error");
-      punchCard("shake");
-      soundError();
     }
-  }
-</script>
+  </script>
 </body>
 </html>

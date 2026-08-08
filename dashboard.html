@@ -3,259 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <title>لوحة التحكم - جامعة السلام الدولية</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="salam.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* خلفية hero */
-       .hero {
-    position: relative;
-    min-height: 100vh;
-    padding: 28px 14px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    background: radial-gradient(circle at top, #0b1120 0%, #020617 55%, #000 100%);
-    
-    overflow-x: hidden; 
-    overflow-y: auto;  
-}
+        :root {
+            --gold-light: #fcd34d;
+            --gold-main: #fbbf24;
+            --gold-dark: #b45309;
+            --gold-glow: rgba(251, 191, 36, 0.2);
+            --bg-dark: #07090e;
+            --card-bg: rgba(13, 18, 30, 0.85);
+        }
 
-/* إخفاء شكل السكرول في كل المتصفحات */
-.hero::-webkit-scrollbar {
-    display: none; /* Chrome - Edge - Safari */
-}
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            padding: 24px 14px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            background: radial-gradient(circle at top, #111625 0%, #07090e 70%, #000000 100%) !important;
+            overflow-x: hidden; 
+            overflow-y: auto;  
+        }
 
-.hero {
-    -ms-overflow-style: none;  /* Internet Explorer */
-    scrollbar-width: none;     /* Firefox */
-}
-
-
+        .hero::-webkit-scrollbar { display: none; }
+        .hero { -ms-overflow-style: none; scrollbar-width: none; }
 
         .dash-shell {
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
         }
 
-        /* رأس الصفحة */
         .dash-header {
             text-align: center;
-            margin-bottom: 18px;
-            color: #E5F0FF;
+            margin-bottom: 25px;
+            color: #ffffff;
         }
 
         .dash-header h1 {
             margin: 0 0 6px;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 800;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+            color: #ffffff;
         }
 
         .dash-header p {
             margin: 0;
-            opacity: 0.85;
-            font-size: 0.9rem;
+            opacity: 0.8;
+            font-size: 0.95rem;
+            color: #94a3b8;
         }
 
         .welcome {
-            margin-top: 8px;
-            color: #F4C46A;
+            margin-top: 10px;
+            color: var(--gold-main) !important;
             font-weight: 700;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
         }
 
-        /* الصندوق */
+        /* كرت الخلفية الرئيسي */
         .dash-card {
-            background: rgba(15,23,42,0.92);
-            border-radius: 18px;
-            padding: 20px 18px 26px;
-            border: 1px solid rgba(148,163,184,0.4);
-            box-shadow: 0 18px 45px rgba(15,23,42,0.9);
-            backdrop-filter: blur(12px);
+            background: linear-gradient(145deg, rgba(15, 22, 38, 0.95), rgba(7, 9, 14, 0.98)) !important;
+            border-radius: 24px;
+            padding: 28px 24px;
+            border: 2px solid rgba(251, 191, 36, 0.35) !important;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 30px var(--gold-glow) !important;
+            backdrop-filter: blur(20px);
         }
 
-        /* شبكة الكروت */
+        /* شبكة الكروت المتجاوبة */
         .dash-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 16px;
         }
 
-        /* كرت واحد */
+        /* إعادة هندسة كرت الزر بالكامل ليعطي مظهر ملكي نظيف */
         .dash-item {
-            padding: 15px 12px;
-            border-radius: 14px;
-            background: rgba(15,23,42,0.95);
-            border: 1px solid rgba(148,163,184,0.45);
-            box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+            padding: 20px 18px;
+            border-radius: 16px;
+            background: rgba(20, 27, 45, 0.6) !important;
+            border: 1px solid rgba(251, 191, 36, 0.15) !important;
             text-decoration: none;
-            transition: 0.2s;
-            color: #E5F0FF;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ffffff !important;
+            display: flex;
+            align-items: center; /* محاذاة أفقية فخمة */
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        /* تصميم فخم ومستقل لحاوية الأيقونات */
+        .dash-item .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(251, 191, 36, 0.02));
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            color: var(--gold-main);
+            font-size: 1.35rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            box-shadow: inset 0 0 8px rgba(251, 191, 36, 0.05);
+        }
+
+        .dash-item .item-content {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            position: relative; /* مهم للعلامة فوق */
-        }
-
-        .dash-item:hover {
-            transform: translateY(-3px);
-            border-color: #38bdf8;
-        }
-
-        .dash-item .icon {
-            font-size: 1.55rem;
-            margin-bottom: 4px;
+            gap: 2px;
         }
 
         .dash-item .title {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 2px;
+            color: #ffffff;
+            transition: color 0.25s;
         }
 
         .dash-item .desc {
-            font-size: 0.78rem;
-            color: #9CA3AF;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.4;
         }
 
-        /* ===== كرت المالية (مميز) ===== */
+        /* تأثيرات الحركات السلسة (Hover) */
+        .dash-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold-main) !important;
+            background: rgba(28, 37, 61, 0.7) !important;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 15px var(--gold-glow);
+        }
+
+        .dash-item:hover .icon-wrapper {
+            background: linear-gradient(135deg, var(--gold-main), var(--gold-dark));
+            color: #000000;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        /* ===== زر الجداول (تميز ملكي بدون تأثير الحظر) ===== */
+        .dash-item.schedules-btn {
+            background: linear-gradient(145deg, rgba(251, 191, 36, 0.08), rgba(15, 23, 42, 0.6)) !important;
+            border: 1px solid rgba(251, 191, 36, 0.4) !important;
+        }
+        .dash-item.schedules-btn .icon-wrapper {
+            background: rgba(251, 191, 36, 0.15);
+            border-color: var(--gold-main);
+        }
+
+        /* ===== زر مخصص لمعادلة المواد الأكاديمية والمقاصات ===== */
+        .dash-item.equalization-btn {
+            background: linear-gradient(145deg, rgba(30, 64, 175, 0.15), rgba(7, 9, 14, 0.85)) !important;
+            border: 1px solid rgba(251, 191, 36, 0.35) !important;
+        }
+
+        /* ===== كرت المالية الفاخر الخالص ===== */
         .dash-item.finance {
-            background: radial-gradient(circle at top left, rgba(250,204,21,0.18), rgba(15,23,42,0.95));
-            border: 1px solid rgba(244,181,71,0.7);
-            overflow: hidden;
+            background: radial-gradient(circle at top left, rgba(251, 191, 36, 0.15), rgba(11, 15, 26, 0.95)) !important;
+            border: 1.5px solid var(--gold-main) !important;
             grid-column: span 2;
         }
-
-        .dash-item.finance::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 0 0, rgba(244,181,71,0.18), transparent 55%);
-            opacity: 0.9;
-            pointer-events: none;
+        .dash-item.finance .icon-wrapper {
+            background: var(--gold-main);
+            color: #000000;
+            border-color: var(--gold-light);
         }
-
-        .dash-item.finance .icon {
-            color: #F4B547;
-        }
-
-        .dash-item.finance .title {
-            color: #FDE68A;
-        }
-
-        .dash-item.finance .desc {
-            color: #E5E7EB;
-        }
+        .dash-item.finance .title { color: var(--gold-light); }
+        .dash-item.finance .desc { color: #cbd5e1; }
 
         .badge-soon {
-            align-self: flex-start;
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: rgba(15,23,42,0.9);
-            border: 1px solid rgba(244,181,71,0.9);
-            color: #F4B547;
-            margin-bottom: 4px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .dash-item.finance > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ===== زر مقفول (لا يملك صلاحية) ===== */
-        .dash-item.disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            border-style: dashed;
-            box-shadow: none;
-        }
-
-        .dash-item.disabled:hover {
-            transform: none;
-            border-color: rgba(148,163,184,0.7);
-        }
-
-        .dash-item.disabled .desc {
-            color: #6b7280;
-        }
-
-        .dash-item.disabled::after {
-            content: "🔒 لا تملك صلاحية لهذا القسم";
             position: absolute;
-            bottom: 6px;
-            inset-inline-start: 10px;
-            inset-inline-end: 10px;
+            top: 12px;
+            left: 14px;
             font-size: 0.7rem;
-            text-align: center;
-            color: #fecaca;
-            background: rgba(15,23,42,0.9);
+            padding: 2px 10px;
             border-radius: 999px;
-            border: 1px solid rgba(248,113,113,0.8);
-            padding: 2px 8px;
+            background: #000000;
+            border: 1px solid var(--gold-main);
+            color: var(--gold-main);
+            font-weight: 700;
         }
 
-        /* فوتر: نوع الحساب + خروج */
+        /* ===== شکل الكروت المقفولة الفخم والواضح الصلاحية ===== */
+        .dash-item.disabled {
+            opacity: 0.35 !important;
+            cursor: not-allowed;
+            border-style: dashed !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            background: rgba(7, 9, 14, 0.7) !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+        .dash-item.disabled .icon-wrapper {
+            background: rgba(255,255,255,0.02) !important;
+            border-color: rgba(255,255,255,0.1) !important;
+            color: #64748b !important;
+        }
+        .dash-item.disabled .desc { color: #475569; }
+        .dash-item.disabled::after {
+            content: "🔒 مغلق";
+            position: absolute;
+            bottom: 8px;
+            left: 12px;
+            font-size: 0.7rem;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            padding: 1px 6px;
+            font-weight: 600;
+        }
+
+        /* الفوتر */
         .dash-footer {
-            margin-top: 20px;
+            margin-top: 26px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         .role-pill {
-            font-size: 0.8rem;
-            padding: 6px 12px;
+            font-size: 0.85rem;
+            padding: 8px 18px;
             border-radius: 999px;
-            border: 1px solid rgba(148,163,184,0.6);
-            color: #E5F0FF;
-            background: rgba(15,23,42,0.9);
+            border: 1px solid rgba(251, 191, 36, 0.4) !important;
+            color: var(--gold-light) !important;
+            background: rgba(0, 0, 0, 0.4);
+            font-weight: 600;
         }
 
         .logout-btn {
-            padding: 10px 22px;
+            padding: 12px 32px;
             border-radius: 999px;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             border: none;
             cursor: pointer;
             font-weight: 700;
-            background: #b91c1c;
+            background: linear-gradient(135deg, #dc2626, #991b1b);
             color: #fff;
-            box-shadow: 0 12px 28px rgba(185,28,28,0.6);
-            transition: 0.2s;
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+            transition: all 0.2s;
         }
 
         .logout-btn:hover {
-            background: #7f1d1d;
+            background: linear-gradient(135deg, #b91c1c, #7f1d1d);
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.6);
         }
 
-        /* نسخة الهاتف */
-        @media (max-width: 500px) {
-            .dash-header h1 { font-size: 1.55rem; }
-            .dash-card { padding: 18px 14px 24px; }
-            .dash-grid { grid-template-columns: 1fr; }
-            .dash-item { padding: 14px 12px; }
-            .dash-item .icon { font-size: 1.45rem; }
-            .dash-item .title { font-size: 0.95rem; }
+        /* التجاوب السلس والكامل للهاتف */
+        @media (max-width: 650px) {
+            .dash-header h1 { font-size: 1.75rem; }
+            .dash-card { padding: 20px 14px; border-radius: 20px; }
+            .dash-grid { grid-template-columns: 1fr; gap: 12px; }
+            .dash-item { padding: 16px 14px; border-radius: 14px; }
             .dash-item.finance { grid-column: auto; }
+            .badge-soon { top: auto; bottom: 12px; left: 14px; }
             .dash-footer {
                 flex-direction: column-reverse;
                 align-items: stretch;
+                gap: 14px;
             }
-            .role-pill {
-                text-align: center;
-                width: 100%;
-            }
-            .logout-btn {
-                width: 100%;
-            }
+            .role-pill { text-align: center; width: 100%; box-sizing: border-box; }
+            .logout-btn { width: 100%; padding: 14px; text-align: center; }
         }
     </style>
 </head>
@@ -268,52 +293,92 @@
 
         <div class="dash-header">
             <h1>لوحة التحكم</h1>
-            <p>إدارة عمليات الجامعة</p>
+            <p>إدارة عمليات الجامعة تحت مراقبة كامله</p>
             <p id="welcome" class="welcome"></p>
         </div>
 
         <div class="dash-card">
 
             <div class="dash-grid">
-                <!-- نستخدم data-key لكل صلاحية -->
-
+                
                 <a href="add-student.html" class="dash-item" data-key="add-student">
-                    <span class="icon">👨‍🎓</span>
-                    <span class="title">إضافة طالب</span>
-                    <span class="desc">تسجيل طالب جديد وربطه بالكلية.</span>
+                    <div class="icon-wrapper"><i class="fa-solid fa-user-graduate"></i></div>
+                    <div class="item-content">
+                        <span class="title">إضافة طالب</span>
+                        <span class="desc">تسجيل طالب جديد وربطه بالكلية.</span>
+                    </div>
                 </a>
 
                 <a href="add-course.html" class="dash-item" data-key="add-course">
-                    <span class="icon">📚</span>
-                    <span class="title">إضافة مادة</span>
-                    <span class="desc">إضافة مقررات واعتمادها.</span>
+                    <div class="icon-wrapper"><i class="fa-solid fa-book-bookmark"></i></div>
+                    <div class="item-content">
+                        <span class="title">إضافة مادة</span>
+                        <span class="desc">إضافة مقررات واعتمادها.</span>
+                    </div>
                 </a>
 
                 <a href="registercourse.html" class="dash-item" data-key="registercourse">
-                    <span class="icon">📝</span>
-                    <span class="title">تسجيل مواد</span>
-                    <span class="desc">تسجيل مواد الطلاب للفصل.</span>
+                    <div class="icon-wrapper"><i class="fa-solid fa-file-signature"></i></div>
+                    <div class="item-content">
+                        <span class="title">تسجيل مواد</span>
+                        <span class="desc">تسجيل مواد الطلاب للفصل.</span>
+                    </div>
+                </a>
+
+                <a href="schedule-manage.html" class="dash-item schedules-btn" data-key="schedules">
+                    <div class="icon-wrapper"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div class="item-content">
+                        <span class="title">جداول المحاضرات</span>
+                        <span class="desc">استعراض وإدارة جداول الامتحانات والمحاضرات.</span>
+                    </div>
+                </a>
+
+                <a href="equalization.html" class="dash-item equalization-btn" data-key="equalization">
+                    <div class="icon-wrapper"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div class="item-content">
+                        <span class="title">معادلة المواد</span>
+                        <span class="desc">إدارة المعادلات الأكاديمية للطلبة المنقولين.</span>
+                    </div>
                 </a>
 
                 <a href="reports.html" class="dash-item" data-key="reports">
-                    <span class="icon">📊</span>
-                    <span class="title">التقارير</span>
-                    <span class="desc">تقارير الطلاب والمواد.</span>
+                    <div class="icon-wrapper"><i class="fa-solid fa-chart-pie"></i></div>
+                    <div class="item-content">
+                        <span class="title">التقارير</span>
+                        <span class="desc">تقارير الطلاب والمواد المسجلة.</span>
+                    </div>
                 </a>
 
-                <!-- زر المالية -->
+                <a href="stats.html" class="dash-item" data-key="stats">
+                    <div class="icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="item-content">
+                        <span class="title">الإحصائيات</span>
+                        <span class="desc">عرض حالة واعداد الطلبة .</span>
+                    </div>
+                </a>
+
+                <a href="users-manage.html" class="dash-item" data-key="users-manage">
+                    <div class="icon-wrapper"><i class="fa-solid fa-users-gear"></i></div>
+                    <div class="item-content">
+                        <span class="title">إدارة المستخدمين</span>
+                        <span class="desc">التحكم في حسابات الموظفين وتوزيع الأدوار.</span>
+                    </div>
+                </a>
+
                 <a href="finance.html" class="dash-item finance" data-key="finance">
                     <span class="badge-soon">قريباً</span>
-                    <span class="icon">💰</span>
-                    <span class="title">المالية</span>
-                    <span class="desc">إدارة الرسوم، الإيصالات، والذمم المالية للطلاب.</span>
+                    <div class="icon-wrapper"><i class="fa-solid fa-sack-dollar"></i></div>
+                    <div class="item-content">
+                        <span class="title">المالية</span>
+                        <span class="desc">إدارة الرسوم، الإيصالات، والذمم المالية للطلاب.</span>
+                    </div>
                 </a>
 
             </div>
 
             <div class="dash-footer">
                 <span id="rolePill" class="role-pill"></span>
-                <button class="logout-btn" onclick="logout()">⏻ تسجيل الخروج</button>
+                <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
             </div>
 
         </div>
@@ -321,7 +386,6 @@
 </div>
 
 <script>
-    // قراءة المستخدم والدور من localStorage
     const user = localStorage.getItem("aiu_user");
     const role = (localStorage.getItem("aiu_role") || "user1").toLowerCase();
 
@@ -331,16 +395,18 @@
         document.getElementById("welcome").textContent = "مرحباً، " + user;
     }
 
-    // جدول الصلاحيات
+    // تم إضافة صلاحية الـ schedules هنا للمنسقين والآدمن
     const permissions = {
-        admin: ["add-student", "add-course", "registercourse", "reports", "finance"],
-        user1: ["add-course", "registercourse", "reports", "finance"], // منسق كلية
-        user2: ["add-student", "finance"],                       // موظف تسجيل
-        user3: ["reports", "finance"]                            // موظف تقارير 
+        admin: ["add-student", "add-course", "registercourse", "schedules", "equalization", "reports", "stats", "finance"], 
+        admin1: ["add-student", "add-course", "registercourse", "schedules", "equalization", "reports", "stats", "users-manage", "finance"], 
+        user1: ["add-course", "registercourse", "schedules", "equalization", "reports", "stats", "finance"], 
+        user2: ["add-student", "equalization", "reports", "stats", "finance"],                               
+        user3: ["reports", "stats", "finance"]                            
     };
 
     const roleNames = {
         admin: "مدير النظام",
+        admin1: "الإدارة العليا",
         user1: "منسق كلية",
         user2: "موظف تسجيل",
         user3: "موظف تقارير"
@@ -351,24 +417,26 @@
         pill.textContent = "نوع الحساب: " + (roleNames[role] || role);
     }
 
-    // تطبيق الصلاحيات: لا نخفي الأزرار، بس نقفلها لو ماعندهش صلاحية
     function applyPermissions() {
         const allowed = permissions[role] || [];
 
         document.querySelectorAll(".dash-item").forEach(item => {
             const key = item.getAttribute("data-key");
-            if (!key) return;
+            if (!key) return; 
 
-            // نرجع الكرت للوضع الافتراضي قبل ما نقرر
             item.classList.remove("disabled");
-
-            // نمسح أي onClick قديم خاص بالقفل
             item.onclick = null;
+
+            if (key === "finance") {
+                item.onclick = function (e) {
+                    e.preventDefault();
+                    alert("قسم المالية سيتم تفعيله في التحديث القادم للنظام.");
+                };
+                return;
+            }
 
             if (!allowed.includes(key)) {
                 item.classList.add("disabled");
-
-                // منع الضغط + رسالة
                 item.onclick = function (e) {
                     e.preventDefault();
                     alert("لا تملك صلاحية الدخول إلى هذا القسم، الرجاء مراجعة مدير النظام م.أيوب الحوات.");
@@ -383,12 +451,6 @@
         localStorage.removeItem("aiu_user");
         localStorage.removeItem("aiu_role");
         window.location.href = "login.html";
-    }
-
-    // لو حاب تخلي زر المالية دايمًا "قريبًا" حتى لو عنده صلاحية:
-    function financeSoon(e) {
-        e.preventDefault();
-        alert("قسم المالية سيتم تفعيله في التحديث القادم للنظام.");
     }
 </script>
 

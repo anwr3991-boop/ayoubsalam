@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة الجداول الدراسية - جامعة السلام الدولية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="salam.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        html, body {
+            overflow-y: auto !important;
+            height: auto !important;
+            min-height: 100vh;
+            background: #07090e;
+        }
+
+        :root {
+            --gold-light: #fcd34d;
+            --gold-main: #fbbf24;
+            --gold-dark: #b45309;
+            --gold-glow: rgba(251, 191, 36, 0.2);
+            --bg-dark: #07090e;
+            --card-bg: rgba(13, 18, 30, 0.95);
+        }
+        body { margin: 0; font-family: "Cairo", sans-serif; color: #f8fafc; direction: rtl; }
+        
+        .hero { 
+            min-height: 100vh !important; 
+            height: auto !important;
+            overflow-y: visible !important;
+            padding: 40px 14px; 
+            display: flex; 
+            align-items: flex-start; 
+            justify-content: center; 
+            background: radial-gradient(circle at top, #111625 0%, #07090e 70%) !important; 
+        }
+        
+        .shell { width: 100%; max-width: 1150px; z-index: 2; }
+        
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { margin: 0 0 8px; font-size: 2rem; font-weight: 800; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        
+        .card { 
+            background: linear-gradient(145deg, rgba(15, 22, 38, 0.95), rgba(7, 9, 14, 0.98)) !important; 
+            border-radius: 20px; 
+            padding: 25px; 
+            border: 2px solid rgba(251, 191, 36, 0.35) !important; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.85); 
+            margin-bottom: 40px;
+        }
+        
+        .grid-form { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 16px; 
+            margin-bottom: 25px; 
+            background: rgba(0,0,0,0.3); 
+            padding: 20px; 
+            border-radius: 14px; 
+            border: 1px solid rgba(251,191,36,0.15); 
+        }
+        
+        .group { display: flex; flex-direction: column; gap: 6px; }
+        .group label { font-size: 0.85rem; color: var(--gold-light); font-weight: 600; }
+        
+        .group input, .group select { 
+            padding: 11px; 
+            border-radius: 8px; 
+            background: #0f1524; 
+            border: 1px solid rgba(251,191,36,0.25); 
+            color: #fff; 
+            outline: none; 
+            font-family: "Cairo"; 
+            transition: all 0.2s;
+        }
+        .group input:focus, .group select:focus { border-color: var(--gold-main); box-shadow: 0 0 8px var(--gold-glow); }
+        .group select option { background: #07090e; color: #fff; }
+        
+        .time-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-submit { 
+            grid-column: 1/-1; 
+            padding: 14px; 
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-main)); 
+            border: none; 
+            border-radius: 10px; 
+            font-weight: 900; 
+            color: #000; 
+            cursor: pointer; 
+            font-size: 1.05rem; 
+            transition: all 0.25s;
+            box-shadow: 0 4px 15px var(--gold-glow);
+        }
+        .btn-submit:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-submit:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(251, 191, 36, 0.05);
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            margin: 25px 0 12px 0;
+        }
+        .filter-bar h3 { margin: 0; font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .filter-group { display: flex; align-items: center; gap: 10px; }
+        .filter-group select { padding: 8px 14px; border-radius: 6px; background: #0f1524; border: 1px solid var(--gold-main); color: #fff; font-family: "Cairo"; min-width: 200px; }
+
+        .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(251,191,36,0.2); }
+        table { width: 100%; border-collapse: collapse; text-align: right; min-width: 850px; }
+        th { background: #141b2d; color: var(--gold-main); padding: 14px; font-weight: 700; }
+        td { padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
+        tr:hover { background: rgba(251,191,36,0.02); }
+        
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; color: var(--gold-light); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: color 0.2s; }
+        .btn-back:hover { color: #fff; }
+
+        .btn-action { padding: 6px 10px; border-radius: 6px; cursor: pointer; border: none; font-weight: bold; margin-left: 5px; transition: opacity 0.2s; }
+        .btn-action:hover { opacity: 0.9; }
+        .btn-edit-row { background: #2563eb; color: #fff; }
+        .btn-delete-row { background: #dc2626; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="shell">
+        <div class="header">
+            <h1>📅 لوحة إدارة وتوزيع الجداول الدراسية</h1>
+            <p style="color: var(--gold-main); font-weight: 600;">بوابة التعديل والإدخال التلقائية </p>
+        </div>
+
+        <div class="card">
+            <form id="scheduleForm" class="grid-form" onsubmit="saveSchedule(event)">
+                <div class="group">
+                    <label><i class="fa-solid fa-university"></i> الكليات المتاحة  </label>
+                    <select id="colName" onchange="filterCoursesByCollege()" required>
+                        <option value="">🔄 جاري جلب الكليات الحالية...</option>
+                    </select>
+                </div>
+
+                <div class="group">
+                    <label><i class="fa-solid fa-calendar-days"></i> الفصل الدراسي الحالي</label>
+                    <select id="sTerm" required style="border-color: var(--gold-main); color: #fff; font-weight: bold;">
+                        <option value="">🔄 جاري جلب الفصول المتاحة...</option>
+                    </select>
+                </div>
+                
+                <div class="group">
+                    <label><i class="fa-solid fa-layer-group"></i> السمستر</label>
+                    <select id="semName" required>
+                        <option value="السمستر الأول">السمستر الأول</option>
+                        <option value="السمستر الثاني">السمستر الثاني</option>
+                        <option value="السمستر الثالث">السمستر الثالث</option>
+                        <option value="السمستر الرابع">السمستر الرابع</option>
+                        <option value="السمستر الخامس">السمستر الخامس</option>
+                        <option value="السمستر السادس">السمستر السادس</option>
+                        <option value="السمستر السابع">السمستر السابع</option>
+                        <option value="السمستر الثامن">السمستر الثامن</option>
+                        <option value="السمستر التاسع">السمستر التاسع</option>
+                        <option value="السمستر العاشر">السمستر العاشر</option>
+                    </select>
+                </div>
+                
+                <div class="group">
+                    <label><i class="fa-solid fa-book"></i> اختر المقرر الدراسي (تعبئة تلقائية)</label>
+                    <select id="courseSelect" onchange="syncCourseData()" required>
+                        <option value="">اختر الكلية أولاً لتظهر المواد...</option>
+                    </select>
+                </div>
+
+                <input type="hidden" id="cCode">
+                <input type="hidden" id="cName">
+                <input type="hidden" id="editRowIndex" value="">
+
+                <div class="group">
+                    <label><i class="fa-solid fa-calendar-day"></i> اليوم</label>
+                    <select id="sDay">
+                        <option value="السبت">السبت</option>
+                        <option value="الأحد">الأحد</option>
+                        <option value="الإثنين">الإثنين</option>
+                        <option value="الثلاثاء">الثلاثاء</option>
+                        <option value="الأربعاء">الأربعاء</option>
+                        <option value="الخميس">الخميس</option>
+                    </select>
+                </div>
+
+                <div class="group">
+                    <label><i class="fa-solid fa-clock"></i> التوقيت الزمني للمحاضرة</label>
+                    <div class="time-range">
+                        <input type="time" id="startTime" title="وقت البداية" required>
+                        <input type="time" id="endTime" title="وقت النهاية" required>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <label><i class="fa-solid fa-door-open"></i> القاعة / المعمل</label>
+                    <input type="text" id="sRoom" placeholder="مثال: A3" required>
+                </div>
+                <div class="group">
+                    <label><i class="fa-solid fa-user-tie"></i> الدكتور / عضو هيئة التدريس</label>
+                    <input type="text" id="sTeacher" placeholder="مثال: أ.أيوب محمد" required>
+                </div>
+                
+                <button type="submit" id="submitBtn" class="btn-submit">⚡ اعتماد وحفظ المادة في الجدول الدراسي</button>
+            </form>
+
+            <div class="filter-bar">
+                <h3><i class="fa-solid fa-filter"></i> استعراض وتصفية المواد حسب الكليات  </h3>
+                <div class="filter-group">
+                    <label style="font-size:0.9rem; color:var(--gold-light);">تصفية حسب الكلية:</label>
+                    <select id="tableFilter" onchange="applyTableFilter()">
+                        <option value="ALL">عرض جداول كافة الكليات (الكل)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الكلية المستهدفة</th>
+                            <th>المقرر الدراسي</th>
+                            <th>اليوم</th>
+                            <th>التوقيت الزمني</th>
+                            <th>القاعة</th>
+                            <th>الأستاذ / عضو هيئة التدريس</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleTableBody">
+                        <tr><td colspan="7" style="text-align:center; color: var(--gold-main); padding: 20px;">🔄 جاري جلب الجدول الدراسي الحالي والموثق...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <a href="dashboard.html" class="btn-back"><i class="fa-solid fa-arrow-right"></i> العودة للرئيسية</a>
+        </div>
+    </div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwgmunZv-wU-kBJqP6cbVk-A1sqoWd9TYqesW7FS0CWz5XRejQ23hOJ0QqpTwpjI0X8kQ/exec";
+let globalSchedules = []; 
+let registeredColleges = []; 
+let cachedCourses = []; 
+let defaultSystemTerm = ""; 
+
+const role = (localStorage.getItem("aiu_role") || "").toLowerCase();
+if (role !== "user1" && role !== "admin" && role !== "admin1") {
+    alert("تنبيه أمني: حسابك الحالي لا يمتلك صلاحية تعديل جداول المنسقين.");
+    window.location.href = "dashboard.html";
+}
+
+function parseCleanTime(timeValue) {
+    if (!timeValue) return "";
+    let str = String(timeValue).trim();
+    if (str.includes("T")) {
+        let timePart = str.split("T")[1];
+        if (timePart) {
+            let parts = timePart.split(":");
+            return `${parts[0]}:${parts[1]}`;
+        }
+    }
+    if (str.includes("GMT") || str.includes("1899")) {
+        let match = str.match(/(\d{2}):(\d{2}):\d{2}/);
+        if (match) return `${match[1]}:${match[2]}`;
+    }
+    let directMatch = str.match(/(\d{1,2}):(\d{2})/);
+    if (directMatch) {
+        let hrs = directMatch[1].padStart(2, '0');
+        let mins = directMatch[2];
+        return `${hrs}:${mins}`;
+    }
+    return str;
+}
+
+function detectCollegeFromRow(rowItem) {
+    if (!rowItem) return "عام";
+    if (typeof rowItem === 'object' && !Array.isArray(rowItem)) {
+        if (rowItem.college) return String(rowItem.college).trim();
+        if (rowItem.collegeName) return String(rowItem.collegeName).trim();
+    }
+    if (Array.isArray(rowItem)) {
+        return String(rowItem[8] || "عام").trim();
+    }
+    return "عام";
+}
+
+async function loadSystemTerms() {
+    const termSelect = document.getElementById("sTerm");
+    try {
+        const res = await fetch(`${API_URL}?action=getSemesters`);
+        const config = await res.json();
+        const termsList = config.semesters || config.terms || ["خريف 2026"];
+        defaultSystemTerm = config.currentTerm || termsList[termsList.length - 1];
+
+        let htmlOptions = '<option value="">اختر الفصل الدراسي...</option>';
+        termsList.forEach(t => {
+            htmlOptions += `<option value="${t}">${t}</option>`;
+        });
+        termSelect.innerHTML = htmlOptions;
+        termSelect.value = defaultSystemTerm;
+    } catch (err) {
+        console.error("Error terms:", err);
+        termSelect.innerHTML = `<option value="خريف 2026">خريف 2026 (افتراضي)</option>`;
+        termSelect.value = "خريف 2026";
+    }
+}
+
+async function loadCollegesAndCourses() {
+    const colSelect = document.getElementById("colName");
+    const tableFilter = document.getElementById("tableFilter");
+    try {
+        const res = await fetch(`${API_URL}?action=getCollegesAndCourses`);
+        const data = await res.json();
+        
+        if (data && data.colleges && data.courses) {
+            registeredColleges = data.colleges;
+            cachedCourses = data.courses; 
+        }
+        
+        if (registeredColleges.length === 0) {
+            colSelect.innerHTML = '<option value="">⚠️ لا توجد كليات في الشيت</option>';
+            return;
+        }
+        
+        let optionsHtml = '<option value="">اختر الكلية المستهدفة...</option>';
+        let filterHtml = '<option value="ALL">عرض جداول كافة الكليات (الكل)</option>';
+        
+        registeredColleges.forEach(col => {
+            optionsHtml += `<option value="${col}">${col}</option>`;
+            filterHtml += `<option value="${col}">${col}</option>`;
+        });
+        
+        colSelect.innerHTML = optionsHtml;
+        tableFilter.innerHTML = filterHtml;
+    } catch (err) {
+        console.error("Error colleges:", err);
+        colSelect.innerHTML = '<option value="">❌ فشل جلب كليات ومواد الشيت (تأكد من نشر السيرفر)</option>';
+    }
+}
+
+function filterCoursesByCollege() {
+    const college = document.getElementById("colName").value;
+    const courseSelect = document.getElementById("courseSelect");
+    
+    if (!college) {
+        courseSelect.innerHTML = '<option value="">اختر الكلية أولاً لتظهر المواد...</option>';
+        return;
+    }
+    const filtered = cachedCourses.filter(c => c.college && c.college.trim() === college.trim());
+    if (filtered.length === 0) {
+        courseSelect.innerHTML = '<option value="">⚠️ لا توجد مواد مضافة لهذه الكلية</option>';
+        return;
+    }
+    let optionsHtml = '<option value="">اختر المادة التعليمية...</option>';
+    filtered.forEach(c => {
+        optionsHtml += `<option value="${c.code}" data-name="${c.name}">[${c.code}] ${c.name}</option>`;
+    });
+    courseSelect.innerHTML = optionsHtml;
+}
+
+function syncCourseData() {
+    const select = document.getElementById("courseSelect");
+    const selectedOption = select.options[select.selectedIndex];
+    if (selectedOption && select.value) {
+        document.getElementById("cCode").value = select.value;
+        document.getElementById("cName").value = selectedOption.getAttribute("data-name");
+    } else {
+        document.getElementById("cCode").value = "";
+        document.getElementById("cName").value = "";
+    }
+}
+
+async function loadSchedules() {
+    const tbody = document.getElementById("scheduleTableBody");
+    try {
+        const res = await fetch(`${API_URL}?action=readSchedules`);
+        const rawData = await res.json();
+        globalSchedules = Array.isArray(rawData) ? rawData : (rawData.data || rawData.schedules || []);
+        applyTableFilter(); 
+    } catch(e) {
+        console.error("Error schedules:", e);
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: #ef4444; padding: 20px;">❌ حدث خطأ أثناء جلب الجدول من السيرفر.</td></tr>`;
+    }
+}
+
+function applyTableFilter() {
+    const filterValue = document.getElementById("tableFilter").value;
+    const tbody = document.getElementById("scheduleTableBody");
+    tbody.innerHTML = "";
+    
+    let filteredData = globalSchedules;
+    if (filterValue !== "ALL") {
+        filteredData = globalSchedules.filter(s => {
+            let actualCollege = detectCollegeFromRow(s);
+            return actualCollege.trim() === filterValue.trim();
+        });
+    }
+    
+    if (filteredData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: #64748b; padding: 20px;">لا توجد جداول مسجلة تطابق الكلية المحددة حالياً.</td></tr>`;
+        return;
+    }
+    
+    filteredData.forEach((s, index) => {
+        const tr = document.createElement("tr");
+        const googleRowIdx = index + 2; 
+        
+        let cCode = '', cName = '', day = '', rawStart = '', rawEnd = '', room = '', semester = '', instructor = '', term = '';
+        let college = detectCollegeFromRow(s); 
+        
+        if (Array.isArray(s)) {
+            cCode = s[0] || '';
+            cName = s[1] || '';
+            day = s[2] || '';
+            rawStart = s[3] || '';
+            rawEnd = s[4] || '';
+            room = s[5] || '';
+            semester = s[7] || '';
+            term = s[9] || ''; 
+            instructor = s[10] || 'عضو هيئة تدريس';
+        } else {
+            cCode = s.courseCode || '';
+            cName = s.courseName || '';
+            day = s.day || '';
+            rawStart = s.startTime || '';
+            rawEnd = s.endTime || '';
+            room = s.room || '';
+            term = s.term || '';
+            semester = s.semester || '';
+            instructor = s.instructor || s.teacher || 'عضو هيئة تدريس';
+        }
+        
+        const cleanStart = parseCleanTime(rawStart);
+        const cleanEnd = parseCleanTime(rawEnd);
+
+        tr.innerHTML = `
+            <td><strong style="color: var(--gold-main);">${college}</strong></td>
+            <td><span style="color: var(--gold-light); font-weight:600;">${cCode}</span> - ${cName}</td>
+            <td><i class="fa-regular fa-calendar-check"></i> ${day}</td>
+            <td style="direction: ltr; text-align: right; font-weight: bold; color: #fff;">
+                من ${cleanStart} إلى ${cleanEnd}
+            </td>
+            <td>${room}</td>
+            <td style="color: #e2e8f0; font-weight: 500;">${instructor}</td>
+            <td>
+                <button type="button" class="btn-action btn-edit-row" onclick="editSchedule('${googleRowIdx}', '${cCode}', '${semester}', '${college}', '${day}', '${cleanStart}', '${cleanEnd}', '${room}', '${instructor}', '${term}')"><i class="fa-solid fa-pen"></i></button>
+                <button type="button" class="btn-action btn-delete-row" onclick="deleteSchedule(${googleRowIdx})"><i class="fa-solid fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+async function saveSchedule(e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById("submitBtn");
+    const editRowIndex = document.getElementById("editRowIndex").value;
+    
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = editRowIndex ? `⏳ جاري التحديث...` : `⏳ جاري الإضافة...`;
+    
+    const liveRealName = sessionStorage.getItem("username") || localStorage.getItem("username") || "مستخدم عام";
+
+    const payload = {
+        action: "saveSchedule", 
+        rowIndex: editRowIndex || null,
+        college: document.getElementById("colName").value,
+        term: document.getElementById("sTerm").value, 
+        username: role, 
+        realName: liveRealName.trim(), 
+        semester: document.getElementById("semName").value,
+        courseCode: document.getElementById("cCode").value,
+        courseName: document.getElementById("cName").value,
+        day: document.getElementById("sDay").value,
+        startTime: document.getElementById("startTime").value,
+        endTime: document.getElementById("endTime").value,
+        room: document.getElementById("sRoom").value.trim(),
+        instructor: document.getElementById("sTeacher").value.trim()
+    };
+
+    try {
+        const res = await fetch(API_URL, { 
+            method: "POST", 
+            mode: "cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload) 
+        });
+        const result = await res.json();
+        
+        if (result.status === "OK" || result.code === 200) {
+            alert(editRowIndex ? "🎉 تم تحديث بيانات المحاضرة بنجاح!" : "🎉 تم حفظ وتوثيق موعد المادة بنجاح!");
+            const savedTermSelection = document.getElementById("sTerm").value;
+            
+            document.getElementById("scheduleForm").reset();
+            document.getElementById("editRowIndex").value = ""; 
+            document.getElementById("sTerm").value = savedTermSelection; 
+            document.getElementById("courseSelect").innerHTML = '<option value="">اختر الكلية أولاً لتظهر المواد...</option>';
+            
+            submitBtn.innerHTML = `⚡ اعتماد وحفظ المادة في الجدول الدراسي`;
+            await loadSchedules(); 
+        } else {
+            alert("⚠️ تنبيه من السيرفر: " + (result.message || "فشل الحفظ"));
+        }
+    } catch(err) {
+        console.error(err);
+        alert("❌ فشل الاتصال بالسيرفر أثناء الحفظ.");
+    } finally {
+        submitBtn.disabled = false;
+    }
+}
+
+async function deleteSchedule(rowIndex) {
+    if(!confirm("هل أنت متأكد من حذف هذه المحاضرة نهائياً من الجدول؟")) return;
+    try {
+        const res = await fetch(`${API_URL}?action=deleteSchedule&rowIndex=${rowIndex}`);
+        const result = await res.json();
+        if(result.status === "OK") {
+            alert("🗑️ تم حذف المحاضرة بنجاح.");
+            await loadSchedules();
+        } else {
+            alert("❌ فشل الحذف: " + result.message);
+        }
+    } catch(e) {
+        alert("❌ حدث خطأ أثناء الاتصال بالسيرفر لحذف السطر.");
+    }
+}
+
+function editSchedule(rowIndex, code, semester, college, day, start, end, room, teacher, term) {
+    document.getElementById("editRowIndex").value = rowIndex;
+    document.getElementById("colName").value = college;
+    if(term) { document.getElementById("sTerm").value = term; }
+    document.getElementById("semName").value = semester;
+    document.getElementById("sDay").value = day;
+    document.getElementById("startTime").value = start;
+    document.getElementById("endTime").value = end;
+    document.getElementById("sRoom").value = room;
+    document.getElementById("sTeacher").value = teacher;
+
+    document.getElementById("submitBtn").innerHTML = `💾 تحديث وحفظ التعديلات في الجدول`;
+    filterCoursesByCollege();
+    setTimeout(() => {
+        document.getElementById("courseSelect").value = code;
+        syncCourseData();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 250);
+}
+
+// تشغيل متوازي بالكامل لمنع تعليق العناصر في حال حدوث خطأ بأي دالة
+window.onload = function() {
+    loadSystemTerms(); 
+    loadCollegesAndCourses(); 
+    loadSchedules();
+};
+</script>
+</body>
+</html>
