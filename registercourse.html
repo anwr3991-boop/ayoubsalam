@@ -785,7 +785,7 @@
     <div class="row">
       <div class="field">
         <label for="sid">رقم القيد</label>
-        <input list="studentsList" type="text" id="sid" placeholder="مثال: 20251234 أو اختر من القائمة" oninput="validateStudentFromInput()">
+        <input list="studentsList" type="text" id="sid" placeholder="مثال: 20251234 أو اختر من القائمة" onchange="validateStudentFromInput()">
         <datalist id="studentsList"></datalist>
       </div>
       <div class="field">
@@ -847,7 +847,7 @@
 
     <div class="field" style="margin-top:8px;">
       <label for="semester">الفصل الدراسي</label>
-      <input type="text" id="semester" value="خريف2027/2026" readonly>
+      <input type="text" id="semester" value=" خريف 2026-2027" readonly>
     </div>
 
     <div class="actions">
@@ -1163,6 +1163,8 @@
     }
   }
 
+  let currentFetchController = null;
+
   async function validateStudentFromInput() {
     const rawVal = document.getElementById("sid").value;
     const sid = extractIdFromListValue(rawVal);
@@ -1174,11 +1176,19 @@
       return;
     }
 
+    // إلغاء أي طلب سابق ما زال معلقاً في الخلفية
+    if (currentFetchController) {
+      currentFetchController.abort();
+    }
+    currentFetchController = new AbortController();
+
     document.getElementById("msg").innerText = "جاري جلب بيانات الطالب ومواده الدراسية...";
     document.getElementById("msg").style.color = "var(--gold)";
 
     try {
-      const res = await fetch(`${API_URL}?action=getStudent&id=${sid}&semester=${encodeURIComponent(sem)}`);
+      const res = await fetch(`${API_URL}?action=getStudent&id=${sid}&semester=${encodeURIComponent(sem)}`, {
+        signal: currentFetchController.signal
+      });
       const data = await res.json();
 
       if (data.error) {
@@ -1226,6 +1236,7 @@
       }
 
     } catch (e) {
+      if (e.name === 'AbortError') return; // تجاهل الطلبات المُلغاة
       console.error(e);
       document.getElementById("msg").innerText = "حدث خطأ أثناء جلب مواد الطالب الحالية من السيرفر.";
       document.getElementById("msg").style.color = "#ef4444";
@@ -1248,7 +1259,7 @@
       return;
     }
 
-    document.getElementById("msg").innerText = "جاري تنفيذطلب التسجيل على السيرفر...";
+    document.getElementById("msg").innerText = "جاري تنفيذ طلب التسجيل للطالب...";
     document.getElementById("msg").style.color = "var(--gold)";
 
     try {
