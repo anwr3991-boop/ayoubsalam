@@ -11,12 +11,11 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background-color: #000; /* لون احتياطي للخلفية */
-            overflow-y: auto; /* السماح بالتمرير العمودي دائماً عند الحاجة */
+            background-color: #000;
+            overflow-y: auto;
             scroll-behavior: smooth;
         }
 
-        /* التعديل هنا فقط: تحويل الارتفاع إلى مرن يسمح بشريط تمرير كامل للصفحة دون المساس بالداخل */
         .hero {
             position: relative;
             min-height: 100vh;
@@ -50,7 +49,6 @@
             margin-bottom: 5px;
         }
 
-        /* شبكة اللوحات الرقمية - متوافقة كلياً مع الشاشات والهواتف */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -68,7 +66,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-            cursor: pointer; /* جعل الكروت قابلة للنقر */
+            cursor: pointer;
         }
 
         .stat-card:hover {
@@ -77,7 +75,6 @@
             box-shadow: 0 15px 30px rgba(56, 189, 248, 0.15);
         }
 
-        /* تمييز الكرت النشط حالياً */
         .stat-card.active-card {
             border-color: #38bdf8;
             background: rgba(30, 41, 59, 0.6);
@@ -101,11 +98,10 @@
         .stat-card .total-label { color: #38bdf8; }
         .stat-card .graduates-label { color: #10b981; }
         .stat-card .filter-label { color: #f59e0b; }
-        .stat-card .new-label { color: #ec4899; } /* لون مميز للطلاب الجدد */
+        .stat-card .new-label { color: #ec4899; }
 
         .semesterNameLabel { pointer-events: none; }
 
-        /* قسـم التصفية الديناميكية للفصول */
         .filter-section {
             background: rgba(30, 41, 59, 0.4);
             border: 1px solid rgba(148,163,184,0.15);
@@ -136,14 +132,13 @@
             min-width: 200px;
         }
 
-        /* صندوق تفاصيل الطلاب المعروضة عند النقر */
         .details-box {
             background: rgba(15, 23, 42, 0.95);
             border: 1px solid #38bdf8;
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 30px;
-            display: none; /* مخفي افتراضياً ويظهر عند النقر */
+            display: none;
             animation: fadeIn 0.4s ease-in-out;
         }
 
@@ -166,7 +161,6 @@
         }
         .close-details:hover { color: #fff; }
 
-        /* تنسيق فلتر الكلية الجديد والعداد */
         .college-filter-wrapper {
             display: flex;
             align-items: center;
@@ -200,10 +194,9 @@
             margin-right: auto;
         }
 
-        /* لم يتم تغيير شيء هنا نهائياً بناءً على طلبك: شريط التمرير الأبيض الداخلي للجدول كما هو */
         .students-table-wrapper {
             overflow-x: auto;
-            max-height: 400px; /* تحديد أقصى ارتفاع مع تمرير داخلي */
+            max-height: 400px;
             overflow-y: auto;
         }
 
@@ -233,7 +226,6 @@
             background: rgba(56, 189, 248, 0.08);
         }
         
-        /* جدول عرض الكليات */
         .colleges-box {
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid rgba(148, 163, 184, 0.2);
@@ -291,7 +283,6 @@
             transition: width 0.5s ease-in-out;
         }
 
-        /* تنسيق أزرار الأكشن والتنقل */
         .actions-wrapper {
             display: flex;
             gap: 15px;
@@ -341,7 +332,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* تحسينات إضافية للهواتف المحمولة الصغيره */
         @media (max-width: 600px) {
             .hero { padding: 20px 10px; }
             .header-title h1 { font-size: 1.6rem; }
@@ -351,7 +341,6 @@
             .actions-wrapper, .btn-back, .btn-print { width: 100%; box-sizing: border-box; justify-content: center; }
         }
 
-        /* إعدادات الطباعة الاحترافية للتقرير المالي والإحصائي */
         @media print {
             body, html, .hero {
                 background: #fff !important;
@@ -446,14 +435,12 @@
             </div>
         </div>
 
-        <!-- صندوق عرض القائمة التفصيلية للطلاب المختارين -->
         <div class="details-box" id="studentsDetailsBox">
             <h2>
                 <span id="detailsTitle">قائمة الطلاب التفصيلية</span>
                 <button class="close-details" onclick="closeDetailsBox()">✕ إغلاق</button>
             </h2>
 
-            <!-- الفلترة حسب الكلية وعداد النتائج المعروضة داخلياً -->
             <div class="college-filter-wrapper">
                 <label for="collegeFilterSelect">تصفية حسب الكلية الكلية:</label>
                 <select id="collegeFilterSelect" onchange="filterDetailsByCollege(this.value)">
@@ -473,7 +460,6 @@
                         </tr>
                     </thead>
                     <tbody id="studentsDetailsBody">
-                        <!-- تظهر البيانات هنا ديناميكياً -->
                     </tbody>
                 </table>
             </div>
@@ -506,7 +492,7 @@
     
     let rawStatsData = null;
     let currentActiveCategory = null;
-    let currentFilteredStudentsList = []; // لتخزين القائمة النشطة الحالية للكرت قبل فلترة الكلية
+    let currentFilteredStudentsList = [];
 
     async function loadStatistics() {
         try {
@@ -527,10 +513,36 @@
                 selector.appendChild(opt);
             });
             
-            if(data.semesters.includes("ربيع 2026")) {
-                selector.value = "ربيع 2026";
-                onSemesterChange("ربيع 2026");
-            } else if(data.semesters.length > 0) {
+            // فلترة واستبعاد الألفاظ غير الفصلية
+            const realSemesters = data.semesters.filter(s => {
+                const str = String(s || "").trim();
+                return str && !str.includes("معادلة") && !str.includes("FINANCIAL");
+            });
+
+            if (realSemesters.length > 0) {
+                // دالة ذكية تستخرج أعلى سنة رقمية مع ترتيب مواسم الفصول
+                const getSemesterScore = s => {
+                    const matches = s.match(/\d{4}/g);
+                    let maxYear = 0;
+                    if (matches) {
+                        maxYear = Math.max(...matches.map(num => parseInt(num, 10)));
+                    }
+                    
+                    let seasonScore = 1;
+                    if (s.includes("ربيع")) seasonScore = 1;
+                    else if (s.includes("صيف")) seasonScore = 2;
+                    else if (s.includes("خريف")) seasonScore = 3;
+
+                    return (maxYear * 10) + seasonScore;
+                };
+
+                const latestSemester = realSemesters.reduce((prev, curr) => {
+                    return getSemesterScore(curr) >= getSemesterScore(prev) ? curr : prev;
+                });
+
+                selector.value = latestSemester;
+                onSemesterChange(latestSemester);
+            } else if (data.semesters.length > 0) {
                 selector.value = data.semesters[0];
                 onSemesterChange(data.semesters[0]);
             }
@@ -544,7 +556,6 @@
         }
     }
 
-    // تعبئة خيارات فلتر الكلية
     function populateCollegeFilterOptions(colleges) {
         const select = document.getElementById("collegeFilterSelect");
         select.innerHTML = `<option value="">كل الكليات</option>`;
@@ -606,20 +617,17 @@
             label.innerText = `البيانات الخاصة بـ (${selectedSemester})`;
         });
 
-        // إذا كانت هناك قائمة تفصيلية مفتوحة ومربوطة بالفصل المختار، قم بتحديثها فوراً
         if (currentActiveCategory === 'semester' || currentActiveCategory === 'new') {
             showCategoryDetails(currentActiveCategory);
         }
     }
 
-    // دالة التحكم في عرض تفاصيل الطلاب حسب الكرت المضغوط
     function showCategoryDetails(category) {
         if (!rawStatsData) return;
 
         currentActiveCategory = category;
         const selectedSemester = document.getElementById("semesterSelector").value;
 
-        // إزالة الفئة النشطة من كل الكروت وإضافتها للكرت الحالي
         document.querySelectorAll('.stat-card').forEach(card => card.classList.remove('active-card'));
         document.getElementById(`card-${category}`).classList.add('active-card');
 
@@ -649,25 +657,19 @@
         }
 
         document.getElementById("detailsTitle").innerText = titleText;
-        
-        // إعادة تعيين فلتر اختيار الكلية إلى الوضع الافتراضي عند تغيير الكرت
         document.getElementById("collegeFilterSelect").value = "";
         
-        // عرض البيانات كاملة بشكل مبدئي
         renderDetailsTable(currentFilteredStudentsList);
 
-        // إظهار صندوق التفاصيل وعمل سكرول سلس باتجاهه لإراحة المستخدم
         const detailsBox = document.getElementById("studentsDetailsBox");
         detailsBox.style.display = "block";
         detailsBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // دالة بناء وتحديث الجدول داخلياً مع العداد
     function renderDetailsTable(list) {
         const tbody = document.getElementById("studentsDetailsBody");
         tbody.innerHTML = "";
 
-        // تحديث العداد الرقمي تحت الفلتر مباشرة
         document.getElementById("liveDetailsCounter").innerText = `العدد المعروض: ${list.length} طالب`;
 
         if (list.length === 0) {
@@ -686,7 +688,6 @@
         }
     }
 
-    // دالة الفلترة الفورية حسب الكلية المختارة من القائمة المنسدلة
     function filterDetailsByCollege(selectedCollege) {
         if (!selectedCollege) {
             renderDetailsTable(currentFilteredStudentsList);
