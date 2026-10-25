@@ -8,23 +8,25 @@
   
   <style>
     :root {
-      --primary: #0f172a;
-      --secondary: #1e293b;
-      --accent: #F4B547;
-      --text: #0f172a;
-      --border: #cbd5e1;
-      --bg: #f1f5f9;
-      --table-border: #94a3b8;
+      /* ألوان فخمة: كحلي عميق وذهبي ملكي */
+      --primary: #0a1128; 
+      --primary-light: #162447;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --text-dark: #1f2937;
+      --bg-main: #e2e8f0;
+      --paper: #ffffff;
+      --border-color: #cbd5e1;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      padding: 15px;
+      padding: 20px 15px;
       font-family: "Cairo", sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-main);
+      color: var(--text-dark);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -36,175 +38,244 @@
     .controls {
       width: 100%;
       max-width: 210mm;
-      background: white;
-      padding: 12px 15px;
+      background: var(--paper);
+      padding: 15px 20px;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      margin-bottom: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(212, 175, 55, 0.2);
     }
 
     .btn {
-      padding: 8px 16px;
+      padding: 10px 20px;
       border-radius: 8px;
       border: none;
       font-family: inherit;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      transition: 0.2s;
+      gap: 8px;
+      transition: all 0.3s ease;
     }
 
-    .btn-print { background: #2563eb; color: white; }
-    .btn-print:hover { background: #1d4ed8; }
-    .btn-close { background: #e2e8f0; color: #334155; }
-    .btn-close:hover { background: #cbd5e1; }
+    .btn-print { 
+      background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
+      color: var(--gold-light); 
+      box-shadow: 0 4px 15px rgba(10, 17, 40, 0.2);
+    }
+    .btn-print:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(10, 17, 40, 0.3); }
+    
+    .btn-close { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .btn-close:hover { background: #e2e8f0; color: #1e293b; }
 
-    /* الورقة (A4 متجاوبة) */
+    /* الورقة */
     .page {
       width: 100%;
       max-width: 210mm;
       min-height: auto;
-      background: white;
-      padding: 15mm 10mm;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-      border-radius: 8px;
+      background: var(--paper);
+      padding: 15mm 12mm;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border-radius: 12px;
       position: relative;
       display: flex;
       flex-direction: column;
     }
 
-    /* ترويسة التقرير */
+    /* الترويسة الفخمة */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 3px double var(--primary);
-      padding-bottom: 12px;
-      margin-bottom: 20px;
-      gap: 10px;
+      border-bottom: 4px solid var(--primary);
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+      position: relative;
+    }
+    /* خط ذهبي رفيع تحت الخط الكحلي */
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gold);
     }
 
-    .header-text { text-align: center; line-height: 1.3; }
-    .header-text h1 { margin: 0; font-size: 1.1rem; font-weight: 900; color: var(--primary); }
-    .header-text p { margin: 3px 0 0; font-size: 0.8rem; font-weight: 700; color: #475569; }
-    .logo img { width: 70px; height: 70px; object-fit: contain; }
+    .header-text { text-align: center; line-height: 1.4; }
+    .header-text h1 { margin: 0; font-size: 1.15rem; font-weight: 900; color: var(--primary); }
+    .header-text p { margin: 2px 0 0; font-size: 0.85rem; font-weight: 700; color: #64748b; }
+    .logo img { width: 85px; height: 85px; object-fit: contain; }
 
     /* عنوان التقرير */
     .report-title {
       text-align: center;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 900;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       color: var(--primary);
-      text-decoration: underline;
-      text-decoration-color: var(--accent);
-      text-underline-offset: 6px;
-      text-decoration-thickness: 3px;
+      position: relative;
+      display: inline-block;
+      align-self: center;
+      padding: 0 15px;
     }
+    .report-title::before, .report-title::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+    .report-title::before { right: -30px; }
+    .report-title::after { left: -30px; }
 
-    /* بيانات الطالب */
+    /* بيانات الطالب - تقسيم الشاشة */
     .student-info {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      background: #f8fafc;
-      padding: 14px;
-      border: 1px solid var(--border);
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+      background: #fafaf9;
+      padding: 15px;
       border-radius: 10px;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-right: 5px solid var(--gold);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
     }
 
-    .info-item { font-size: 0.9rem; }
-    .info-item span.label { font-weight: 800; color: #475569; display: inline-block; width: 95px; }
-    .info-item span.val { font-weight: 900; color: var(--primary); }
+    /* الكروت الداخلية للبيانات */
+    .info-item {
+      background: #ffffff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.01);
+    }
+    .info-item span.label { 
+      font-size: 0.75rem; 
+      font-weight: 800; 
+      color: #64748b; 
+      text-transform: uppercase;
+    }
+    .info-item span.val { 
+      font-size: 1rem; 
+      font-weight: 900; 
+      color: var(--primary); 
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-    /* تصميم الجدول الاحترافي */
+    /* تصميم الجدول الفخم وتمرير الهواتف */
     .table-container {
       width: 100%;
-      border-radius: 8px;
-      overflow-x: auto; /* يسمح بالتمرير الداخلي فقط للجدول إذا ضاقت الشاشة جداً */
-      border: 1.5px solid var(--primary);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-      margin-bottom: 25px;
+      border-radius: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--primary);
+      box-shadow: 0 8px 20px rgba(10, 17, 40, 0.08);
+      margin-bottom: 30px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       background: white;
-      min-width: 500px; /* يضمن عدم انضغط الأعمدة بشكل سيء */
+      min-width: 650px;
     }
 
     table th, table td {
-      border: 1px solid var(--table-border);
-      padding: 10px 6px;
+      padding: 12px 8px;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #e2e8f0;
     }
 
     table th {
-      background: var(--primary);
-      color: white;
-      font-weight: 800;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      color: var(--gold-light);
+      font-weight: 900;
       letter-spacing: 0.5px;
-      border-color: var(--primary);
+      white-space: nowrap;
+      border-bottom: 3px solid var(--gold);
     }
 
-    table tr:nth-child(even) { background: #f8fafc; }
-    table td { color: #334155; font-weight: 600; }
+    table tr { transition: background-color 0.2s; }
+    table tr:hover { background-color: #f8fafc; }
+    table td { color: #1e293b; font-weight: 700; }
     
-    .col-num {
-      width: 35px;
-      font-weight: 900;
-      color: var(--primary);
-      background: #e2e8f0;
+    /* تثبيت الأعمدة في الجوال */
+    .col-num, th:nth-child(1) {
+      min-width: 45px;
+      max-width: 45px;
+      width: 45px;
+      position: sticky;
+      right: 0;
+      z-index: 2;
     }
+    th:nth-child(2), td:nth-child(2) {
+      position: sticky;
+      right: 45px;
+      z-index: 2;
+      border-left: 2px solid rgba(212, 175, 55, 0.4);
+    }
+
+    /* ألوان الأعمدة الثابتة */
+    th:nth-child(1), th:nth-child(2) { 
+      background: var(--primary); 
+    }
+    td:nth-child(1) { background: #f1f5f9; color: var(--primary); font-weight: 900; border-left: 1px solid #e2e8f0;}
+    td:nth-child(2) { background: #ffffff; }
+    tr:hover td:nth-child(2) { background: #f8fafc; }
 
     /* رسالة القفل */
     .lock-msg {
       text-align: center;
-      padding: 15px;
-      background: #fef2f2;
-      border: 2px dashed #ef4444;
-      color: #b91c1c;
+      padding: 18px;
+      background: #fff1f2;
+      border: 2px dashed #be123c;
+      color: #9f1239;
       border-radius: 10px;
       font-weight: 800;
-      font-size: 1rem;
-      margin-bottom: 20px;
+      font-size: 1.05rem;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 10px rgba(159, 18, 57, 0.05);
     }
 
-    /* تذييل الورقة */
+    /* التذييل */
     .footer-note {
       margin-top: auto;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #64748b;
-      border-top: 2px dashed #cbd5e1;
-      padding-top: 12px;
+      border-top: 2px dotted #cbd5e1;
+      padding-top: 15px;
       font-weight: 700;
-      line-height: 1.5;
+      line-height: 1.6;
     }
-
     .footer-note strong { color: var(--primary); font-weight: 900; }
 
-    /* تعديلات خاصة بالشاشات الصغيرة جداً (الهواتف) */
-    @media (max-width: 768px) {
-      body { padding: 5px; }
-      .page { padding: 10px 8px; width: 100%; border-radius: 0; box-shadow: none; }
-      .student-info { grid-template-columns: 1fr; gap: 6px; padding: 10px; }
-      .info-item { font-size: 0.82rem; }
-      .info-item span.label { width: 90px; }
-      .header-text h1 { font-size: 0.95rem; }
-      .header-text p { font-size: 0.7rem; }
-      .logo img { width: 55px; height: 55px; }
-      .report-title { font-size: 1.1rem; }
+    /* شاشات الجوال - تم إضافة screen لمنع تطبيقه في الطباعة */
+    @media screen and (max-width: 768px) {
+      body { padding: 10px; }
+      .page { padding: 12px 10px; border-radius: 8px; }
+      .header-text h1 { font-size: 1rem; }
+      .header-text p { font-size: 0.75rem; }
+      .logo img { width: 65px; height: 65px; }
+      .student-info { grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px; }
+      .info-item:nth-child(1), .info-item:nth-child(4) { grid-column: span 2; }
+      .report-title { font-size: 1.2rem; }
+      .report-title::before, .report-title::after { width: 20px; }
     }
 
     /* إعدادات الطباعة الرسمية */
@@ -212,10 +283,28 @@
       @page { size: A4; margin: 0; }
       body { background: white; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .controls { display: none !important; }
-      .page { box-shadow: none; padding: 12mm 15mm; width: 100%; min-height: 297mm; display: block; border-radius: 0; }
-      .table-container { box-shadow: none; border-width: 2px; overflow: visible; }
-      table { min-width: 100% !important; }
-      .col-num { background: #e2e8f0 !important; }
+      .page { box-shadow: none; padding: 15mm 12mm; width: 100%; max-width: none; min-height: 297mm; border-radius: 0; margin: 0; }
+      .table-container { box-shadow: none; overflow: visible; border: 2px solid var(--primary); }
+      table { min-width: 100% !important; width: 100% !important; }
+      .col-num, th:nth-child(1), th:nth-child(2), td:nth-child(2) {
+        position: static !important;
+        border-left: 1px solid #e2e8f0 !important;
+      }
+      td:nth-child(1), td:nth-child(2) { background: transparent !important; }
+      
+      /* إجبار الطباعة على التقسيم الصحيح (الاسم مساحته مضاعفة) */
+      .student-info { 
+        box-shadow: none; 
+        border-color: #cbd5e1;
+        display: grid !important;
+        grid-template-columns: 2fr 1fr 1fr !important;
+      }
+      .info-item:nth-child(1), .info-item:nth-child(4) { 
+        grid-column: auto !important; 
+      }
+      .info-item span.val {
+        white-space: nowrap !important;
+      }
     }
   </style>
 </head>
@@ -223,7 +312,7 @@
 
   <div class="controls no-print">
     <button class="btn btn-print" onclick="window.print()">
-      🖨️ طباعة التقرير
+      🖨️ طباعة الكشف الرسمي
     </button>
     <button class="btn btn-close" onclick="window.close()">
       ❌ إغلاق
@@ -231,7 +320,7 @@
   </div>
 
   <div class="page" id="reportPage">
-    <!-- سيتم تعبئة المحتوى هنا بواسطة الجافاسكربت -->
+    <!-- المحتوى سيُضاف عبر الجافاسكريبت -->
   </div>
 
 <script>
@@ -250,7 +339,7 @@
     const container = document.getElementById('reportPage');
 
     if (!rawData) {
-      container.innerHTML = `<h2 style="text-align:center; color:red; margin-top:50px;">عذراً، لا توجد بيانات للطباعة. الرجاء الاستعلام أولاً.</h2>`;
+      container.innerHTML = `<h2 style="text-align:center; color:#be123c; margin-top:50px; font-weight:900;">⚠️ عذراً، لا توجد بيانات للطباعة. الرجاء الاستعلام أولاً من المنظومة.</h2>`;
       return;
     }
 
@@ -277,9 +366,9 @@
     let coursesHtml = "";
     
     if (selectedSemester === latestSemester && isLocked) {
-      coursesHtml = `<div class="lock-msg">🔒 مواد هذا الفصل محجوبة مؤقتاً لأسباب مالية. يرجى مراجعة الشؤون المالية.</div>`;
+      coursesHtml = `<div class="lock-msg">🔒 مواد هذا الفصل محجوبة مؤقتاً لأسباب مالية.<br>يرجى مراجعة إدارة الشؤون المالية لتسوية الأوضاع.</div>`;
     } else if (coursesToPrint.length === 0) {
-      coursesHtml = `<div class="lock-msg" style="background:#f8fafc; border-color:#cbd5e1; color:#475569;">لا توجد مواد مسجلة قابلة للعرض.</div>`;
+      coursesHtml = `<div class="lock-msg" style="background:#f8fafc; border-color:#cbd5e1; color:#475569;">لا توجد مواد مسجلة قابلة للعرض في هذا السجل.</div>`;
     } else {
       let trs = coursesToPrint.map((c, index) => {
         let day = (c.day || c.day_name || c.dayName || "").trim();
@@ -297,7 +386,7 @@
         return `
           <tr>
             <td class="col-num">${index + 1}</td>
-            <td style="font-weight:700;">${c.code || '-'}</td>
+            <td style="font-weight:800;">${c.code || '-'}</td>
             <td style="font-weight:900; color:var(--primary);">${c.name || '-'}</td>
             <td>${timeStr}</td>
             <td>${roomStr}</td>
@@ -311,9 +400,9 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 35px;">م</th>
+                <th style="width: 45px;">م</th>
                 <th>رمز المادة</th>
-                <th>اسم المادة</th>
+                <th>اسم المقرر الدراسي</th>
                 <th>الموعد</th>
                 <th>القاعة</th>
                 <th>أستاذ المادة</th>
@@ -328,7 +417,7 @@
     }
 
     if (!selectedSemester && isLocked) {
-      coursesHtml += `<div class="lock-msg" style="padding:12px; margin-top:-10px;">⚠ تم إخفاء مواد الفصل الحالي (${latestSemester}) فقط بسبب عدم استكمال الإجراءات المالية.</div>`;
+      coursesHtml += `<div class="lock-msg" style="padding:12px; margin-top:-10px; font-size:0.9rem;">⚠ ملاحظة: تم إخفاء مواد الفصل الحالي (${latestSemester}) فقط بسبب عدم استكمال الإجراءات المالية.</div>`;
     }
 
     container.innerHTML = `
@@ -338,6 +427,7 @@
           <p>رئيس وحدة المنظومة</p>
         </div>
         <div class="logo">
+          <!-- تأكد أن مسار الشعار صحيح لديك -->
           <img src="aiu-logo.png" alt="شعار الجامعة">
         </div>
         <div class="header-text" style="text-align: left;">
@@ -346,22 +436,40 @@
         </div>
       </div>
 
-      <div class="report-title">كشف مواد للطالب (للاطلاع)</div>
+      <div class="report-title">كشف المقررات الدراسية للطالب</div>
 
       <div class="student-info">
-        <div class="info-item"><span class="label">اسم الطالب:</span> <span class="val">${data.full_name || "-"}</span></div>
-        <div class="info-item"><span class="label">رقم القيد:</span> <span class="val">${sid}</span></div>
-        <div class="info-item"><span class="label">الكلية:</span> <span class="val">${data.college || "-"}</span></div>
-        <div class="info-item"><span class="label">القسم:</span> <span class="val">${data.department || "-"}</span></div>
-        <div class="info-item"><span class="label">الفصل المطبوع:</span> <span class="val">${semesterLabel}</span></div>
-        <div class="info-item"><span class="label">تاريخ الطباعة:</span> <span class="val">${today}</span></div>
+        <div class="info-item">
+          <span class="label">اسم الطالب</span>
+          <span class="val">${data.full_name || "-"}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">رقم القيد</span>
+          <span class="val">${sid}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">الكلية</span>
+          <span class="val">${data.college || "-"}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">القسم العلمي</span>
+          <span class="val">${data.department || "-"}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">الفصل المطبوع</span>
+          <span class="val">${semesterLabel}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">تاريخ الإصدار</span>
+          <span class="val">${today}</span>
+        </div>
       </div>
 
       ${coursesHtml}
 
       <div class="footer-note">
         هذا الكشف مخصص <strong>للاطلاع فقط</strong> ولا يعتبر مستنداً رسمياً للمطالبة بأي إجراء.<br>
-        تم استخراج هذا التقرير من البوابة الإلكترونية لجامعة السلام الدولية - برمجة: أ. أيوب الحوات
+        تم استخراج هذا التقرير آلياً من البوابة الإلكترونية لجامعة السلام الدولية - برمجة: أ. أيوب الحوات
       </div>
     `;
   });
