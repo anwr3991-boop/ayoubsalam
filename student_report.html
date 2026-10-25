@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تقرير الطالب - جامعة السلام الدولية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #1e293b;
+      --accent: #F4B547;
+      --text: #0f172a;
+      --border: #cbd5e1;
+      --bg: #f1f5f9;
+      --table-border: #94a3b8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "Cairo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* شريط التحكم */
+    .controls {
+      width: 100%;
+      max-width: 210mm;
+      background: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border);
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+
+    .btn-print { background: #2563eb; color: white; }
+    .btn-print:hover { background: #1d4ed8; }
+    .btn-close { background: #e2e8f0; color: #334155; }
+    .btn-close:hover { background: #cbd5e1; }
+
+    /* الورقة (A4) */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      background: white;
+      padding: 20mm 15mm;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ترويسة التقرير */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px double var(--primary);
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+
+    .header-text { text-align: center; line-height: 1.4; }
+    .header-text h1 { margin: 0; font-size: 1.25rem; font-weight: 900; color: var(--primary); }
+    .header-text p { margin: 4px 0 0; font-size: 0.9rem; font-weight: 700; color: #475569; }
+    .logo img { width: 85px; height: 85px; object-fit: contain; }
+
+    /* عنوان التقرير */
+    .report-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 25px;
+      color: var(--primary);
+      text-decoration: underline;
+      text-decoration-color: var(--accent);
+      text-underline-offset: 8px;
+      text-decoration-thickness: 3px;
+    }
+
+    /* بيانات الطالب */
+    .student-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: #f8fafc;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 30px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .info-item { font-size: 1rem; }
+    .info-item span.label { font-weight: 800; color: #475569; display: inline-block; width: 110px; }
+    .info-item span.val { font-weight: 900; color: var(--primary); }
+
+    /* تصميم الجدول الاحترافي بالبرواز */
+    .table-container {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--primary);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    table th, table td {
+      border: 1px solid var(--table-border);
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    table th {
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      border-color: var(--primary);
+    }
+
+    table tr:nth-child(even) { background: #f8fafc; }
+    table td { color: #334155; font-weight: 600; }
+    
+    /* عمود الترقيم (م) */
+    .col-num {
+      width: 45px;
+      font-weight: 900;
+      color: var(--primary);
+      background: #e2e8f0;
+      border-color: var(--table-border);
+    }
+
+    /* رسالة القفل */
+    .lock-msg {
+      text-align: center;
+      padding: 20px;
+      background: #fef2f2;
+      border: 2px dashed #ef4444;
+      color: #b91c1c;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    /* تذييل الورقة (الملاحظة السفلية) */
+    .footer-note {
+      margin-top: auto;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #64748b;
+      border-top: 2px dashed #cbd5e1;
+      padding-top: 15px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .footer-note strong { color: var(--primary); font-weight: 900; }
+
+    /* إعدادات الطباعة */
+    @media print {
+      @page { size: A4; margin: 12mm; }
+      body { 
+        background: white; 
+        padding: 0; 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+      }
+      .controls { display: none !important; }
+      .page { box-shadow: none; padding: 0; width: 100%; min-height: auto; display: block; border-radius: 0; }
+      .table-container { box-shadow: none; border-width: 2px; }
+      .col-num { background: #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls no-print">
+    <button class="btn btn-print" onclick="window.print()">
+      🖨️ طباعة التقرير
+    </button>
+    <button class="btn btn-close" onclick="window.close()">
+      ❌ إغلاق
+    </button>
+  </div>
+
+  <div class="page" id="reportPage">
+    <!-- سيتم تعبئة المحتوى هنا بواسطة الجافاسكربت -->
+  </div>
+
+<script>
+  function formatExcelTime(timeStr) {
+    if (!timeStr) return "غير محدد";
+    let s = String(timeStr).trim();
+    if (s.includes("GMT") || s.includes("11:30:00") || s.includes("10:10:00") || s.includes("10:30:00")) {
+      let match = s.match(/(\d{2}):(\d{2})/);
+      if (match) return match[0];
+    }
+    return s;
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const rawData = sessionStorage.getItem('aiu_student_report');
+    const container = document.getElementById('reportPage');
+
+    if (!rawData) {
+      container.innerHTML = `<h2 style="text-align:center; color:red; margin-top:50px;">عذراً، لا توجد بيانات للطباعة. الرجاء الاستعلام أولاً.</h2>`;
+      return;
+    }
+
+    const reportData = JSON.parse(rawData);
+    const data = reportData.data; 
+    const sid = reportData.id;
+    const isLocked = reportData.isLocked;
+    const selectedSemester = reportData.selectedSemester;
+    const latestSemester = reportData.latestSemester;
+    
+    let coursesToPrint = data.courses || [];
+    let semesterLabel = selectedSemester ? selectedSemester : "كشف عام (كل الفصول)";
+
+    if (selectedSemester) {
+      coursesToPrint = coursesToPrint.filter(c => (c.semester || c.sem || c.semester_name || "").trim() === selectedSemester);
+    }
+    
+    if (!selectedSemester && isLocked) {
+      coursesToPrint = coursesToPrint.filter(c => (c.semester || c.sem || c.semester_name || "").trim() !== latestSemester);
+    }
+
+    const today = new Date().toLocaleDateString("ar-LY");
+
+    let coursesHtml = "";
+    
+    if (selectedSemester === latestSemester && isLocked) {
+      coursesHtml = `<div class="lock-msg">🔒 مواد هذا الفصل محجوبة مؤقتاً لأسباب مالية. يرجى مراجعة الشؤون المالية.</div>`;
+    } else if (coursesToPrint.length === 0) {
+      coursesHtml = `<div class="lock-msg" style="background:#f8fafc; border-color:#cbd5e1; color:#475569;">لا توجد مواد مسجلة قابلة للعرض.</div>`;
+    } else {
+      // بناء صفوف الجدول مع عمود الترقيم
+      let trs = coursesToPrint.map((c, index) => {
+        let day = (c.day || c.day_name || c.dayName || "").trim();
+        let start = formatExcelTime(c.startTime || c.start_time || c.start || "");
+        let end = formatExcelTime(c.endTime || c.end_time || c.end || "");
+        
+        let timeStr = "غير محدد";
+        if (day || start !== "غير محدد") {
+          timeStr = `${day} (${start} - ${end})`.replace("غير محدد", "").trim();
+        }
+        
+        let roomStr = c.room || c.room_name || c.roomName || c.hall || c.lecture_hall || "-";
+        let instStr = c.instructor || c.instructor_name || c.instructorName || c.teacher || c.professor || "-";
+
+        return `
+          <tr>
+            <td class="col-num">${index + 1}</td>
+            <td style="font-weight:700;">${c.code || '-'}</td>
+            <td style="font-weight:900; color:var(--primary);">${c.name || '-'}</td>
+            <td>${timeStr}</td>
+            <td>${roomStr}</td>
+            <td>${instStr}</td>
+          </tr>
+        `;
+      }).join("");
+
+      coursesHtml = `
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 45px;">م</th>
+                <th>رمز المادة</th>
+                <th>اسم المادة</th>
+                <th>الموعد</th>
+                <th>القاعة</th>
+                <th>أستاذ المادة</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${trs}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    if (!selectedSemester && isLocked) {
+      coursesHtml += `<div class="lock-msg" style="padding:15px; margin-top:-15px;">⚠ تم إخفاء مواد الفصل الحالي (${latestSemester}) فقط بسبب عدم استكمال الإجراءات المالية.</div>`;
+    }
+
+    // بناء الواجهة النهائية
+    container.innerHTML = `
+      <div class="header">
+        <div class="header-text" style="text-align: right;">
+          <h1>أ. أيوب الحوات</h1>
+          <p>رئيس وحدة المنظومة</p>
+        </div>
+        <div class="logo">
+          <img src="aiu-logo.png" alt="شعار الجامعة">
+        </div>
+        <div class="header-text" style="text-align: left;">
+          <h1>جامعة السلام الدولية</h1>
+          <p>إدارة التسجيل والدراسة والامتحانات</p>
+        </div>
+      </div>
+
+      <div class="report-title">كشف مواد للطالب (للاطلاع)</div>
+
+      <div class="student-info">
+        <div class="info-item"><span class="label">اسم الطالب:</span> <span class="val">${data.full_name || "-"}</span></div>
+        <div class="info-item"><span class="label">رقم القيد:</span> <span class="val">${sid}</span></div>
+        <div class="info-item"><span class="label">الكلية:</span> <span class="val">${data.college || "-"}</span></div>
+        <div class="info-item"><span class="label">القسم:</span> <span class="val">${data.department || "-"}</span></div>
+        <div class="info-item"><span class="label">الفصل المطبوع:</span> <span class="val">${semesterLabel}</span></div>
+        <div class="info-item"><span class="label">تاريخ الطباعة:</span> <span class="val">${today}</span></div>
+      </div>
+
+      ${coursesHtml}
+
+      <div class="footer-note">
+        هذا الكشف مخصص <strong>للاطلاع فقط</strong> ولا يعتبر مستنداً رسمياً للمطالبة بأي إجراء.<br>
+        تم استخراج هذا التقرير من البوابة الإلكترونية لجامعة السلام الدولية - برمجة: أ. أيوب الحوات
+      </div>
+    `;
+  });
+</script>
+</body>
+</html>

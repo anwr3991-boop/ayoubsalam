@@ -768,6 +768,8 @@
 <script>
   let _audioCtx = null;
   let IS_LATEST_SEMESTER_LOCKED = false; 
+  let CURRENT_STUDENT_DATA = null;
+  let CURRENT_ID = null;
 
   function getAudioCtx() {
     if (_audioCtx) return _audioCtx;
@@ -867,12 +869,16 @@
 
     status.textContent = "⏳ جاري جلب البيانات...";
               
-    let api = "https://script.google.com/macros/s/AKfycbwgmunZv-wU-kBJqP6cbVk-A1sqoWd9TYqesW7FS0CWz5XRejQ23hOJ0QqpTwpjI0X8kQ/exec";
+    let api = "https://script.google.com/macros/s/AKfycbzOGk1HLQffDMThJyi3nrEkF3RU7xeGmIenaxVB7KdVrVRm3Txg5dCwzB08TmgF7un5/exec";
     let url = api + "?action=getStudent&id=" + encodeURIComponent(id) + "&t=" + Date.now();
 
     try {
       let res  = await fetch(url, { cache: "no-store" });
       let data = await res.json();
+      
+      // حفظ البيانات عالمياً لاستخدامها في التقرير
+      CURRENT_STUDENT_DATA = data;
+      CURRENT_ID = id;
 
       status.textContent = "";
 
@@ -1012,16 +1018,14 @@
     dropdown.classList.toggle("open");
   }
 
-  // دالة ذكية لتنظيف صياغة الوقت الطويل المستخرج من الإكسل
   function formatExcelTime(timeStr, fallbackDay = "") {
     if (!timeStr) return "غير محدد";
     let s = String(timeStr).trim();
     
-    // إذا كان يحتوي على توقيت نظام GMT الطويل، نقوم بقص الساعة والدقائق فقط
     if (s.includes("GMT") || s.includes("11:30:00") || s.includes("10:10:00") || s.includes("10:30:00")) {
       let match = s.match(/(\d{2}):(\d{2})/);
       if (match) {
-        return match[0]; // يرجع فقط 10:30 أو 11:30 مثلاً
+        return match[0]; 
       }
     }
     return s;
@@ -1066,14 +1070,12 @@
       let start = (c.startTime || c.start_time || c.start || "").trim();
       let end = (c.endTime || c.end_time || c.end || "").trim();
       
-      // تنظيف الأوقات لتظهر طبيعية مثل الإكسل
       let cleanStart = formatExcelTime(start);
       let cleanEnd = formatExcelTime(end);
 
       let timeStr = "غير محدد";
       if (day || cleanStart !== "غير محدد") {
         timeStr = `${day} من ${cleanStart} إلى ${cleanEnd}`.trim();
-        // إزالة الزوائد المكررة إن وجدت
         timeStr = timeStr.replace("غير محدد", "").trim();
       }
 
@@ -1108,15 +1110,24 @@
 
   function printPdf() {
     const error  = document.getElementById("error");
-    const result = document.getElementById("result");
     error.textContent = "";
 
-    if (!result.innerHTML.trim()) {
-      error.textContent = "لا يمكن الطباعة قبل عرض بيانات الطالب.";
+    if (!CURRENT_STUDENT_DATA) {
+      error.textContent = "لا يمكن الطباعة قبل الاستعلام وعرض بيانات الطالب.";
       playErrorChime();
       return;
     }
-    window.print();
+
+    const reportPackage = {
+      id: CURRENT_ID,
+      data: CURRENT_STUDENT_DATA,
+      selectedSemester: SELECTED_SEMESTER,
+      latestSemester: LATEST_SEMESTER,
+      isLocked: IS_LATEST_SEMESTER_LOCKED
+    };
+
+    sessionStorage.setItem("aiu_student_report", JSON.stringify(reportPackage));
+    window.open("student_report.html", "_blank");
   }
 
   window.addEventListener("DOMContentLoaded", () => {
