@@ -96,14 +96,13 @@
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             color: #ffffff !important;
             display: flex;
-            align-items: center; /* محاذاة أفقية فخمة */
+            align-items: center; 
             gap: 16px;
             position: relative;
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
-        /* تصميم فخم ومستقل لحاوية الأيقونات */
         .dash-item .icon-wrapper {
             display: flex;
             align-items: center;
@@ -139,7 +138,6 @@
             line-height: 1.4;
         }
 
-        /* تأثيرات الحركات السلسة (Hover) */
         .dash-item:hover {
             transform: translateY(-3px);
             border-color: var(--gold-main) !important;
@@ -154,7 +152,6 @@
             box-shadow: 0 0 12px var(--gold-glow);
         }
 
-        /* ===== زر الجداول (تميز ملكي بدون تأثير الحظر) ===== */
         .dash-item.schedules-btn {
             background: linear-gradient(145deg, rgba(251, 191, 36, 0.08), rgba(15, 23, 42, 0.6)) !important;
             border: 1px solid rgba(251, 191, 36, 0.4) !important;
@@ -164,13 +161,30 @@
             border-color: var(--gold-main);
         }
 
-        /* ===== زر مخصص لمعادلة المواد الأكاديمية والمقاصات ===== */
         .dash-item.equalization-btn {
             background: linear-gradient(145deg, rgba(30, 64, 175, 0.15), rgba(7, 9, 14, 0.85)) !important;
             border: 1px solid rgba(251, 191, 36, 0.35) !important;
         }
 
-        /* ===== كرت المالية الفاخر الخالص ===== */
+        /* ===== زر طباعة الاستمارات الجديد ===== */
+        .dash-item.print-btn {
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(7, 9, 14, 0.85)) !important;
+            border: 1px solid rgba(16, 185, 129, 0.35) !important;
+        }
+        .dash-item.print-btn .icon-wrapper {
+            color: #34d399;
+            border-color: #34d399;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .dash-item.print-btn:hover {
+            border-color: #34d399 !important;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 15px rgba(52, 211, 153, 0.3);
+        }
+        .dash-item.print-btn:hover .icon-wrapper {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #000;
+        }
+
         .dash-item.finance {
             background: radial-gradient(circle at top left, rgba(251, 191, 36, 0.15), rgba(11, 15, 26, 0.95)) !important;
             border: 1.5px solid var(--gold-main) !important;
@@ -197,7 +211,6 @@
             font-weight: 700;
         }
 
-        /* ===== شکل الكروت المقفولة الفخم والواضح الصلاحية ===== */
         .dash-item.disabled {
             opacity: 0.35 !important;
             cursor: not-allowed;
@@ -227,7 +240,6 @@
             font-weight: 600;
         }
 
-        /* الفوتر */
         .dash-footer {
             margin-top: 26px;
             display: flex;
@@ -266,7 +278,6 @@
             box-shadow: 0 8px 25px rgba(220, 38, 38, 0.6);
         }
 
-        /* التجاوب السلس والكامل للهاتف */
         @media (max-width: 650px) {
             .dash-header h1 { font-size: 1.75rem; }
             .dash-card { padding: 20px 14px; border-radius: 20px; }
@@ -341,6 +352,15 @@
                     </div>
                 </a>
 
+                <!-- تمت إضافة زر طباعة الاستمارات الجديد هنا -->
+                <a href="form_builder.html" class="dash-item print-btn" data-key="print-forms">
+                    <div class="icon-wrapper"><i class="fa-solid fa-print"></i></div>
+                    <div class="item-content">
+                        <span class="title">طباعة الاستمارات</span>
+                        <span class="desc">طباعة مواد التسجيل مباشرة فوق الاستمارات الجاهزة.</span>
+                    </div>
+                </a>
+
                 <a href="reports.html" class="dash-item" data-key="reports">
                     <div class="icon-wrapper"><i class="fa-solid fa-chart-pie"></i></div>
                     <div class="item-content">
@@ -353,7 +373,7 @@
                     <div class="icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
                     <div class="item-content">
                         <span class="title">الإحصائيات</span>
-                        <span class="desc">عرض حالة واعداد الطلبة .</span>
+                        <span class="desc">عرض حالة واعداد الطلبة.</span>
                     </div>
                 </a>
 
@@ -395,11 +415,11 @@
         document.getElementById("welcome").textContent = "مرحباً، " + user;
     }
 
-    // تم إضافة صلاحية الـ schedules هنا للمنسقين والآدمن
+    // تمت إضافة print-forms لصلاحيات المنسقين والإدارة
     const permissions = {
-        admin: ["add-student", "add-course", "registercourse", "schedules", "equalization", "reports", "stats", "finance"], 
-        admin1: ["add-student", "add-course", "registercourse", "schedules", "equalization", "reports", "stats", "users-manage", "finance"], 
-        user1: ["add-course", "registercourse", "schedules", "equalization", "reports", "stats", "finance"], 
+        admin: ["add-student", "add-course", "registercourse", "schedules", "equalization", "print-forms", "reports", "stats", "finance"], 
+        admin1: ["add-student", "add-course", "registercourse", "schedules", "equalization", "print-forms", "reports", "stats", "users-manage", "finance"], 
+        user1: ["add-course", "registercourse", "schedules", "equalization", "print-forms", "reports", "stats", "finance"], 
         user2: ["add-student", "equalization", "reports", "stats", "finance"],                               
         user3: ["reports", "stats", "finance"]                            
     };
