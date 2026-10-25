@@ -42,7 +42,6 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    /* شريط الأزرار في أعلى الصفحة */
     .top-actions {
       display: flex;
       justify-content: center;
@@ -140,23 +139,13 @@
     .btn-clear:hover { background: #ef4444; color: #fff; }
 
     /* =========================================
-       تصميم ورقة الطباعة - الطباعة الاحترافية (شفاف)
+       تصميم ورقة الطباعة - (التحكم الكامل لكل سطر: عرض، طول، مكان)
        ========================================= */
     .print-page { display: none; }
 
     @media print {
-      @page { 
-        size: A4; 
-        margin: 0; 
-      }
-      
-      body { 
-        background: #fff; 
-        color: #000; 
-        margin: 0; 
-        padding: 0; 
-      }
-      
+      @page { size: A4; margin: 0; }
+      body { background: #fff; color: #000; margin: 0; padding: 0; }
       .no-print { display: none !important; }
       
       .print-page { 
@@ -167,43 +156,111 @@
         position: relative;
       }
 
-      /* إخفاء كل العناصر الزائدة */
-      .p-header, .p-title, .p-student-info, .p-footer, h3, thead {
+      .p-header, .p-title, .p-student-info, .p-footer, thead, .p-table td:nth-child(6) {
         display: none !important; 
       }
 
-      /* ==========================================
-         مقاساتك الأصلية المضبوطة 100%
-         ========================================== */
       .p-table {
         position: absolute;
-        top: 228mm; 
-        right: 12mm; 
-        width: 185mm; 
-        border-collapse: collapse;
+        top: 0mm; 
+        right: 0mm; 
+        width: 100%;
         border: none !important;
         direction: rtl !important; 
-        table-layout: fixed; 
       }
 
-      .p-table th, .p-table td {
-        border: none !important; 
+      .p-table tbody {
+        position: relative;
+        display: block; 
+      }
+
+      /* كل سطر أصبح بوكس مستقل تماماً يتحكم في مكانه (top, right) */
+      .p-table tbody tr {
+        position: absolute; 
+        display: flex; 
+        flex-direction: row;
+      }
+
+      /* تصميم الخانات الداخلية لكل بوكس */
+      .p-table td {
+        box-sizing: border-box;
+        border: 1px solid transparent !important; /* الخطوط ولت شفافة، ولا رقم تحرك */
         color: #000 !important; 
         font-size: 13px;
         font-weight: bold;
-        height: 6mm; 
-        vertical-align: middle;
-        padding: 0;
-        text-align: center !important; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: -1px; 
       }
 
-      /* وزنية الأعمدة الخاصة بك */
-      .p-table td:nth-child(1) { width: 10mm; padding-right: 5mm !important; } 
-      .p-table td:nth-child(2) { width: 22mm; } 
-      .p-table td:nth-child(3) { width: 48mm; } 
-      .p-table td:nth-child(4) { width: 12mm; } 
-      .p-table td:nth-child(5) { width: 15mm; } 
-      .p-table td:nth-child(6) { width: auto; }
+      /* ==========================================================================
+         تحكم كامل لكل سطر على حدة (الارتفاع height، المكان top، واليمين right)
+         ========================================================================== */
+      
+      /* السطر الأول */
+      .p-table tbody tr:nth-child(1) { top: 230mm; right: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(1) td:nth-child(1) { width: 6mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(1) td:nth-child(2) { width: 19mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(1) td:nth-child(3) { width: 51mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(1) td:nth-child(4) { width: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(1) td:nth-child(5) { width: 21mm; height: 6.6mm; }
+
+      /* السطر الثاني */
+      .p-table tbody tr:nth-child(2) { top: 236mm; right: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(2) td:nth-child(1) { width: 6mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(2) td:nth-child(2) { width: 19mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(2) td:nth-child(3) { width: 51mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(2) td:nth-child(4) { width: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(2) td:nth-child(5) { width: 21mm; height: 6.6mm; }
+
+      /* السطر الثالث */
+      .p-table tbody tr:nth-child(3) { top: 242mm; right: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(3) td:nth-child(1) { width: 6mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(3) td:nth-child(2) { width: 19mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(3) td:nth-child(3) { width: 51mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(3) td:nth-child(4) { width: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(3) td:nth-child(5) { width: 21mm; height: 6.6mm; }
+
+      /* السطر الرابع (اللي كان متعبك - تقدر تعدل طوله وعرضه ومكانه بروحه بالكامل) */
+      .p-table tbody tr:nth-child(4) { top: 248mm; right: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(4) td:nth-child(1) { width: 6mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(4) td:nth-child(2) { width: 19mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(4) td:nth-child(3) { width: 51mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(4) td:nth-child(4) { width: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(4) td:nth-child(5) { width: 21mm; height: 6.6mm; }
+
+      /* السطر الخامس */
+      .p-table tbody tr:nth-child(5) { top: 255mm; right: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(5) td:nth-child(1) { width: 6mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(5) td:nth-child(2) { width: 19mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(5) td:nth-child(3) { width: 51mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(5) td:nth-child(4) { width: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(5) td:nth-child(5) { width: 21mm; height: 6.6mm; }
+
+      /* السطر السادس */
+      .p-table tbody tr:nth-child(6) { top: 261mm; right: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(6) td:nth-child(1) { width: 6mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(6) td:nth-child(2) { width: 19mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(6) td:nth-child(3) { width: 51mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(6) td:nth-child(4) { width: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(6) td:nth-child(5) { width: 21mm; height: 6.6mm; }
+
+      /* السطر السابع */
+      .p-table tbody tr:nth-child(7) { top: 268mm; right: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(7) td:nth-child(1) { width: 6mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(7) td:nth-child(2) { width: 19mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(7) td:nth-child(3) { width: 51mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(7) td:nth-child(4) { width: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(7) td:nth-child(5) { width: 21mm; height: 6.6mm; }
+
+      /* السطر الثامن */
+      .p-table tbody tr:nth-child(8) { top: 274.5mm; right: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(8) td:nth-child(1) { width: 6mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(8) td:nth-child(2) { width: 19mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(8) td:nth-child(3) { width: 51mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(8) td:nth-child(4) { width: 14mm; height: 6.6mm; }
+      .p-table tbody tr:nth-child(8) td:nth-child(5) { width: 21mm; height: 6.6mm; }
     }
   </style>
 </head>
@@ -212,7 +269,6 @@
   <div class="no-print">
     <div class="control-panel">
       
-      <!-- أزرار التحكم في رأس الصفحة -->
       <div class="top-actions">
         <button class="btn btn-print" onclick="prepareAndPrint()">
           🖨️ طباعة المواد (فوق الاستمارة)
@@ -328,7 +384,6 @@
       });
     }
 
-    // دالة تفريغ الخيارات بضغطة زر
     function clearSelections() {
       const checkboxes = document.querySelectorAll(".course-cb");
       checkboxes.forEach(cb => cb.checked = false);
